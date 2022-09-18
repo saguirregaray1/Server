@@ -25,5 +25,9 @@ import java.util.List;
         public void registerNewClub(@RequestBody Club club){
             service.addNewClub(club);
         }
+        @DeleteMapping(path="{clubName}")
+        public void deleteClub(@PathVariable String clubName){
+         service.deleteClub(clubName);
+        }
     }
 

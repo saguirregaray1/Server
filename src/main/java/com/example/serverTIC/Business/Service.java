@@ -7,6 +7,7 @@ import com.example.serverTIC.Persistence.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 
 @org.springframework.stereotype.Service
 public class Service {
@@ -39,4 +40,27 @@ public class Service {
 
     public void addNewEmployee(Employee employee){ employeeRepository.save(employee);}
 
+    public void deleteClub(String clubName) {
+        Optional<Club> temp=clubRepository.findClubByNombre(clubName);
+        if(temp.isEmpty()){
+            throw new IllegalStateException("club is not registered");
+        }
+        clubRepository.deleteById(temp.get().getId());
+    }
+
+    public void deleteCompany(String companyName) {
+        Optional<Company> temp=companyRepository.findCompanyByNombre(companyName);
+        if(temp.isEmpty()){
+            throw new IllegalStateException("company is not registered");
+        }
+        companyRepository.deleteById(temp.get().getId());
+    }
+
+    public void deleteEmployee(Long cedulaEmp) {
+        Optional<Employee> temp=employeeRepository.findEmployeeByCedula(cedulaEmp);
+        if(temp.isEmpty()){
+            throw new IllegalStateException("employee is not registered");
+        }
+        employeeRepository.deleteById(temp.get().getId());
+    }
 }

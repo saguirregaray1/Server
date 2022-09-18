@@ -24,4 +24,9 @@ public class EmployeeController {
     public void registerNewEmployee(@RequestBody Employee employee){
         service.addNewEmployee(employee);
     }
+
+    @DeleteMapping(path="{cedula}")
+    public void deleteEmployee(@PathVariable Long cedula){
+        service.deleteEmployee(cedula);
+    }
 }

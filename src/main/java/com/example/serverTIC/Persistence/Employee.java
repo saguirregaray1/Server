@@ -16,12 +16,12 @@ public class Employee {
     )
     private Long id;
     private Long cedula;
-    private String mail;
+    private String email;
     private Long saldo;
 
     public Employee(Long cedula, String mail, Long saldo) {
         this.cedula = cedula;
-        this.mail = mail;
+        this.email = mail;
         this.saldo = saldo;
     }
 
@@ -44,12 +44,12 @@ public class Employee {
         this.cedula = cedula;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getSaldo() {

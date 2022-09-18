@@ -21,4 +21,9 @@ public class CompanyController {
     public void registerNewCompany(@RequestBody Company company){
         service.addNewCompany(company);
     }
+
+    @DeleteMapping(path="{companyName}")
+    public void deleteCompany(@PathVariable String companyName){
+        service.deleteCompany(companyName);
+    }
 }
