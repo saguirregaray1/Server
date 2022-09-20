@@ -1,6 +1,6 @@
-package com.example.serverTIC.Business;
+package com.example.serverTIC.business.employee;
 
-import com.example.serverTIC.Persistence.Employee;
+import com.example.serverTIC.persistence.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

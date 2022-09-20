@@ -1,6 +1,8 @@
-package com.example.serverTIC.Persistence;
+package com.example.serverTIC.persistence;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table
@@ -18,13 +20,19 @@ public class Company {
     )
     private Long id;
     private String nombre;
-    private String mail;
     private Long nroCuenta;
+    private String mail;
 
-    public Company(String nombre, String mail, Long nroCuenta) {
+    private String password;
+
+
+
+
+    public Company(String nombre, String mail, Long nroCuenta, String password) {
         this.nombre = nombre;
         this.mail = mail;
         this.nroCuenta = nroCuenta;
+        this.password = password;
     }
 
     public Company() {
@@ -60,6 +68,14 @@ public class Company {
 
     public void setNroCuenta(Long nroCuenta) {
         this.nroCuenta = nroCuenta;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 

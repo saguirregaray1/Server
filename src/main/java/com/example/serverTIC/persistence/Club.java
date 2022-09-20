@@ -1,4 +1,4 @@
-package com.example.serverTIC.Persistence;
+package com.example.serverTIC.persistence;
 
 import javax.persistence.*;
 
@@ -17,14 +17,16 @@ public class Club {
     )
     private Long id;
     private String nombre;
-    private String tel;
     private String dir;
+    private String mail;
+    private String password;
 
 
-    public Club(String nombre, String tel, String dir) {
+    public Club(String nombre, String mail, String dir, String password) {
         this.nombre = nombre;
-        this.tel = tel;
+        this.mail = mail;
         this.dir = dir;
+        this.password = password;
     }
 
     public Club() {
@@ -46,12 +48,12 @@ public class Club {
         this.nombre = nombre;
     }
 
-    public String getTel() {
-        return tel;
+    public String getMail() {
+        return mail;
     }
 
-    public void setTel(String tel) {
-        this.tel = tel;
+    public void setMail(String tel) {
+        this.mail = tel;
     }
 
     public String getDir() {
@@ -62,12 +64,21 @@ public class Club {
         this.dir = dir;
     }
 
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "Gym{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
-                ", telefono=" + tel +
+                ", telefono=" + mail +
                 ", dir='" + dir + '\'' +
                 '}';
     }

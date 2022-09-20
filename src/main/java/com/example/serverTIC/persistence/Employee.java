@@ -1,4 +1,4 @@
-package com.example.serverTIC.Persistence;
+package com.example.serverTIC.persistence;
 
 import javax.persistence.*;
 @Entity
@@ -15,14 +15,21 @@ public class Employee {
             generator = "employee_sequence"
     )
     private Long id;
+    private Long companyId;
     private Long cedula;
     private String email;
     private Long saldo;
+    private String user;
+    private String password;
 
-    public Employee(Long cedula, String mail, Long saldo) {
+
+    public Employee(Long cedula, String mail, Long saldo, Long companyId, String user, String password) {
         this.cedula = cedula;
         this.email = mail;
         this.saldo = saldo;
+        this.companyId = companyId;
+        this.user= user;
+        this.password= password;
     }
 
     public Employee() {
