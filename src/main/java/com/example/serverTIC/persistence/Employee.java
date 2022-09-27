@@ -19,16 +19,14 @@ public class Employee {
     private Long cedula;
     private String email;
     private Long saldo;
-    private String user;
     private String password;
 
 
-    public Employee(Long cedula, String mail, Long saldo, Long companyId, String user, String password) {
+    public Employee(Long cedula, String mail, Long saldo, Long companyId, String password) {
         this.cedula = cedula;
         this.email = mail;
         this.saldo = saldo;
         this.companyId = companyId;
-        this.user= user;
         this.password= password;
     }
 
@@ -67,6 +65,20 @@ public class Employee {
         this.saldo = saldo;
     }
 
+    public Long getCompanyId() {
+        return companyId;
+    }
 
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
 
