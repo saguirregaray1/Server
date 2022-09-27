@@ -1,6 +1,9 @@
 package com.example.serverTIC.persistence;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table
 public class Employee {
@@ -21,6 +24,8 @@ public class Employee {
     private Long saldo;
     private String password;
 
+  //  private List<Activity> favs;
+
 
     public Employee(Long cedula, String mail, Long saldo, Long companyId, String password) {
         this.cedula = cedula;
@@ -28,6 +33,7 @@ public class Employee {
         this.saldo = saldo;
         this.companyId = companyId;
         this.password= password;
+    //    this.favs = new ArrayList<>();
     }
 
     public Employee() {

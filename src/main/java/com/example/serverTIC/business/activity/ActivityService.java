@@ -1,7 +1,8 @@
 package com.example.serverTIC.business.activity;
 
+import com.example.serverTIC.business.employee.EmployeeRepository;
 import com.example.serverTIC.persistence.Activity;
-import com.example.serverTIC.persistence.Club;
+import com.example.serverTIC.persistence.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +12,12 @@ import java.util.Optional;
 @Service
 public class ActivityService {
 
+    private final EmployeeRepository employeeRepository;
     private final ActivityRepository activityRepository;
 
     @Autowired
-    public ActivityService(ActivityRepository activityRepository) {
+    public ActivityService(EmployeeRepository employeeRepository, ActivityRepository activityRepository) {
+        this.employeeRepository = employeeRepository;
         this.activityRepository = activityRepository;
     }
 
@@ -32,5 +35,25 @@ public class ActivityService {
             throw new IllegalStateException("club is not registered");
         }
         activityRepository.deleteById(temp.get().getId());
+    }
+
+    public Optional<Activity> getActivitiesByCategory(int category){
+        return activityRepository.findActivitiesByCategoria(category);
+    }
+
+    public boolean registerToActivity(Long activityId, Long employeeId) {
+        Optional<Activity> act= activityRepository.findActivityById(activityId);
+        Optional<Employee> emp= employeeRepository.findEmployeeById(employeeId);
+        if(act.isEmpty() || emp.isEmpty()){
+            throw new IllegalStateException("activity doesn't exist");
+        }
+        Activity activity=act.get();
+        Employee employee=emp.get();
+        if(activity.getCupos()==0 || employee.getSaldo()<activity.getPrecio()) {
+            return false;
+        }
+        activity.setCupos(activity.getCupos()-1);
+        employee.setSaldo(employee.getSaldo()-activity.getPrecio());
+        return true;
     }
 }

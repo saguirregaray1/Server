@@ -1,7 +1,9 @@
 package com.example.serverTIC.business.club;
 
 
+import com.example.serverTIC.business.activity.ActivityService;
 import com.example.serverTIC.business.employee.EmployeeService;
+import com.example.serverTIC.persistence.Activity;
 import com.example.serverTIC.persistence.Club;
 import com.example.serverTIC.persistence.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +17,13 @@ import java.util.Optional;
  public class ClubController {
      private final ClubService clubService;
      private final EmployeeService employeeService;
+
+     private final ActivityService activityService;
      @Autowired
-     public ClubController(ClubService service, EmployeeService employeeService) {
+     public ClubController(ClubService service, EmployeeService employeeService, ActivityService activityService) {
          this.clubService = service;
          this.employeeService = employeeService;
+         this.activityService = activityService;
         }
 
         @GetMapping
@@ -36,8 +41,38 @@ import java.util.Optional;
          clubService.deleteClub(clubName);
         }
 
-        @GetMapping(path="/employee/{cedula}")
-        public boolean isAnEmployee(@PathVariable Long cedula){ return employeeService.isAnEmployee(cedula); }
+        //updateClub
+
+
+        // Activity
+        @GetMapping(path="/activity")
+        public List<Activity> getListOfActivities(){
+         return activityService.getActivities();
+        }
+
+        @PostMapping(path="/activity")
+        public void registerNewActivity(@RequestBody Activity activity) {activityService.addNewActivity(activity);}
+
+        @DeleteMapping(path="/activity/{activityName}")
+        public void deleteActivity(@PathVariable String activityName)   {activityService.deleteActivity(activityName); }
+
+        //registerToActivity
+        @PostMapping(path="/activity/{activityId}{empId}")
+        public boolean registerToActivity(@PathVariable Long activityId, Long employeeId){
+            return activityService.registerToActivity(activityId,employeeId);
+        }
+
+        //filter
+        @GetMapping(path="/activity/{category}")
+        public Optional<Activity> getListOfActivitiesByCategory(@PathVariable int category) {
+            return activityService.getActivitiesByCategory(category);
+        }
+
+        //cancelActivity
+
+
+        //updateActivity
+
 
     }
 
