@@ -19,17 +19,19 @@ public class Activity {
             generator = "company_sequence"
     )
 
-    private String id;
+    private Long id;
 
     private String clubId;
 
+    private String nombre;
     private Long precio;
 
     private int cupos;
 
     private int categoria;
 
-    public Activity(Long precio, int cupos, int categoria) {
+    public Activity(String nombre,Long precio, int cupos, int categoria) {
+        this.nombre = nombre;
         this.precio = precio;
         this.cupos = cupos;
         this.categoria = categoria;
@@ -70,11 +72,19 @@ public class Activity {
         this.categoria = categoria;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 }
