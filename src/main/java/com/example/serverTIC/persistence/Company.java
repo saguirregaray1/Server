@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table
+@Entity(name = "Company")
+@Table(name = "company_users")
 public class Company {
 
     @Id
@@ -18,11 +18,15 @@ public class Company {
             strategy = GenerationType.SEQUENCE,
             generator = "company_sequence"
     )
+    @Column(name = "company_id", updatable = false)
     private Long id;
+    @Column(name = "nombre", unique = true, nullable = false)
     private String nombre;
+    @Column(name = "numero_cuenta", nullable = false)
     private Long nroCuenta;
+    @Column(name = "email", unique = true, nullable = false)
     private String mail;
-
+    @Column(name = "password", nullable = false)
     private String password;
 
 

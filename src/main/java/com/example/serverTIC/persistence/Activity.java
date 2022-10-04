@@ -4,8 +4,8 @@ package com.example.serverTIC.persistence;
 import javax.persistence.*;
 
 
-@Entity
-@Table
+@Entity(name = "Activity")
+@Table(name = "activities")
 public class Activity {
 
     @Id
@@ -18,16 +18,16 @@ public class Activity {
             strategy = GenerationType.SEQUENCE,
             generator = "company_sequence"
     )
-
+    @Column(name = "activity_id", updatable = false)
     private Long id;
-
     private String clubId;
-
+    @Column(name = "nombre", unique = true, nullable = false)
     private String nombre;
+    @Column(name = "precio", nullable = false)
     private Long precio;
-
+    @Column(name = "cupos")
     private int cupos;
-
+    @Column(name = "categoria", nullable = false)
     private int categoria;
 
     public Activity(String nombre,Long precio, int cupos, int categoria) {

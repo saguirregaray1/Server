@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table
+@Entity(name = "Employee")
+@Table(name = "employee_users")
 public class Employee {
     @Id
     @SequenceGenerator(
@@ -17,14 +17,19 @@ public class Employee {
             strategy = GenerationType.SEQUENCE,
             generator = "employee_sequence"
     )
+    @Column(name = "employee_id", updatable = false)
     private Long id;
     private Long companyId;
+    @Column(name = "cedula", unique = true, nullable = false)
     private Long cedula;
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
+    @Column(name = "budget", nullable = false)
     private Long saldo;
+    @Column(name = "password", nullable = false)
     private String password;
-
-  //  private List<Activity> favs;
+    @OneToMany
+    private List<Activity> favs;
 
 
     public Employee(Long cedula, String mail, Long saldo, Long companyId, String password) {

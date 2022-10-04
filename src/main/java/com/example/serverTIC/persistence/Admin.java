@@ -1,17 +1,25 @@
 package com.example.serverTIC.persistence;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-@Entity
-@Table
+@Entity(name = "Admin")
+@Table(name = "Admin_users")
 public class Admin {
     @Id
+    @SequenceGenerator(
+            name = "club_sequence",
+            sequenceName = "club_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "club_sequence"
+    )
+    @Column(name = "admin_id", updatable = false)
     private Long id;
-
+    @Column(name = "email", unique = true, nullable = false)
     private String mail;
-
+    @Column(name = "password", nullable = false)
     private String password;
 
     public Admin(String mail, String password) {

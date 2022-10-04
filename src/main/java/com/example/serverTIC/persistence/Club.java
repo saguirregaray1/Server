@@ -2,8 +2,8 @@ package com.example.serverTIC.persistence;
 
 import javax.persistence.*;
 
-@Entity
-@Table
+@Entity(name = "Club")
+@Table(name = "club_users")
 public class Club {
     @Id
     @SequenceGenerator(
@@ -15,10 +15,14 @@ public class Club {
             strategy = GenerationType.SEQUENCE,
             generator = "club_sequence"
     )
+    @Column(name = "club_id", updatable = false)
     private Long id;
+    @Column(name = "nombre", unique = true, nullable = false)
     private String nombre;
     private String dir;
+    @Column(name = "email", unique = true, nullable = false)
     private String mail;
+    @Column(name = "password", nullable = false)
     private String password;
 
 
