@@ -16,13 +16,11 @@ import java.util.Optional;
  @RequestMapping(path= "/club")
  public class ClubController {
      private final ClubService clubService;
-     private final EmployeeService employeeService;
 
      private final ActivityService activityService;
      @Autowired
-     public ClubController(ClubService service, EmployeeService employeeService, ActivityService activityService) {
+     public ClubController(ClubService service, ActivityService activityService) {
          this.clubService = service;
-         this.employeeService = employeeService;
          this.activityService = activityService;
         }
 

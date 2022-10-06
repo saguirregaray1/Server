@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "Employee")
-@Table(name = "employee_users")
+@Table(name = "employee")
 public class Employee {
     @Id
     @SequenceGenerator(
@@ -38,7 +38,7 @@ public class Employee {
         this.saldo = saldo;
         this.companyId = companyId;
         this.password= password;
-    //    this.favs = new ArrayList<>();
+        this.favs = new ArrayList<>();
     }
 
     public Employee() {

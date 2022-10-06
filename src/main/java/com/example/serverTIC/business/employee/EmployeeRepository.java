@@ -12,4 +12,7 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
     Optional<Employee> findEmployeeByCedula(Long cedula);
 
     Optional<Employee> findEmployeeById(Long employeeId);
+
+    Optional<Employee> findEmployeeByEmail(String email);
+
 }

@@ -3,7 +3,7 @@ package com.example.serverTIC.persistence;
 import javax.persistence.*;
 
 @Entity(name = "Admin")
-@Table(name = "Admin_users")
+@Table(name = "Admin")
 public class Admin {
     @Id
     @SequenceGenerator(
