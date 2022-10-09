@@ -1,6 +1,9 @@
 package com.example.serverTIC.business.employee;
 
+import com.example.serverTIC.business.activity.ActivityRepository;
+import com.example.serverTIC.business.activity.ActivityService;
 import com.example.serverTIC.business.appuser.AppUserRepository;
+import com.example.serverTIC.persistence.Activity;
 import com.example.serverTIC.persistence.AppUser;
 import com.example.serverTIC.persistence.AppUserRole;
 import com.example.serverTIC.persistence.Employee;
@@ -14,12 +17,15 @@ public class EmployeeService{
 
     private final EmployeeRepository employeeRepository;
 
+    private final ActivityRepository activityRepository;
+
     private final AppUserRepository appUserRepository;
 
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository, AppUserRepository appUserRepository){
+    public EmployeeService(EmployeeRepository employeeRepository, AppUserRepository appUserRepository, ActivityRepository activityRepository){
         this.employeeRepository = employeeRepository;
         this.appUserRepository = appUserRepository;
+        this.activityRepository = activityRepository;
     }
 
     public void addNewEmployee(Employee employee){
@@ -55,9 +61,20 @@ public class EmployeeService{
             Employee employee1 = temp.get();
             employee1.setCompanyId(employee.getCompanyId());
             employee1.setSaldo(employee.getSaldo());
-            employee1.setCedula(employee.getCedula());
             employee1.setEmail(employee.getEmail());
-            employee1.setId(employee.getId());
+        }
+    }
+
+    public void addFavouriteActivity(Long activityId, Long employeeId){
+        Optional<Employee> emp=employeeRepository.findById(employeeId);
+        Optional<Activity> act=activityRepository.findById(activityId);
+        if(emp.isEmpty() || act.isEmpty()){
+            throw new IllegalStateException("empleado o actividad no existen");
+        }
+        Employee employee=emp.get();
+        Activity activity=act.get();
+        if (!employee.getFavs().contains(activity)){
+            employee.addFav(activity);
         }
     }
 }

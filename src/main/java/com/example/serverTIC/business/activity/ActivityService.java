@@ -2,10 +2,13 @@ package com.example.serverTIC.business.activity;
 
 import com.example.serverTIC.business.employee.EmployeeRepository;
 import com.example.serverTIC.persistence.Activity;
+import com.example.serverTIC.persistence.ActivityCategories;
+import com.example.serverTIC.persistence.Admin;
 import com.example.serverTIC.persistence.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,9 +44,9 @@ public class ActivityService {
         return activityRepository.findActivitiesByCategoria(category);
     }
 
-    public boolean registerToActivity(List<Long> idList) {
-        Optional<Activity> act= activityRepository.findById(idList.get(0));
-        Optional<Employee> emp= employeeRepository.findEmployeeById(idList.get(1));
+    public boolean registerToActivity(Long activityId, Long employeeId) {
+        Optional<Activity> act= activityRepository.findById(activityId);
+        Optional<Employee> emp= employeeRepository.findEmployeeById(employeeId);
         if(act.isEmpty() || emp.isEmpty()){
             throw new IllegalStateException("activity doesn't exist");
         }
@@ -55,5 +58,20 @@ public class ActivityService {
         activity.setCupos(activity.getCupos()-1);
         employee.setSaldo(employee.getSaldo()-activity.getPrecio());
         return true;
+    }
+
+    public void updateActivity(Activity activity, Long activityId) {
+        Optional<Activity> temp=activityRepository.findById(activityId);
+        if(temp.isEmpty()){
+            addNewActivity(activity);
+        }
+        else{
+            Activity activity1=temp.get();
+            activity1.setPrecio(activity.getPrecio());
+            activity1.setNombre(activity.getNombre());
+            activity1.setCupos(activity.getCupos());
+            activity1.setActivityCategories(activity.getActivityCategories());
+            activity1.setClubId(activity.getClubId());
+        }
     }
 }

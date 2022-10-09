@@ -40,7 +40,6 @@ public class AppUserService {
         } else {
             AppUser appUser1 = temp.get();
             appUser1.setEmail(appUser.getEmail());
-            appUser1.setId(appUser.getId());
             appUser1.setPassword(appUser.getPassword());
             appUser1.setAppUserRole(appUser.getAppUserRole());
         }

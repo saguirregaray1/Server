@@ -61,7 +61,7 @@ import java.util.Optional;
 
 
 
-    // Activity
+        // Activity
         @GetMapping(path="/activity")
         public List<Activity> getListOfActivities(){
          return activityService.getActivities();
@@ -73,10 +73,13 @@ import java.util.Optional;
         @DeleteMapping(path="/activity/{activityName}")
         public void deleteActivity(@PathVariable String activityName)   {activityService.deleteActivity(activityName); }
 
+        @PutMapping(path="/activity/{activityId}")
+        public void updateActivity(@PathVariable Long activityId, @RequestBody Activity activity) {activityService.updateActivity(activity,activityId);}
+
         //registerToActivity
-        @PostMapping(path="/activity")
-        public boolean registerToActivity(@RequestBody List<Long> idList){
-            return activityService.registerToActivity(idList);
+        @PostMapping(path="/activity/{activityId}")
+        public boolean registerToActivity(@PathVariable Long activityId,@RequestBody Long employeeId){
+            return activityService.registerToActivity(activityId,employeeId);
         }
 
         //filter

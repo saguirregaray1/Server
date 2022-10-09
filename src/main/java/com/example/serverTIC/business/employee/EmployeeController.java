@@ -39,8 +39,8 @@ public class EmployeeController {
     @GetMapping(path="{cedula}")
     public boolean isAnEmployee(@PathVariable Long cedula){ return employeeService.isAnEmployee(cedula); }
 
-    //addFavourite
-
+    @PostMapping(path="{activityId}")
+    public void addToFavouriteList(@PathVariable Long activityId, @RequestBody Long employeeId) { employeeService.addFavouriteActivity(activityId,employeeId);}
 
 
 }

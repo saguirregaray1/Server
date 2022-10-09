@@ -36,7 +36,6 @@ public class CompanyService {
         } else {
             Company company1 = temp.get();
             company1.setEmail(company.getEmail());
-            company1.setId(company.getId());
             company1.setNroCuenta(company.getNroCuenta());
             company1.setNombre(company.getNombre());
             company1.setPassword(company.getPassword());

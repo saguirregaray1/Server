@@ -20,7 +20,8 @@ public class Activity {
     )
     @Column(updatable = false)
     private Long id;
-    private String clubId;
+    @Column(updatable = false, nullable = false)
+    private Long clubId;
     @Column(unique = true, nullable = false)
     private String nombre;
     @Column(nullable = false)
@@ -28,23 +29,25 @@ public class Activity {
     @Column
     private int cupos;
     @Column(nullable = false)
-    private int categoria;
+    @Enumerated(EnumType.STRING)
+    private ActivityCategories activityCategories;
 
-    public Activity(String nombre,Long precio, int cupos, int categoria) {
+    public Activity(Long clubId,String nombre,Long precio, int cupos, ActivityCategories activityCategories) {
+        this.clubId = clubId;
         this.nombre = nombre;
         this.precio = precio;
         this.cupos = cupos;
-        this.categoria = categoria;
+        this.activityCategories = activityCategories;
     }
 
     public Activity() {
     }
 
-    public String getClubId() {
+    public Long getClubId() {
         return clubId;
     }
 
-    public void setClubId(String clubId) {
+    public void setClubId(Long clubId) {
         this.clubId = clubId;
     }
 
@@ -64,12 +67,12 @@ public class Activity {
         this.cupos = cupos;
     }
 
-    public int getCategoria() {
-        return categoria;
+    public ActivityCategories getActivityCategories() {
+        return activityCategories;
     }
 
-    public void setCategoria(int categoria) {
-        this.categoria = categoria;
+    public void setActivityCategories(ActivityCategories activityCategories) {
+        this.activityCategories = activityCategories;
     }
 
     public Long getId() {

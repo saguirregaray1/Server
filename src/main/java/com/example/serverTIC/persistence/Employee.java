@@ -91,5 +91,17 @@ public class Employee {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public List<Activity> getFavs() {
+        return favs;
+    }
+
+    public void setFavs(List<Activity> favs) {
+        this.favs = favs;
+    }
+
+    public void addFav(Activity activity) {
+        this.favs.add(activity);
+    }
 }
 
