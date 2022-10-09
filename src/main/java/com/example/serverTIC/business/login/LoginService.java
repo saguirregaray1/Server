@@ -1,9 +1,7 @@
 package com.example.serverTIC.business.login;
 
-import com.example.serverTIC.business.admin.AdminRepository;
-import com.example.serverTIC.persistence.Admin;
-import org.apache.coyote.Response;
-import org.apache.juli.logging.Log;
+import com.example.serverTIC.business.appuser.AppUserRepository;
+import com.example.serverTIC.persistence.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,23 +12,23 @@ import java.util.Optional;
 @Service
 public class LoginService {
 
-    private final AdminRepository adminRepository;
+    private final AppUserRepository appUserRepository;
 
     @Autowired
-    public LoginService(AdminRepository adminRepository) {
-        this.adminRepository = adminRepository;
+    public LoginService(AppUserRepository appUserRepository) {
+        this.appUserRepository = appUserRepository;
     }
 
 
     public ResponseEntity isLoginCorrect(LoginRequest loginRequest) {
-        Optional<Admin> admin = adminRepository.findAdminByMail(loginRequest.getMail());
+        Optional<AppUser> temp=appUserRepository.findAppUserByEmail(loginRequest.getMail());
 
-        if (admin.isEmpty() ||!admin.get().getPassword().equals(loginRequest.getPassword())){
+        if (temp.isEmpty() || !temp.get().getPassword().equals(loginRequest.getPassword())){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        Admin administrador=admin.get();
+        AppUser appUser=temp.get();
 
-        return new ResponseEntity<>(administrador,HttpStatus.OK);
+        return new ResponseEntity<>(appUser,HttpStatus.OK);
 
     }
 }

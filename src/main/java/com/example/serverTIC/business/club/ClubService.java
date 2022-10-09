@@ -31,5 +31,18 @@ public class ClubService {
         }
         clubRepository.deleteById(temp.get().getId());
     }
+    public void updateClub(Club club, Long clubId) {
+        Optional<Club> temp = clubRepository.findById(clubId);
+        if (temp.isEmpty()) {
+            addNewClub(club);
+        } else {
+            Club club1 = temp.get();
+            club1.setEmail(club.getEmail());
+            club1.setId(club.getId());
+            club1.setNombre(club.getNombre());
+            club1.setPassword(club.getPassword());
+            club1.setDir(club.getDir());
+        }
+    }
 
 }

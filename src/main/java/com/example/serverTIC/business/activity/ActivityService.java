@@ -41,9 +41,9 @@ public class ActivityService {
         return activityRepository.findActivitiesByCategoria(category);
     }
 
-    public boolean registerToActivity(Long activityId, Long employeeId) {
-        Optional<Activity> act= activityRepository.findActivityById(activityId);
-        Optional<Employee> emp= employeeRepository.findEmployeeById(employeeId);
+    public boolean registerToActivity(List<Long> idList) {
+        Optional<Activity> act= activityRepository.findById(idList.get(0));
+        Optional<Employee> emp= employeeRepository.findEmployeeById(idList.get(1));
         if(act.isEmpty() || emp.isEmpty()){
             throw new IllegalStateException("activity doesn't exist");
         }

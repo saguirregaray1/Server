@@ -1,5 +1,7 @@
 package com.example.serverTIC.business.company;
 
+import com.example.serverTIC.business.appuser.AppUserService;
+import com.example.serverTIC.persistence.AppUser;
 import com.example.serverTIC.persistence.Company;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,9 +12,13 @@ import java.util.List;
 public class CompanyController {
 
     private final CompanyService companyService;
+
+    private final AppUserService appUserService;
     @Autowired
-    public CompanyController(CompanyService companyService) {
+    public CompanyController(CompanyService companyService, AppUserService appUserService) {
         this.companyService = companyService;
+        this.appUserService = appUserService;
+
     }
 
     @GetMapping
@@ -28,6 +34,22 @@ public class CompanyController {
         companyService.deleteCompany(companyName);
     }
 
-    //updateCompany
+    @PutMapping(path="/{companyId}")
+    public void updateCompany(@PathVariable Long companyId, @RequestBody Company company) { companyService.updateCompany(company,companyId);}
+
+    //CompanyUser
+
+    @PostMapping(path="/user")
+    public void registerNewCompanyUser(@RequestBody AppUser appUser){appUserService.addNewAppUser(appUser);
+    }
+
+    @DeleteMapping(path="/user/{userId}")
+    public void deleteCompanyUser(@PathVariable Long userId){ appUserService.deleteAppUser(userId);}
+
+    @GetMapping(path="/user")
+    public List<AppUser> getListOfCompanyUsers(){ return appUserService.getAppUsers();}
+
+    @PutMapping(path="/user/{userId}")
+    public void updateCompanyUser(@PathVariable Long userId, @RequestBody AppUser appUser) {appUserService.updateAppUser(appUser,userId);}
 
 }

@@ -1,11 +1,7 @@
 package com.example.serverTIC.business.admin;
 
-import com.example.serverTIC.business.club.ClubService;
-import com.example.serverTIC.business.company.CompanyService;
-import com.example.serverTIC.business.employee.EmployeeService;
+
 import com.example.serverTIC.persistence.Admin;
-import com.example.serverTIC.persistence.Club;
-import com.example.serverTIC.persistence.Company;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +28,8 @@ public class AdminController {
     @DeleteMapping(path="{adminId}")
     public void deleteAdmin(@PathVariable Long adminId) {adminService.deleteAdmin(adminId);}
 
-    //updateAdmin
+    @PutMapping(path="{adminId}")
+    public void updateAdmin(@PathVariable Long adminId, @RequestBody Admin admin) {adminService.updateAdmin(admin,adminId);}
 
 
 

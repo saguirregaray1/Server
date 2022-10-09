@@ -2,10 +2,10 @@ package com.example.serverTIC.business.club;
 
 
 import com.example.serverTIC.business.activity.ActivityService;
-import com.example.serverTIC.business.employee.EmployeeService;
+import com.example.serverTIC.business.appuser.AppUserService;
 import com.example.serverTIC.persistence.Activity;
+import com.example.serverTIC.persistence.AppUser;
 import com.example.serverTIC.persistence.Club;
-import com.example.serverTIC.persistence.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,10 +18,13 @@ import java.util.Optional;
      private final ClubService clubService;
 
      private final ActivityService activityService;
+
+     private final AppUserService appUserService;
      @Autowired
-     public ClubController(ClubService service, ActivityService activityService) {
+     public ClubController(ClubService service, ActivityService activityService, AppUserService appUserService) {
          this.clubService = service;
          this.activityService = activityService;
+         this.appUserService = appUserService;
         }
 
         @GetMapping
@@ -39,10 +42,26 @@ import java.util.Optional;
          clubService.deleteClub(clubName);
         }
 
-        //updateClub
+        @PutMapping(path="{clubId}")
+        public void updateClub(@PathVariable Long clubId, @RequestBody Club club) { clubService.updateClub(club,clubId);}
+
+        //ClubUser
+        @PostMapping(path="/user")
+        public void registerNewClubUser(@RequestBody AppUser appUser){appUserService.addNewAppUser(appUser);
+        }
+
+        @DeleteMapping(path="/user/{userId}")
+        public void deleteClubUser(@PathVariable Long userId){ appUserService.deleteAppUser(userId);}
+
+        @GetMapping(path="/user")
+        public List<AppUser> getListOfClubUsers(){ return appUserService.getAppUsers();}
+
+        @PutMapping(path="/user/{userId}")
+        public void updateClubUser(@PathVariable Long userId, @RequestBody AppUser appUser) {appUserService.updateAppUser(appUser,userId);}
 
 
-        // Activity
+
+    // Activity
         @GetMapping(path="/activity")
         public List<Activity> getListOfActivities(){
          return activityService.getActivities();
@@ -55,9 +74,9 @@ import java.util.Optional;
         public void deleteActivity(@PathVariable String activityName)   {activityService.deleteActivity(activityName); }
 
         //registerToActivity
-        @PostMapping(path="/activity/{activityId}{empId}")
-        public boolean registerToActivity(@PathVariable Long activityId, Long employeeId){
-            return activityService.registerToActivity(activityId,employeeId);
+        @PostMapping(path="/activity")
+        public boolean registerToActivity(@RequestBody List<Long> idList){
+            return activityService.registerToActivity(idList);
         }
 
         //filter
@@ -71,6 +90,5 @@ import java.util.Optional;
 
         //updateActivity
 
-
-    }
+}
 

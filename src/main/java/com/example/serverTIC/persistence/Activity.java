@@ -4,30 +4,30 @@ package com.example.serverTIC.persistence;
 import javax.persistence.*;
 
 
-@Entity(name = "Activity")
-@Table(name = "activity")
+@Entity
+@Table
 public class Activity {
 
     @Id
     @SequenceGenerator(
-            name = "company_sequence",
-            sequenceName = "company_sequence",
+            name = "activity_sequence",
+            sequenceName = "activity_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "company_sequence"
+            generator = "activity_sequence"
     )
-    @Column(name = "activity_id", updatable = false)
+    @Column(updatable = false)
     private Long id;
     private String clubId;
-    @Column(name = "nombre", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String nombre;
-    @Column(name = "precio", nullable = false)
+    @Column(nullable = false)
     private Long precio;
-    @Column(name = "cupos")
+    @Column
     private int cupos;
-    @Column(name = "categoria", nullable = false)
+    @Column(nullable = false)
     private int categoria;
 
     public Activity(String nombre,Long precio, int cupos, int categoria) {

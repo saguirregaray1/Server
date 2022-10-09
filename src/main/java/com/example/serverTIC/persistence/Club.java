@@ -2,8 +2,8 @@ package com.example.serverTIC.persistence;
 
 import javax.persistence.*;
 
-@Entity(name = "Club")
-@Table(name = "club")
+@Entity
+@Table
 public class Club {
     @Id
     @SequenceGenerator(
@@ -15,20 +15,20 @@ public class Club {
             strategy = GenerationType.SEQUENCE,
             generator = "club_sequence"
     )
-    @Column(name = "club_id", updatable = false)
+    @Column(updatable = false)
     private Long id;
-    @Column(name = "nombre", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String nombre;
     private String dir;
-    @Column(name = "email", unique = true, nullable = false)
-    private String mail;
-    @Column(name = "password", nullable = false)
+    @Column(unique = true, nullable = false)
+    private String email;
+    @Column(nullable = false)
     private String password;
 
 
-    public Club(String nombre, String mail, String dir, String password) {
+    public Club(String nombre, String email, String dir, String password) {
         this.nombre = nombre;
-        this.mail = mail;
+        this.email = email;
         this.dir = dir;
         this.password = password;
     }
@@ -52,12 +52,12 @@ public class Club {
         this.nombre = nombre;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String tel) {
-        this.mail = tel;
+    public void setEmail(String tel) {
+        this.email = tel;
     }
 
     public String getDir() {
@@ -82,7 +82,7 @@ public class Club {
         return "Gym{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
-                ", telefono=" + mail +
+                ", telefono=" + email +
                 ", dir='" + dir + '\'' +
                 '}';
     }

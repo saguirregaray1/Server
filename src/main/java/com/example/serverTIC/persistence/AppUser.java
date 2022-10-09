@@ -4,16 +4,16 @@ import javax.persistence.*;
 
 @Entity
 @Table
-public class Admin {
+public class AppUser {
     @Id
     @SequenceGenerator(
-            name = "admin_sequence",
-            sequenceName = "admin_sequence",
+            name = "appuser_sequence",
+            sequenceName = "appuser_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "admin_sequence"
+            generator = "appuser_sequence"
     )
     @Column(updatable = false)
     private Long id;
@@ -22,12 +22,24 @@ public class Admin {
     @Column(nullable = false)
     private String password;
 
-    public Admin(String email, String password) {
+    @Enumerated(EnumType.STRING)
+    private AppUserRole appUserRole;
+
+    public AppUser(String eail, String password, AppUserRole appUserRole) {
         this.email = email;
         this.password = password;
+        this.appUserRole = appUserRole;
     }
 
-    public Admin(){
+    public AppUserRole getAppUserRole() {
+        return appUserRole;
+    }
+
+    public void setAppUserRole(AppUserRole appUserRole) {
+        this.appUserRole = appUserRole;
+    }
+
+    public AppUser(){
     }
 
     public void setId(Long id) {
