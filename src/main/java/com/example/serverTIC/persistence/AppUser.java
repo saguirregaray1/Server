@@ -25,7 +25,7 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
 
-    public AppUser(String eail, String password, AppUserRole appUserRole) {
+    public AppUser(String email, String password, AppUserRole appUserRole) {
         this.email = email;
         this.password = password;
         this.appUserRole = appUserRole;

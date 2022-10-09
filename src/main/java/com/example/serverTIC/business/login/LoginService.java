@@ -21,7 +21,7 @@ public class LoginService {
 
 
     public ResponseEntity isLoginCorrect(LoginRequest loginRequest) {
-        Optional<AppUser> temp=appUserRepository.findAppUserByEmail(loginRequest.getMail());
+        Optional<AppUser> temp=appUserRepository.findAppUserByEmail(loginRequest.getEmail());
 
         if (temp.isEmpty() || !temp.get().getPassword().equals(loginRequest.getPassword())){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

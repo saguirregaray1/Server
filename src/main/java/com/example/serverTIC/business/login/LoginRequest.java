@@ -2,21 +2,21 @@ package com.example.serverTIC.business.login;
 
 public class LoginRequest {
 
-    private String mail;
+    private String email;
 
     private String password;
 
-    public LoginRequest(String mail, String password) {
-        this.mail = mail;
+    public LoginRequest(String email, String password) {
+        this.email = email;
         this.password = password;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
