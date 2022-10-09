@@ -1,6 +1,7 @@
 package com.example.serverTIC.business.activity;
 
 import com.example.serverTIC.persistence.Activity;
+import com.example.serverTIC.persistence.ActivityCategories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +12,7 @@ public interface ActivityRepository extends JpaRepository<Activity,Long> {
 
     Optional<Activity> findActivityByNombre(String nombre);
 
-    Optional<Activity> findActivitiesByCategoria(int categoria);
+    Optional<Activity> findActivitiesByActivityCategories(ActivityCategories activityCategories);
 
 
 }

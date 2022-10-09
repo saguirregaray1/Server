@@ -40,8 +40,8 @@ public class ActivityService {
         activityRepository.deleteById(temp.get().getId());
     }
 
-    public Optional<Activity> getActivitiesByCategory(int category){
-        return activityRepository.findActivitiesByCategoria(category);
+    public Optional<Activity> getActivitiesByCategory(ActivityCategories category){
+        return activityRepository.findActivitiesByActivityCategories(category);
     }
 
     public boolean registerToActivity(Long activityId, Long employeeId) {

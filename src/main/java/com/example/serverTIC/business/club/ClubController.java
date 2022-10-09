@@ -4,6 +4,7 @@ package com.example.serverTIC.business.club;
 import com.example.serverTIC.business.activity.ActivityService;
 import com.example.serverTIC.business.appuser.AppUserService;
 import com.example.serverTIC.persistence.Activity;
+import com.example.serverTIC.persistence.ActivityCategories;
 import com.example.serverTIC.persistence.AppUser;
 import com.example.serverTIC.persistence.Club;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +85,7 @@ import java.util.Optional;
 
         //filter
         @GetMapping(path="/activity/{category}")
-        public Optional<Activity> getListOfActivitiesByCategory(@PathVariable int category) {
+        public Optional<Activity> getListOfActivitiesByCategory(@PathVariable ActivityCategories category) {
             return activityService.getActivitiesByCategory(category);
         }
 
