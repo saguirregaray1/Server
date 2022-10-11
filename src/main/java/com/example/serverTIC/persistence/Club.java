@@ -1,6 +1,7 @@
 package com.example.serverTIC.persistence;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table
@@ -24,6 +25,9 @@ public class Club {
     private String email;
     @Column(nullable = false)
     private String password;
+
+    @OneToMany
+    private List<Activity> clubActivities;
 
 
     public Club(String nombre, String email, String dir, String password) {

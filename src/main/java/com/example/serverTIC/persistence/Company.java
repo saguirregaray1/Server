@@ -1,6 +1,7 @@
 package com.example.serverTIC.persistence;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table
@@ -28,6 +29,9 @@ public class Company {
 
     @Column(nullable = false)
     private String password;
+
+    @OneToMany
+    private List<Employee> companyEmployees;
 
 
 
