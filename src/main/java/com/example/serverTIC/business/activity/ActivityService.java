@@ -1,14 +1,10 @@
 package com.example.serverTIC.business.activity;
 
+import com.example.serverTIC.business.club.ClubRepository;
 import com.example.serverTIC.business.employee.EmployeeRepository;
-import com.example.serverTIC.persistence.Activity;
-import com.example.serverTIC.persistence.ActivityCategories;
-import com.example.serverTIC.persistence.Admin;
-import com.example.serverTIC.persistence.Employee;
+import com.example.serverTIC.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,27 +14,24 @@ public class ActivityService {
     private final EmployeeRepository employeeRepository;
     private final ActivityRepository activityRepository;
 
+    private final ClubRepository clubRepository;
+
     @Autowired
-    public ActivityService(EmployeeRepository employeeRepository, ActivityRepository activityRepository) {
+    public ActivityService(EmployeeRepository employeeRepository, ActivityRepository activityRepository, ClubRepository clubRepository) {
         this.employeeRepository = employeeRepository;
         this.activityRepository = activityRepository;
+        this.clubRepository = clubRepository;
     }
 
     public void addNewActivity(Activity activity) {
         activityRepository.save(activity);
     }
 
-    public List<Activity> getActivities(){
-        return activityRepository.findAll();
+    public List<List> getActivities(){
+        return clubRepository.getAllActivitiesJoinClubs();
     }
 
-    public void deleteActivity(String activityName) {
-        Optional<Activity> temp= activityRepository.findActivityByNombre(activityName);
-        if(temp.isEmpty()){
-            throw new IllegalStateException("club is not registered");
-        }
-        activityRepository.deleteById(temp.get().getId());
-    }
+    //delete activity
 
     public Optional<Activity> getActivitiesByCategory(ActivityCategories category){
         return activityRepository.findActivitiesByActivityCategories(category);
@@ -71,7 +64,16 @@ public class ActivityService {
             activity1.setNombre(activity.getNombre());
             activity1.setCupos(activity.getCupos());
             activity1.setActivityCategories(activity.getActivityCategories());
-            activity1.setClubId(activity.getClubId());
         }
+    }
+
+    public void deleteActivity(String activityName, Club club) {
+
+        Optional<Activity> temp=activityRepository.findActivitiesByClubAndNombre(club,activityName);
+
+        if (temp.isEmpty()){
+            throw new IllegalStateException("actividad no existe");
+        }
+        activityRepository.deleteById(temp.get().getId());
     }
 }

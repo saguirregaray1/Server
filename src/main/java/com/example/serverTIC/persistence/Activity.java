@@ -32,7 +32,7 @@ public class Activity {
     @Enumerated(EnumType.STRING)
     private ActivityCategories activityCategories;
 
-    public Activity(Long clubId,String nombre,Long precio, int cupos, ActivityCategories activityCategories) {
+    public Activity(Long clubId, String nombre, Long precio, int cupos, ActivityCategories activityCategories) {
         this.clubId = clubId;
         this.nombre = nombre;
         this.precio = precio;

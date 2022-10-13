@@ -64,15 +64,15 @@ import java.util.Optional;
 
         // Activity
         @GetMapping(path="/activity")
-        public List<Activity> getListOfActivities(){
+        public List<List> getListOfActivities(){
          return activityService.getActivities();
         }
 
         @PostMapping(path="/activity")
         public void registerNewActivity(@RequestBody Activity activity) {activityService.addNewActivity(activity);}
 
-        @DeleteMapping(path="/activity/{activityName}")
-        public void deleteActivity(@PathVariable String activityName)   {activityService.deleteActivity(activityName); }
+       @DeleteMapping(path="/activity/{activityName}")
+        public void deleteActivity(@PathVariable String activityName, @RequestBody Club club)   {activityService.deleteActivity(activityName,club); }
 
         @PutMapping(path="/activity/{activityId}")
         public void updateActivity(@PathVariable Long activityId, @RequestBody Activity activity) {activityService.updateActivity(activity,activityId);}

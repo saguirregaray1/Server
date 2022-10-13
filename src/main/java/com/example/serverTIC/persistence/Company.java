@@ -1,6 +1,7 @@
 package com.example.serverTIC.persistence;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,13 +23,8 @@ public class Company {
     @Column(unique = true, nullable = false)
     private String nombre;
 
-    @Column(unique = true, nullable = false)
-    private String email;
     @Column(nullable = false)
     private Long nroCuenta;
-
-    @Column(nullable = false)
-    private String password;
 
     @OneToMany
     private List<Employee> companyEmployees;
@@ -36,11 +32,10 @@ public class Company {
 
 
 
-    public Company(String nombre, String email, Long nroCuenta, String password) {
+    public Company(String nombre, Long nroCuenta) {
         this.nombre = nombre;
-        this.email = email;
         this.nroCuenta = nroCuenta;
-        this.password = password;
+        this.companyEmployees=new ArrayList<>();
     }
 
     public Company() {
@@ -62,14 +57,6 @@ public class Company {
         this.nombre = nombre;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String mail) {
-        this.email = mail;
-    }
-
     public Long getNroCuenta() {
         return nroCuenta;
     }
@@ -78,13 +65,21 @@ public class Company {
         this.nroCuenta = nroCuenta;
     }
 
-    public String getPassword() {
-        return password;
+    public List<Employee> getCompanyEmployees() {
+        return companyEmployees;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setCompanyEmployees(List<Employee> companyEmployees) {
+        this.companyEmployees = companyEmployees;
     }
 
-
+    @Override
+    public String toString() {
+        return "Company{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", nroCuenta=" + nroCuenta +
+                ", companyEmployees=" + companyEmployees +
+                '}';
+    }
 }

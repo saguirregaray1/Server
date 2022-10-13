@@ -1,6 +1,7 @@
 package com.example.serverTIC.business.appuser;
 
 import com.example.serverTIC.persistence.AppUser;
+import com.example.serverTIC.persistence.AppUserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

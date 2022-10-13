@@ -1,6 +1,8 @@
 package com.example.serverTIC.persistence;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -20,21 +22,16 @@ public class Club {
     private Long id;
     @Column(unique = true, nullable = false)
     private String nombre;
-    private String dir;
     @Column(unique = true, nullable = false)
-    private String email;
-    @Column(nullable = false)
-    private String password;
-
+    private String dir;
     @OneToMany
     private List<Activity> clubActivities;
 
 
-    public Club(String nombre, String email, String dir, String password) {
+    public Club(String nombre,String dir) {
         this.nombre = nombre;
-        this.email = email;
         this.dir = dir;
-        this.password = password;
+        this.clubActivities=new ArrayList<>();
     }
 
     public Club() {
@@ -56,13 +53,6 @@ public class Club {
         this.nombre = nombre;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String tel) {
-        this.email = tel;
-    }
 
     public String getDir() {
         return dir;
@@ -73,21 +63,33 @@ public class Club {
     }
 
 
-    public String getPassword() {
-        return password;
+    public List<Activity> getClubActivities() {
+        return clubActivities;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setClubActivities(List<Activity> clubActivities) {
+        this.clubActivities = clubActivities;
     }
 
     @Override
     public String toString() {
-        return "Gym{" +
+        return "Club{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
-                ", telefono=" + email +
                 ", dir='" + dir + '\'' +
+                ", clubActivities=" + clubActivities +
+                ", activity=" + activity +
                 '}';
+    }
+
+    @OneToMany(mappedBy = "club")
+    private Collection<Activity> activity;
+
+    public Collection<Activity> getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Collection<Activity> activity) {
+        this.activity = activity;
     }
 }
