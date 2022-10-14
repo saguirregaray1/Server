@@ -40,7 +40,7 @@ public class ActivityService {
 
     public void deleteActivity(String activityName, Club club) {
 
-        Optional<Activity> temp=activityRepository.findActivitiesByClubAndNombre(club,activityName);
+        Optional<Activity> temp=activityRepository.findActivitiesByClubIdAndNombre(club.getId(),activityName);
 
         if (temp.isEmpty()){
             throw new IllegalStateException("actividad no existe");

@@ -10,10 +10,8 @@ import java.util.Optional;
 
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity,Long> {
-
     Optional<Activity> findActivitiesByActivityCategories(ActivityCategories activityCategories);
-
-    Optional<Activity> findActivitiesByClubAndNombre(Club club, String nombre);
+    Optional<Activity> findActivitiesByClubIdAndNombre(Long clubId, String nombre);
 
 
 
