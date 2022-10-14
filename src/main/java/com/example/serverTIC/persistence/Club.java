@@ -71,6 +71,10 @@ public class Club {
         this.clubActivities = clubActivities;
     }
 
+    public void addClubActivity(Activity activity) {
+        this.clubActivities.add(activity);
+    }
+
     @Override
     public String toString() {
         return "Club{" +
@@ -78,18 +82,6 @@ public class Club {
                 ", nombre='" + nombre + '\'' +
                 ", dir='" + dir + '\'' +
                 ", clubActivities=" + clubActivities +
-                ", activity=" + activity +
                 '}';
-    }
-
-    @OneToMany(mappedBy = "club")
-    private Collection<Activity> activity;
-
-    public Collection<Activity> getActivity() {
-        return activity;
-    }
-
-    public void setActivity(Collection<Activity> activity) {
-        this.activity = activity;
     }
 }

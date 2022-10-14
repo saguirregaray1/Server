@@ -43,6 +43,7 @@ public class AppUserService {
             appUser1.setEmail(appUser.getEmail());
             appUser1.setPassword(appUser.getPassword());
             appUser1.setAppUserRole(appUser.getAppUserRole());
+            appUserRepository.save(appUser1);
         }
     }
 }

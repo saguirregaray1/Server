@@ -24,6 +24,13 @@ public class ActivityService {
     }
 
     public void addNewActivity(Activity activity) {
+        Optional<Club> temp=clubRepository.findById(activity.getClubId());
+        if(temp.isEmpty()){
+            throw new IllegalStateException("club no existe");
+        }
+        Club club=temp.get();
+        club.addClubActivity(activity);
+        clubRepository.save(club);
         activityRepository.save(activity);
     }
 
@@ -31,7 +38,17 @@ public class ActivityService {
         return clubRepository.getAllActivitiesJoinClubs();
     }
 
-    //delete activity
+    public void deleteActivity(String activityName, Club club) {
+
+        Optional<Activity> temp=activityRepository.findActivitiesByClubAndNombre(club,activityName);
+
+        if (temp.isEmpty()){
+            throw new IllegalStateException("actividad no existe");
+        }
+        activityRepository.deleteById(temp.get().getId());
+        //borrar de club activity
+
+    }
 
     public Optional<Activity> getActivitiesByCategory(ActivityCategories category){
         return activityRepository.findActivitiesByActivityCategories(category);
@@ -64,16 +81,9 @@ public class ActivityService {
             activity1.setNombre(activity.getNombre());
             activity1.setCupos(activity.getCupos());
             activity1.setActivityCategories(activity.getActivityCategories());
+            activityRepository.save(activity);
+            //update en el club
         }
     }
 
-    public void deleteActivity(String activityName, Club club) {
-
-        Optional<Activity> temp=activityRepository.findActivitiesByClubAndNombre(club,activityName);
-
-        if (temp.isEmpty()){
-            throw new IllegalStateException("actividad no existe");
-        }
-        activityRepository.deleteById(temp.get().getId());
-    }
 }

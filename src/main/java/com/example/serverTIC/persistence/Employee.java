@@ -24,14 +24,20 @@ public class Employee {
     private Long cedula;
     @Column(nullable = false)
     private Long saldo;
+    @Column
+    private String email;
+    @Column
+    private String password;
     @OneToMany
     private List<Activity> favs;
 
 
-    public Employee(Long cedula,Long saldo, Long companyId) {
+    public Employee(Long cedula,Long saldo, Long companyId,String email,String password) {
         this.cedula = cedula;
         this.saldo = saldo;
         this.companyId = companyId;
+        this.email = email;
+        this.password = password;
         this.favs = new ArrayList<>();
     }
 
@@ -70,6 +76,22 @@ public class Employee {
         this.companyId = companyId;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public List<Activity> getFavs() {
         return favs;
     }
@@ -89,6 +111,8 @@ public class Employee {
                 ", companyId=" + companyId +
                 ", cedula=" + cedula +
                 ", saldo=" + saldo +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", favs=" + favs +
                 '}';
     }

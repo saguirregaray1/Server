@@ -37,11 +37,10 @@ public class ClubService {
             addNewClub(club);
         } else {
             Club club1 = temp.get();
-            club1.setEmail(club.getEmail());
-            club1.setId(club.getId());
+            club1.setClubActivities(club.getClubActivities());
             club1.setNombre(club.getNombre());
-            club1.setPassword(club.getPassword());
             club1.setDir(club.getDir());
+            clubRepository.save(club1);
         }
     }
 

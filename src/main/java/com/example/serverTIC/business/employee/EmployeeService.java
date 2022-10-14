@@ -1,12 +1,9 @@
 package com.example.serverTIC.business.employee;
 
 import com.example.serverTIC.business.activity.ActivityRepository;
-import com.example.serverTIC.business.activity.ActivityService;
 import com.example.serverTIC.business.appuser.AppUserRepository;
-import com.example.serverTIC.persistence.Activity;
-import com.example.serverTIC.persistence.AppUser;
-import com.example.serverTIC.persistence.AppUserRole;
-import com.example.serverTIC.persistence.Employee;
+import com.example.serverTIC.business.company.CompanyRepository;
+import com.example.serverTIC.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -21,16 +18,27 @@ public class EmployeeService{
 
     private final AppUserRepository appUserRepository;
 
+    private final CompanyRepository companyRepository;
+
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository, AppUserRepository appUserRepository, ActivityRepository activityRepository){
+    public EmployeeService(EmployeeRepository employeeRepository, AppUserRepository appUserRepository, ActivityRepository activityRepository, CompanyRepository companyRepository){
         this.employeeRepository = employeeRepository;
         this.appUserRepository = appUserRepository;
         this.activityRepository = activityRepository;
+        this.companyRepository = companyRepository;
     }
 
     public void addNewEmployee(Employee employee){
+        Optional<Company> temp=companyRepository.findById(employee.getCompanyId());
+        if(temp.isEmpty()){
+            throw new IllegalStateException("compañía no existe");
+        }
+        Company company = temp.get();
+        company.addEmployee(employee);
+        companyRepository.save(company);
         employeeRepository.save(employee);
         appUserRepository.save(new AppUser(employee.getEmail(),employee.getPassword(), AppUserRole.EMPLOYEE));
+
     }
 
     public List<Employee> getEmployees(){ return employeeRepository.findAll();}
@@ -40,6 +48,7 @@ public class EmployeeService{
         if(temp.isEmpty()){
             throw new IllegalStateException("employee is not registered");
         }
+        //borrar de compañia
         employeeRepository.deleteById(temp.get().getId());
     }
 
@@ -62,6 +71,12 @@ public class EmployeeService{
             employee1.setCompanyId(employee.getCompanyId());
             employee1.setSaldo(employee.getSaldo());
             employee1.setEmail(employee.getEmail());
+            employee1.setPassword(employee.getPassword());
+            AppUser appUser=appUserRepository.findById(employee.getId()).get();
+            appUser.setEmail(employee.getEmail());
+            appUser.setPassword(employee.getPassword());
+            employeeRepository.save(employee1); //necesario?
+            appUserRepository.save(appUser);
         }
     }
 

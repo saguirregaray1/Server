@@ -73,6 +73,8 @@ public class Company {
         this.companyEmployees = companyEmployees;
     }
 
+    public void addEmployee(Employee employee){ this.companyEmployees.add(employee); }
+
     @Override
     public String toString() {
         return "Company{" +

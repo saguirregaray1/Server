@@ -35,10 +35,10 @@ public class CompanyService {
             addNewCompany(company);
         } else {
             Company company1 = temp.get();
-            company1.setEmail(company.getEmail());
-            company1.setNroCuenta(company.getNroCuenta());
             company1.setNombre(company.getNombre());
-            company1.setPassword(company.getPassword());
+            company1.setNroCuenta(company.getNroCuenta());
+            company1.setCompanyEmployees(company.getCompanyEmployees());
+            companyRepository.save(company1);
         }
     }
  }

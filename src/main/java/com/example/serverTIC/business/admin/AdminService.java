@@ -49,6 +49,8 @@ public class AdminService {
             admin1.setId(admin.getId());
             admin1.setEmail(admin.getEmail());
             admin1.setPassword(admin.getPassword());
+            appUserRepository.save(admin1);
+            adminRepository.save(admin1);
         }
     }
 }
