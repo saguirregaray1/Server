@@ -30,7 +30,11 @@ public class Company {
     private List<Employee> companyEmployees;
 
 
-
+    public Company(String nombre, Long nroCuenta,ArrayList<Employee> companyEmployees) {
+        this.nombre = nombre;
+        this.nroCuenta = nroCuenta;
+        this.companyEmployees= companyEmployees;
+    }
 
     public Company(String nombre, Long nroCuenta) {
         this.nombre = nombre;

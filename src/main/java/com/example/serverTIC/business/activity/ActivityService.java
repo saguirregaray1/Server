@@ -29,13 +29,15 @@ public class ActivityService {
             throw new IllegalStateException("club no existe");
         }
         Club club=temp.get();
+        activityRepository.save(activity);
         club.addClubActivity(activity);
         clubRepository.save(club);
-        activityRepository.save(activity);
+
+
     }
 
-    public List<List> getActivities(){
-        return clubRepository.getAllActivitiesJoinClubs();
+    public List<Activity> getActivities(){
+        return activityRepository.findAll();
     }
 
     public void deleteActivity(String activityName, Club club) {
@@ -50,7 +52,7 @@ public class ActivityService {
 
     }
 
-    public Optional<Activity> getActivitiesByCategory(ActivityCategories category){
+    public List<Activity> getActivitiesByCategory(ActivityCategories category){
         return activityRepository.findActivitiesByActivityCategories(category);
     }
 

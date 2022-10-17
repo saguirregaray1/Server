@@ -4,6 +4,7 @@ import com.example.serverTIC.business.activity.ActivityRepository;
 import com.example.serverTIC.business.appuser.AppUserRepository;
 import com.example.serverTIC.business.company.CompanyRepository;
 import com.example.serverTIC.persistence.*;
+import net.bytebuddy.pool.TypePool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -35,8 +36,8 @@ public class EmployeeService{
         }
         Company company = temp.get();
         company.addEmployee(employee);
-        companyRepository.save(company);
         employeeRepository.save(employee);
+        companyRepository.save(company);
         appUserRepository.save(new AppUser(employee.getEmail(),employee.getPassword(), AppUserRole.EMPLOYEE));
 
     }
@@ -91,5 +92,13 @@ public class EmployeeService{
         if (!employee.getFavs().contains(activity)){
             employee.addFav(activity);
         }
+    }
+
+    public List<Activity> getFavsList(Long userId) {
+        Optional<Employee> temp=employeeRepository.findById(userId);
+        if(temp.isEmpty()){
+            throw new IllegalStateException("empleado no existe");
+        }
+        return temp.get().getFavs();
     }
 }

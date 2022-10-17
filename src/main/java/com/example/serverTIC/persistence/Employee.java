@@ -32,7 +32,16 @@ public class Employee {
     private List<Activity> favs;
 
 
-    public Employee(Long cedula,Long saldo, Long companyId,String email,String password) {
+    public Employee(Long companyId,Long cedula,Long saldo,String email,String password, ArrayList<Activity> favs) {
+        this.cedula = cedula;
+        this.saldo = saldo;
+        this.companyId = companyId;
+        this.email = email;
+        this.password = password;
+        this.favs = favs;
+    }
+
+    public Employee(Long companyId,Long cedula,Long saldo,String email,String password) {
         this.cedula = cedula;
         this.saldo = saldo;
         this.companyId = companyId;

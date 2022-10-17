@@ -64,7 +64,7 @@ import java.util.Optional;
 
         // Activity
         @GetMapping(path="/activity")
-        public List<List> getListOfActivities(){
+        public List<Activity> getListOfActivities(){
          return activityService.getActivities();
         }
 
@@ -85,7 +85,7 @@ import java.util.Optional;
 
         //filter
         @GetMapping(path="/activity/{category}")
-        public Optional<Activity> getListOfActivitiesByCategory(@PathVariable ActivityCategories category) {
+        public List<Activity> getListOfActivitiesByCategory(@PathVariable ActivityCategories category) {
             return activityService.getActivitiesByCategory(category);
         }
 
