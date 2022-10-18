@@ -14,9 +14,5 @@ public interface ClubRepository extends JpaRepository<Club,Long> {
 
     Optional<Club> findClubByNombre(String nombre);
 
-    @Query("SELECT a.nombre,a.cupos,a.precio,c.nombre,c.dir FROM Activity a INNER JOIN Club c where a.clubId=c.id")
-    List<List> getAllActivitiesJoinClubs();
-
-
 
 }

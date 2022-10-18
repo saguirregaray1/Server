@@ -1,6 +1,8 @@
 package com.example.serverTIC.persistence;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 
@@ -20,8 +22,10 @@ public class Activity {
     )
     @Column(updatable = false)
     private Long id;
-    @Column(updatable = false, nullable = false)
-    private Long clubId;
+
+    @JsonBackReference
+    @ManyToOne (targetEntity = Club.class)
+    private Club club;
     @Column(unique = true, nullable = false)
     private String nombre;
     @Column(nullable = false)
@@ -32,8 +36,8 @@ public class Activity {
     @Enumerated(EnumType.STRING)
     private ActivityCategories activityCategories;
 
-    public Activity(Long clubId, String nombre, Long precio, int cupos, ActivityCategories activityCategories) {
-        this.clubId = clubId;
+    public Activity(Club club, String nombre, Long precio, int cupos, ActivityCategories activityCategories) {
+        this.club = club;
         this.nombre = nombre;
         this.precio = precio;
         this.cupos = cupos;
@@ -43,12 +47,12 @@ public class Activity {
     public Activity() {
     }
 
-    public Long getClubId() {
-        return clubId;
+    public Club getClub() {
+        return club;
     }
 
-    public void setClubId(Long clubId) {
-        this.clubId = clubId;
+    public void setClub(Club club) {
+        this.club = club;
     }
 
     public Long getPrecio() {

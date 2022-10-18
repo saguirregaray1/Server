@@ -1,5 +1,7 @@
 package com.example.serverTIC.persistence;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,9 @@ public class Employee {
     )
     @Column(updatable = false)
     private Long id;
-    private Long companyId;
+    @JsonBackReference
+    @ManyToOne (targetEntity = Company.class)
+    private Company company;
     @Column(unique = true, nullable = false)
     private Long cedula;
     @Column(nullable = false)
@@ -32,19 +36,19 @@ public class Employee {
     private List<Activity> favs;
 
 
-    public Employee(Long companyId,Long cedula,Long saldo,String email,String password, ArrayList<Activity> favs) {
+    public Employee(Company company,Long cedula,Long saldo,String email,String password, ArrayList<Activity> favs) {
         this.cedula = cedula;
         this.saldo = saldo;
-        this.companyId = companyId;
+        this.company = company;
         this.email = email;
         this.password = password;
         this.favs = favs;
     }
 
-    public Employee(Long companyId,Long cedula,Long saldo,String email,String password) {
+    public Employee(Company company,Long cedula,Long saldo,String email,String password) {
         this.cedula = cedula;
         this.saldo = saldo;
-        this.companyId = companyId;
+        this.company = company;
         this.email = email;
         this.password = password;
         this.favs = new ArrayList<>();
@@ -77,12 +81,12 @@ public class Employee {
         this.saldo = saldo;
     }
 
-    public Long getCompanyId() {
-        return companyId;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public String getEmail() {
@@ -117,7 +121,7 @@ public class Employee {
     public String toString() {
         return "Employee{" +
                 "id=" + id +
-                ", companyId=" + companyId +
+                ", company=" + company +
                 ", cedula=" + cedula +
                 ", saldo=" + saldo +
                 ", email='" + email + '\'' +

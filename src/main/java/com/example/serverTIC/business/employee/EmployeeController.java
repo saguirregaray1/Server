@@ -25,9 +25,7 @@ public class EmployeeController {
 
     @PostMapping
     public void registerNewEmployee(@RequestBody Employee employee){
-
-        employeeService.addNewEmployee(employee);
-
+        this.employeeService.addNewEmployee(employee);
     }
 
     @DeleteMapping(path="{cedula}")

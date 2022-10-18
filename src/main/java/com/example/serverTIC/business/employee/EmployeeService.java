@@ -4,7 +4,6 @@ import com.example.serverTIC.business.activity.ActivityRepository;
 import com.example.serverTIC.business.appuser.AppUserRepository;
 import com.example.serverTIC.business.company.CompanyRepository;
 import com.example.serverTIC.persistence.*;
-import net.bytebuddy.pool.TypePool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -30,7 +29,7 @@ public class EmployeeService{
     }
 
     public void addNewEmployee(Employee employee){
-        Optional<Company> temp=companyRepository.findById(employee.getCompanyId());
+        Optional<Company> temp=companyRepository.findById(employee.getCompany().getId());
         if(temp.isEmpty()){
             throw new IllegalStateException("compañía no existe");
         }
@@ -69,7 +68,7 @@ public class EmployeeService{
         }
         else {
             Employee employee1 = temp.get();
-            employee1.setCompanyId(employee.getCompanyId());
+            employee1.setCompany(employee.getCompany());
             employee1.setSaldo(employee.getSaldo());
             employee1.setEmail(employee.getEmail());
             employee1.setPassword(employee.getPassword());

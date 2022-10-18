@@ -26,7 +26,7 @@ public class ActivityService {
     }
 
     public void addNewActivity(Activity activity) {
-        Optional<Club> temp=clubRepository.findById(activity.getClubId());
+        Optional<Club> temp=clubRepository.findById(activity.getClub().getId());
         if(temp.isEmpty()){
             throw new IllegalStateException("club no existe");
         }
@@ -38,8 +38,8 @@ public class ActivityService {
 
     }
 
-    public List<Activity> getActivities(){
-        return activityRepository.findAll();
+    public List<List> getActivities(){
+        return activityRepository.joinClubAndActivity();
     }
 
     public void deleteActivity(String activityName, Club club) {
@@ -54,7 +54,7 @@ public class ActivityService {
 
     }
 
-    public List<Activity> getActivitiesByCategory(String category){
+    public List<List> getActivitiesByCategory(String category){
         ActivityCategories activityCategories=ActivityCategories.valueOf(category);
         return activityRepository.findActivitiesByActivityCategories(activityCategories);
     }

@@ -1,5 +1,7 @@
 package com.example.serverTIC.persistence;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +27,8 @@ public class Company {
 
     @Column(nullable = false)
     private Long nroCuenta;
-
-    @OneToMany
+    @JsonManagedReference
+    @OneToMany (mappedBy = "company")
     private List<Employee> companyEmployees;
 
 

@@ -1,5 +1,7 @@
 package com.example.serverTIC.persistence;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +26,8 @@ public class Club {
     private String nombre;
     @Column(unique = true, nullable = false)
     private String dir;
-    @OneToMany
+    @JsonManagedReference
+    @OneToMany(mappedBy="club")
     private List<Activity> clubActivities;
 
 
