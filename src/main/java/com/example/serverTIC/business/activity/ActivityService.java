@@ -4,6 +4,8 @@ import com.example.serverTIC.business.club.ClubRepository;
 import com.example.serverTIC.business.employee.EmployeeRepository;
 import com.example.serverTIC.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -52,24 +54,27 @@ public class ActivityService {
 
     }
 
-    public List<Activity> getActivitiesByCategory(ActivityCategories category){
-        return activityRepository.findActivitiesByActivityCategories(category);
+    public List<Activity> getActivitiesByCategory(String category){
+        ActivityCategories activityCategories=ActivityCategories.valueOf(category);
+        return activityRepository.findActivitiesByActivityCategories(activityCategories);
     }
 
-    public boolean registerToActivity(Long activityId, Long employeeId) {
+    public ResponseEntity registerToActivity(Long activityId, AppUser appUser) {
         Optional<Activity> act= activityRepository.findById(activityId);
-        Optional<Employee> emp= employeeRepository.findEmployeeById(employeeId);
+        Optional<Employee> emp= employeeRepository.findEmployeeById(appUser.getAssociatedId());
         if(act.isEmpty() || emp.isEmpty()){
             throw new IllegalStateException("activity doesn't exist");
         }
         Activity activity=act.get();
         Employee employee=emp.get();
         if(activity.getCupos()==0 || employee.getSaldo()<activity.getPrecio()) {
-            return false;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         activity.setCupos(activity.getCupos()-1);
         employee.setSaldo(employee.getSaldo()-activity.getPrecio());
-        return true;
+        employeeRepository.save(employee);
+        activityRepository.save(activity);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public void updateActivity(Activity activity, Long activityId) {

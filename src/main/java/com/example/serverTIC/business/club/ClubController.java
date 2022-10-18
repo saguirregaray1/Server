@@ -8,6 +8,7 @@ import com.example.serverTIC.persistence.ActivityCategories;
 import com.example.serverTIC.persistence.AppUser;
 import com.example.serverTIC.persistence.Club;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -79,13 +80,13 @@ import java.util.Optional;
 
         //registerToActivity
         @PostMapping(path="/activity/{activityId}")
-        public boolean registerToActivity(@PathVariable Long activityId,@RequestBody Long employeeId){
-            return activityService.registerToActivity(activityId,employeeId);
+        public ResponseEntity registerToActivity(@PathVariable Long activityId, @RequestBody AppUser appUser){
+            return activityService.registerToActivity(activityId,appUser);
         }
 
         //filter
         @GetMapping(path="/activity/{category}")
-        public List<Activity> getListOfActivitiesByCategory(@PathVariable ActivityCategories category) {
+        public List<Activity> getListOfActivitiesByCategory(@PathVariable String category) {
             return activityService.getActivitiesByCategory(category);
         }
 

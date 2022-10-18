@@ -38,7 +38,7 @@ public class EmployeeService{
         company.addEmployee(employee);
         employeeRepository.save(employee);
         companyRepository.save(company);
-        appUserRepository.save(new AppUser(employee.getEmail(),employee.getPassword(), AppUserRole.EMPLOYEE));
+        appUserRepository.save(new AppUser(employee.getEmail(),employee.getPassword(), AppUserRole.EMPLOYEE, employee.getId()));
 
     }
 
@@ -81,8 +81,8 @@ public class EmployeeService{
         }
     }
 
-    public void addFavouriteActivity(Long activityId, Long employeeId){
-        Optional<Employee> emp=employeeRepository.findById(employeeId);
+    public void addFavouriteActivity(Long activityId, AppUser appUser){
+        Optional<Employee> emp=employeeRepository.findById(appUser.getAssociatedId());
         Optional<Activity> act=activityRepository.findById(activityId);
         if(emp.isEmpty() || act.isEmpty()){
             throw new IllegalStateException("empleado o actividad no existen");
@@ -92,6 +92,7 @@ public class EmployeeService{
         if (!employee.getFavs().contains(activity)){
             employee.addFav(activity);
         }
+        employeeRepository.save(employee);
     }
 
     public List<Activity> getFavsList(Long userId) {

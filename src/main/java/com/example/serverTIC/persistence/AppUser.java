@@ -24,11 +24,13 @@ public class AppUser {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
+    private Long associatedId;
 
-    public AppUser(String email, String password, AppUserRole appUserRole) {
+    public AppUser(String email, String password, AppUserRole appUserRole, Long associatedId) {
         this.email = email;
         this.password = password;
         this.appUserRole = appUserRole;
+        this.associatedId = associatedId;
     }
 
     public AppUserRole getAppUserRole() {
@@ -38,6 +40,7 @@ public class AppUser {
     public void setAppUserRole(AppUserRole appUserRole) {
         this.appUserRole = appUserRole;
     }
+
 
     public AppUser(){
     }
@@ -66,5 +69,11 @@ public class AppUser {
         this.password = password;
     }
 
+    public Long getAssociatedId() {
+        return associatedId;
+    }
 
+    public void setAssociatedId(Long associatedId) {
+        this.associatedId = associatedId;
+    }
 }

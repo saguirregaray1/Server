@@ -1,6 +1,7 @@
 package com.example.serverTIC.business.employee;
 
 import com.example.serverTIC.persistence.Activity;
+import com.example.serverTIC.persistence.AppUser;
 import com.example.serverTIC.persistence.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,9 +42,11 @@ public class EmployeeController {
     public boolean isAnEmployee(@PathVariable Long cedula){ return employeeService.isAnEmployee(cedula); }
 
     @PostMapping(path="{activityId}")
-    public void addToFavouriteList(@PathVariable Long activityId, @RequestBody Long employeeId) { employeeService.addFavouriteActivity(activityId,employeeId);}
+    public void addToFavouriteList(@PathVariable Long activityId, @RequestBody AppUser appUser) {
+        employeeService.addFavouriteActivity(activityId,appUser);}
 
-    @GetMapping(path="{employeeId}")
-    public List<Activity> getFavouriteList(@PathVariable Long employeeId) { return employeeService.getFavsList(employeeId);}
+    @GetMapping(path="/favourite/{employeeId}")
+    public List<Activity> getFavouriteList(@PathVariable Long employeeId) {
+        return employeeService.getFavsList(employeeId);}
 
 }
