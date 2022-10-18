@@ -94,11 +94,11 @@ public class EmployeeService{
         employeeRepository.save(employee);
     }
 
-    public List<Activity> getFavsList(Long userId) {
+    public List<List> getFavsList(Long userId) {
         Optional<Employee> temp=employeeRepository.findById(userId);
         if(temp.isEmpty()){
             throw new IllegalStateException("empleado no existe");
         }
-        return temp.get().getFavs();
+        return employeeRepository.getFavouriteList(temp.get().getFavs());
     }
 }

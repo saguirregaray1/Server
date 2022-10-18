@@ -44,7 +44,7 @@ public class EmployeeController {
         employeeService.addFavouriteActivity(activityId,appUser);}
 
     @GetMapping(path="/favourite/{employeeId}")
-    public List<Activity> getFavouriteList(@PathVariable Long employeeId) {
+    public List<List> getFavouriteList(@PathVariable Long employeeId) {
         return employeeService.getFavsList(employeeId);}
 
 }

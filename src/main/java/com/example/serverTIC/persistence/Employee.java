@@ -1,6 +1,7 @@
 package com.example.serverTIC.persistence;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class Employee {
     private String email;
     @Column
     private String password;
+    @JsonManagedReference
     @OneToMany
     private List<Activity> favs;
 
