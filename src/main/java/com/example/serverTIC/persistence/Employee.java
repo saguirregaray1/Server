@@ -33,7 +33,6 @@ public class Employee {
     private String email;
     @Column
     private String password;
-    @JsonManagedReference
     @OneToMany
     private List<Activity> favs;
 
