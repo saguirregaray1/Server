@@ -30,13 +30,13 @@ public class Activity {
     private String nombre;
     @Column(nullable = false)
     private Long precio;
-    @Column
-    private int cupos;
+    @Column(nullable = true)
+    private Integer cupos;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ActivityCategories activityCategories;
 
-    public Activity(Club club, String nombre, Long precio, int cupos, ActivityCategories activityCategories) {
+    public Activity(Club club, String nombre, Long precio, Integer cupos, ActivityCategories activityCategories) {
         this.club = club;
         this.nombre = nombre;
         this.precio = precio;
@@ -63,11 +63,11 @@ public class Activity {
         this.precio = precio;
     }
 
-    public int getCupos() {
+    public Integer getCupos() {
         return cupos;
     }
 
-    public void setCupos(int cupos) {
+    public void setCupos(Integer cupos) {
         this.cupos = cupos;
     }
 

@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -26,27 +28,25 @@ public class ActivityService {
     }
 
     public void addNewActivity(Activity activity) {
-        Optional<Club> temp=clubRepository.findById(activity.getClub().getId());
-        if(temp.isEmpty()){
+        Optional<Club> temp = clubRepository.findById(activity.getClub().getId());
+        if (temp.isEmpty()) {
             throw new IllegalStateException("club no existe");
         }
-        Club club=temp.get();
+        Club club = temp.get();
         activityRepository.save(activity);
         club.addClubActivity(activity);
         clubRepository.save(club);
-
-
     }
 
-    public List<List> getActivities(){
+    public List<List> getActivities() {
         return activityRepository.joinClubAndActivity();
     }
 
     public void deleteActivity(String activityName, Club club) {
 
-        Optional<Activity> temp=activityRepository.findActivitiesByClubIdAndNombre(club.getId(),activityName);
+        Optional<Activity> temp = activityRepository.findActivitiesByClubIdAndNombre(club.getId(), activityName);
 
-        if (temp.isEmpty()){
+        if (temp.isEmpty()) {
             throw new IllegalStateException("actividad no existe");
         }
         activityRepository.deleteById(temp.get().getId());
@@ -54,43 +54,43 @@ public class ActivityService {
 
     }
 
-    public List<List> getActivitiesByCategory(String category){
-        ActivityCategories activityCategories=ActivityCategories.valueOf(category);
+    public List<List> getActivitiesByCategory(String category) {
+        ActivityCategories activityCategories = ActivityCategories.valueOf(category);
         return activityRepository.findActivitiesByActivityCategories(activityCategories);
     }
 
     public ResponseEntity registerToActivity(Long activityId, AppUser appUser) {
-        Optional<Activity> act= activityRepository.findById(activityId);
-        Optional<Employee> emp= employeeRepository.findEmployeeById(appUser.getAssociatedId());
-        if(act.isEmpty() || emp.isEmpty()){
+        Optional<Activity> act = activityRepository.findById(activityId);
+        Optional<Employee> emp = employeeRepository.findEmployeeById(appUser.getAssociatedId());
+        if (act.isEmpty() || emp.isEmpty()) {
             throw new IllegalStateException("activity doesn't exist");
         }
-        Activity activity=act.get();
-        Employee employee=emp.get();
-        if(activity.getCupos()==0 || employee.getSaldo()<activity.getPrecio()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Activity activity = act.get();
+        Employee employee = emp.get();
+
+        if (Objects.isNull(activity.getCupos())) {
+            employee.setSaldo(employee.getSaldo() - activity.getPrecio());
+        } else {
+            if (activity.getCupos() == 0 || employee.getSaldo() < activity.getPrecio()) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            activity.setCupos(activity.getCupos() - 1);
+            employee.setSaldo(employee.getSaldo() - activity.getPrecio());
         }
-        activity.setCupos(activity.getCupos()-1);
-        employee.setSaldo(employee.getSaldo()-activity.getPrecio());
         employeeRepository.save(employee);
         activityRepository.save(activity);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public void updateActivity(Activity activity, Long activityId) {
-        Optional<Activity> temp=activityRepository.findById(activityId);
-        if(temp.isEmpty()){
-            addNewActivity(activity);
+    public void updateActivity(Activity activity) {
+        Optional<Club> temp = clubRepository.findById(activity.getClub().getId());
+        if (temp.isEmpty()) {
+            throw new IllegalStateException("club no existe");
         }
-        else{
-            Activity activity1=temp.get();
-            activity1.setPrecio(activity.getPrecio());
-            activity1.setNombre(activity.getNombre());
-            activity1.setCupos(activity.getCupos());
-            activity1.setActivityCategories(activity.getActivityCategories());
-            activityRepository.save(activity);
-            //update en el club
-        }
+        Club club = temp.get();
+        activityRepository.save(activity);
+        club.addClubActivity(activity);
+        clubRepository.save(club);
     }
 
 }

@@ -2,6 +2,7 @@ package com.example.serverTIC.business.appuser;
 
 import com.example.serverTIC.persistence.AppUser;
 import com.example.serverTIC.persistence.AppUserRole;
+import net.bytebuddy.pool.TypePool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,10 @@ public class AppUserService {
     }
 
     public void addNewAppUser(AppUser appUser) {
+        Optional<AppUser> temp=appUserRepository.findById(appUser.getId());
+        if (temp.isPresent()){
+            throw new IllegalStateException("usuario ya existe");
+        }
         appUserRepository.save(appUser);
     }
 
@@ -34,18 +39,8 @@ public class AppUserService {
         appUserRepository.deleteById(id);
     }
 
-    public void updateAppUser(AppUser appUser, Long userId) {
-        Optional<AppUser> temp = appUserRepository.findById(userId);
-        if (temp.isEmpty()) {
-            addNewAppUser(appUser);
-        } else {
-            AppUser appUser1 = temp.get();
-            appUser1.setEmail(appUser.getEmail());
-            appUser1.setPassword(appUser.getPassword());
-            appUser1.setAppUserRole(appUser.getAppUserRole());
-            appUser1.setAssociatedId(appUser.getAssociatedId());
-            appUserRepository.save(appUser1);
-        }
+    public void updateAppUser(AppUser appUser) {
+        appUserRepository.save(appUser);
     }
 }
 

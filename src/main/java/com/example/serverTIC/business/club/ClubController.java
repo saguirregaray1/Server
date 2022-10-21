@@ -58,8 +58,8 @@ import java.util.Optional;
         @GetMapping(path="/user")
         public List<AppUser> getListOfClubUsers(){ return appUserService.getAppUsers();}
 
-        @PutMapping(path="/user/{userId}")
-        public void updateClubUser(@PathVariable Long userId, @RequestBody AppUser appUser) {appUserService.updateAppUser(appUser,userId);}
+        @PutMapping(path="/user")
+        public void updateClubUser(@RequestBody AppUser appUser) {appUserService.updateAppUser(appUser);}
 
 
         // Activity
@@ -75,8 +75,8 @@ import java.util.Optional;
        @DeleteMapping(path="/activity/{activityName}")
         public void deleteActivity(@PathVariable String activityName, @RequestBody Club club)   {activityService.deleteActivity(activityName,club); }
 
-        @PutMapping(path="/activity/{activityId}")
-        public void updateActivity(@PathVariable Long activityId, @RequestBody Activity activity) {activityService.updateActivity(activity,activityId);}
+        @PutMapping(path="/activity")
+        public void updateActivity(@RequestBody Activity activity) {activityService.updateActivity(activity);}
 
         //registerToActivity
         @PostMapping(path="/activity/{activityId}")

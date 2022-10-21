@@ -30,6 +30,10 @@ public class Club {
     @OneToMany(mappedBy="club")
     private List<Activity> clubActivities;
 
+    @JsonManagedReference
+    @OneToMany (mappedBy="club")
+    private List<AppUser> clubUsers;
+
 
     public Club(String nombre,String dir) {
         this.nombre = nombre;

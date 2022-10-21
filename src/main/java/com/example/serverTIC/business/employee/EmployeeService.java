@@ -37,7 +37,7 @@ public class EmployeeService{
         company.addEmployee(employee);
         employeeRepository.save(employee);
         companyRepository.save(company);
-        appUserRepository.save(new AppUser(employee.getEmail(),employee.getPassword(), AppUserRole.EMPLOYEE, employee.getId()));
+        appUserRepository.save(employee.getAppUser());
 
     }
 
@@ -61,27 +61,12 @@ public class EmployeeService{
     }
 
 
-    public void updateEmployee(Employee employee, Long cedula) {
-        Optional<Employee> temp=employeeRepository.findEmployeeByCedula(cedula);
-        if(temp.isEmpty()){
-            addNewEmployee(employee);
-        }
-        else {
-            Employee employee1 = temp.get();
-            employee1.setCompany(employee.getCompany());
-            employee1.setSaldo(employee.getSaldo());
-            employee1.setEmail(employee.getEmail());
-            employee1.setPassword(employee.getPassword());
-            AppUser appUser=appUserRepository.findById(employee.getId()).get();
-            appUser.setEmail(employee.getEmail());
-            appUser.setPassword(employee.getPassword());
-            employeeRepository.save(employee1); //necesario?
-            appUserRepository.save(appUser);
-        }
+    public void updateEmployee(Employee employee) {
+        employeeRepository.save(employee);
     }
 
     public void addFavouriteActivity(Long activityId, AppUser appUser){
-        Optional<Employee> emp=employeeRepository.findById(appUser.getAssociatedId());
+        Optional<Employee> emp=employeeRepository.findById(appUser.getEmployee().getId());
         Optional<Activity> act=activityRepository.findById(activityId);
         if(emp.isEmpty() || act.isEmpty()){
             throw new IllegalStateException("empleado o actividad no existen");

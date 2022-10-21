@@ -49,7 +49,7 @@ public class CompanyController {
     @GetMapping(path="/user")
     public List<AppUser> getListOfCompanyUsers(){ return appUserService.getAppUsers();}
 
-    @PutMapping(path="/user/{userId}")
-    public void updateCompanyUser(@PathVariable Long userId, @RequestBody AppUser appUser) {appUserService.updateAppUser(appUser,userId);}
+    @PutMapping(path="/user")
+    public void updateCompanyUser(@RequestBody AppUser appUser) {appUserService.updateAppUser(appUser);}
 
 }

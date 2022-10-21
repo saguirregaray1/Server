@@ -31,9 +31,9 @@ public class EmployeeController {
     @DeleteMapping(path="{cedula}")
     public void deleteEmployee(@PathVariable Long cedula){ employeeService.deleteEmployee(cedula); }
 
-    @PutMapping(path="{cedula}")
-    public void updateEmployee(@PathVariable Long cedula, @RequestBody Employee employee){
-        employeeService.updateEmployee(employee,cedula);
+    @PutMapping
+    public void updateEmployee(@RequestBody Employee employee){
+        employeeService.updateEmployee(employee);
     }
 
     @GetMapping(path="{cedula}")

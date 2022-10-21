@@ -23,35 +23,49 @@ public class Employee {
     @Column(updatable = false)
     private Long id;
     @JsonBackReference
-    @ManyToOne (targetEntity = Company.class)
+    @ManyToOne(targetEntity = Company.class)
     private Company company;
     @Column(unique = true, nullable = false)
     private Long cedula;
     @Column(nullable = false)
     private Long saldo;
+    @JsonManagedReference
+    @OneToOne(mappedBy = "employee")
     @Column
-    private String email;
-    @Column
-    private String password;
+    private AppUser appUser;
     @OneToMany
     private List<Activity> favs;
 
 
-    public Employee(Company company,Long cedula,Long saldo,String email,String password, ArrayList<Activity> favs) {
+    public Employee(Company company, Long cedula, Long saldo, AppUser appUser, ArrayList<Activity> favs) {
         this.cedula = cedula;
         this.saldo = saldo;
         this.company = company;
-        this.email = email;
-        this.password = password;
+        this.appUser = appUser;
         this.favs = favs;
     }
 
-    public Employee(Company company,Long cedula,Long saldo,String email,String password) {
+    public Employee(Company company, Long cedula, Long saldo, AppUser appUser) {
         this.cedula = cedula;
         this.saldo = saldo;
         this.company = company;
-        this.email = email;
-        this.password = password;
+        this.appUser = appUser;
+        this.favs = new ArrayList<>();
+    }
+
+    public Employee(Company company, Long cedula, Long saldo, ArrayList<Activity> favs) {
+        this.cedula = cedula;
+        this.saldo = saldo;
+        this.company = company;
+        this.appUser = new AppUser();
+        this.favs = favs;
+    }
+
+    public Employee(Company company, Long cedula, Long saldo) {
+        this.cedula = cedula;
+        this.saldo = saldo;
+        this.company = company;
+        this.appUser = new AppUser();
         this.favs = new ArrayList<>();
     }
 
@@ -90,20 +104,12 @@ public class Employee {
         this.company = company;
     }
 
-    public String getEmail() {
-        return email;
+    public AppUser getAppUser() {
+        return appUser;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
     }
 
     public List<Activity> getFavs() {
@@ -125,10 +131,8 @@ public class Employee {
                 ", company=" + company +
                 ", cedula=" + cedula +
                 ", saldo=" + saldo +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
+                ", appUser=" + appUser +
                 ", favs=" + favs +
                 '}';
     }
 }
-

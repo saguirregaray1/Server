@@ -1,5 +1,8 @@
 package com.example.serverTIC.persistence;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.LazyToOne;
+
 import javax.persistence.*;
 
 @Entity
@@ -24,13 +27,37 @@ public class AppUser {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
-    private Long associatedId;
 
-    public AppUser(String email, String password, AppUserRole appUserRole, Long associatedId) {
+    @JsonBackReference
+    @OneToOne (targetEntity = Employee.class)
+    private Employee employee;
+
+    @JsonBackReference
+    @ManyToOne (targetEntity = Club.class)
+    private Club club;
+
+    @JsonBackReference
+    @ManyToOne (targetEntity = Company.class)
+    private Company company;
+
+    public AppUser(String email, String password, AppUserRole appUserRole, Employee employee) {
         this.email = email;
         this.password = password;
         this.appUserRole = appUserRole;
-        this.associatedId = associatedId;
+        this.employee = employee;
+    }
+    public AppUser(String email, String password, AppUserRole appUserRole, Club club) {
+        this.email = email;
+        this.password = password;
+        this.appUserRole = appUserRole;
+        this.club = club;
+    }
+
+    public AppUser(String email, String password, AppUserRole appUserRole, Company company) {
+        this.email = email;
+        this.password = password;
+        this.appUserRole = appUserRole;
+        this.company = company;
     }
 
     public AppUserRole getAppUserRole() {
@@ -69,11 +96,40 @@ public class AppUser {
         this.password = password;
     }
 
-    public Long getAssociatedId() {
-        return associatedId;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setAssociatedId(Long associatedId) {
-        this.associatedId = associatedId;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public Club getClub() {
+        return club;
+    }
+
+    public void setClub(Club club) {
+        this.club = club;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    @Override
+    public String toString() {
+        return "AppUser{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", appUserRole=" + appUserRole +
+                ", employee=" + employee +
+                ", club=" + club +
+                ", company=" + company +
+                '}';
     }
 }

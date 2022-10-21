@@ -31,6 +31,10 @@ public class Company {
     @OneToMany (mappedBy = "company")
     private List<Employee> companyEmployees;
 
+    @JsonManagedReference
+    @OneToMany (mappedBy = "company")
+    private List<AppUser> companyUsers;
+
 
     public Company(String nombre, Long nroCuenta) {
         this.nombre = nombre;
