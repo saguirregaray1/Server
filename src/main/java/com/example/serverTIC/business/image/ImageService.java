@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -15,7 +14,7 @@ public class ImageService {
     @Autowired
     private ImageRepository imageRepository;
 
-    public void uploadImage(Image image) throws IOException {
+    public void uploadImage(Image image) {
         imageRepository.save(image);
     }
 

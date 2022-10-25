@@ -28,18 +28,18 @@ public class Company {
     @Column(nullable = false)
     private Long nroCuenta;
     @JsonManagedReference(value = "companyEmployees")
-    @OneToMany (mappedBy = "company", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "company", cascade = {CascadeType.ALL})
     private List<Employee> companyEmployees;
 
     @JsonManagedReference(value = "companyUsers")
-    @OneToMany (mappedBy = "company", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "company", cascade = {CascadeType.ALL})
     private List<AppUser> companyUsers;
 
 
     public Company(String nombre, Long nroCuenta) {
         this.nombre = nombre;
         this.nroCuenta = nroCuenta;
-        this.companyEmployees=new ArrayList<>();
+        this.companyEmployees = new ArrayList<>();
     }
 
     public Company() {
@@ -77,7 +77,13 @@ public class Company {
         this.companyEmployees = companyEmployees;
     }
 
-    public void addEmployee(Employee employee){ this.companyEmployees.add(employee); }
+    public void addEmployee(Employee employee) {
+        this.companyEmployees.add(employee);
+    }
+
+    public void addCompanyUser(AppUser appUser) {
+        companyUsers.add(appUser);
+    }
 
     @Override
     public String toString() {
@@ -88,4 +94,6 @@ public class Company {
                 ", companyEmployees=" + companyEmployees +
                 '}';
     }
+
+
 }

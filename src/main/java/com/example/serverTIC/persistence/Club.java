@@ -26,19 +26,19 @@ public class Club {
     private String nombre;
     @Column(unique = true, nullable = false)
     private String dir;
-    @JsonManagedReference (value = "clubActivities")
-    @OneToMany(mappedBy="club", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "clubActivities")
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<Activity> clubActivities;
 
-    @JsonManagedReference (value ="clubUsers")
-    @OneToMany (mappedBy="club", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "clubUsers")
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<AppUser> clubUsers;
 
 
-    public Club(String nombre,String dir) {
+    public Club(String nombre, String dir) {
         this.nombre = nombre;
         this.dir = dir;
-        this.clubActivities=new ArrayList<>();
+        this.clubActivities = new ArrayList<>();
     }
 
     public Club() {
@@ -78,6 +78,10 @@ public class Club {
         this.clubActivities = clubActivities;
     }
 
+    public void addClubUser(AppUser appUser) {
+        clubUsers.add(appUser);
+    }
+
     public void addClubActivity(Activity activity) {
         this.clubActivities.add(activity);
     }
@@ -91,4 +95,6 @@ public class Club {
                 ", clubActivities=" + clubActivities +
                 '}';
     }
+
+
 }

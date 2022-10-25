@@ -5,6 +5,8 @@ import com.example.serverTIC.business.appuser.AppUserRepository;
 import com.example.serverTIC.business.company.CompanyRepository;
 import com.example.serverTIC.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -33,10 +35,6 @@ public class EmployeeService{
         if(temp.isEmpty()){
             throw new IllegalStateException("compañía no existe");
         }
-    /*    AppUser appUser= employee.getAppUser();
-        appUser.setEmployee(employee);
-        appUserRepository.save(appUser);
-        employeeRepository.save(employee); */
         Company company = temp.get();
         company.addEmployee(employee);
         companyRepository.save(company);
@@ -53,12 +51,13 @@ public class EmployeeService{
         employeeRepository.deleteById(temp.get().getId());
     }
 
-    public Optional<Employee> getEmployee(Long cedula) {
-        return employeeRepository.findEmployeeByCedula(cedula);
-    }
 
-    public boolean isAnEmployee(Long cedula) {
-        return getEmployee(cedula).isPresent();
+    public ResponseEntity isAnEmployee(Long cedula) {
+        Optional<Employee> emp = employeeRepository.findEmployeeByCedula(cedula);
+        if (emp.isEmpty()){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(emp.get(),HttpStatus.OK);
     }
 
 
@@ -67,7 +66,8 @@ public class EmployeeService{
     }
 
     public void addFavouriteActivity(Long activityId, AppUser appUser){
-        Optional<Employee> emp=employeeRepository.findById(appUser.getEmployee().getId());
+        AppUser user=appUserRepository.findById(appUser.getId()).get();
+        Optional<Employee> emp=employeeRepository.findById(user.getEmployee().getId());
         Optional<Activity> act=activityRepository.findById(activityId);
         if(emp.isEmpty() || act.isEmpty()){
             throw new IllegalStateException("empleado o actividad no existen");
@@ -81,7 +81,8 @@ public class EmployeeService{
     }
 
     public List<List> getFavsList(Long userId) {
-        Optional<Employee> temp=employeeRepository.findById(userId);
+        AppUser appUser=appUserRepository.findById(userId).get();
+        Optional<Employee> temp=employeeRepository.findById(appUser.getEmployee().getId());
         if(temp.isEmpty()){
             throw new IllegalStateException("empleado no existe");
         }

@@ -38,9 +38,9 @@ public class CompanyController {
     public void updateCompany(@PathVariable Long companyId, @RequestBody Company company) { companyService.updateCompany(company,companyId);}
 
     //CompanyUser
-
-    @PostMapping(path="/user")
-    public void registerNewCompanyUser(@RequestBody AppUser appUser){appUserService.addNewAppUser(appUser);
+    @PostMapping(path = "/user/{companyId}")
+    public void registerNewCompanyUser(@PathVariable Long companyId,@RequestBody AppUser appUser) {
+        appUserService.addNewCompanyUser(appUser,companyId);
     }
 
     @DeleteMapping(path="/user/{userId}")

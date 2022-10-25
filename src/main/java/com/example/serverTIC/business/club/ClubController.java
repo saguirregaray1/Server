@@ -15,85 +15,107 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
- @RequestMapping(path= "/club")
- public class ClubController {
-     private final ClubService clubService;
+@RequestMapping(path = "/club")
+public class ClubController {
+    private final ClubService clubService;
 
-     private final ActivityService activityService;
+    private final ActivityService activityService;
 
-     private final AppUserService appUserService;
-     @Autowired
-     public ClubController(ClubService service, ActivityService activityService, AppUserService appUserService) {
-         this.clubService = service;
-         this.activityService = activityService;
-         this.appUserService = appUserService;
-        }
+    private final AppUserService appUserService;
 
-        @GetMapping
-        public List<Club> getListOfClubs(){
-            return clubService.getClubs();
-        }
+    @Autowired
+    public ClubController(ClubService service, ActivityService activityService, AppUserService appUserService) {
+        this.clubService = service;
+        this.activityService = activityService;
+        this.appUserService = appUserService;
+    }
 
-        @PostMapping
-        public void registerNewClub(@RequestBody Club club){
-         clubService.addNewClub(club);
-        }
+    @GetMapping
+    public List<Club> getListOfClubs() {
+        return clubService.getClubs();
+    }
 
-        @DeleteMapping(path="{clubName}")
-        public void deleteClub(@PathVariable String clubName){
-         clubService.deleteClub(clubName);
-        }
+    @PostMapping
+    public void registerNewClub(@RequestBody Club club) {
+        clubService.addNewClub(club);
+    }
 
-        @PutMapping(path="{clubId}")
-        public void updateClub(@PathVariable Long clubId, @RequestBody Club club) { clubService.updateClub(club,clubId);}
+    @DeleteMapping(path = "{clubName}")
+    public void deleteClub(@PathVariable String clubName) {
+        clubService.deleteClub(clubName);
+    }
 
-        //ClubUser
-        @PostMapping(path="/user")
-        public void registerNewClubUser(@RequestBody AppUser appUser){appUserService.addNewAppUser(appUser);
-        }
-
-        @DeleteMapping(path="/user/{userId}")
-        public void deleteClubUser(@PathVariable Long userId){ appUserService.deleteAppUser(userId);}
-
-        @GetMapping(path="/user")
-        public List<AppUser> getListOfClubUsers(){ return appUserService.getAppUsers();}
-
-        @PutMapping(path="/user")
-        public void updateClubUser(@RequestBody AppUser appUser) {appUserService.updateAppUser(appUser);}
+    @PutMapping(path = "{clubId}")
+    public void updateClub(@PathVariable Long clubId, @RequestBody Club club) {
+        clubService.updateClub(club, clubId);
+    }
+    @GetMapping(path = "/{clubId}")
+    public List<List> getListOfClubActivities(@PathVariable Long clubId) {
+        return activityService.getActivitiesByClub(clubId);
+    }
 
 
-        // Activity
-        @GetMapping(path="/activity")
-        public List<List> getListOfActivities(){
-            return activityService.getActivities();
-        }
+    //ClubUser
+    @PostMapping(path = "/user/{clubId}")
+    public void registerNewClubUser(@PathVariable Long clubId,@RequestBody AppUser appUser) {
+        appUserService.addNewClubUser(appUser,clubId);
+    }
 
-        @PostMapping(path="/activity")
-        public void registerNewActivity(@RequestBody Activity activity) {
-         activityService.addNewActivity(activity);}
+    @DeleteMapping(path = "/user/{userId}")
+    public void deleteClubUser(@PathVariable Long userId) {
+        appUserService.deleteAppUser(userId);
+    }
 
-       @DeleteMapping(path="/activity/{activityName}")
-        public void deleteActivity(@PathVariable String activityName, @RequestBody Club club)   {activityService.deleteActivity(activityName,club); }
+    @GetMapping(path = "/user")
+    public List<AppUser> getListOfClubUsers() {
+        return appUserService.getAppUsers();
+    }
 
-        @PutMapping(path="/activity")
-        public void updateActivity(@RequestBody Activity activity) {activityService.updateActivity(activity);}
-
-        //registerToActivity
-        @PostMapping(path="/activity/{activityId}")
-        public ResponseEntity registerToActivity(@PathVariable Long activityId, @RequestBody AppUser appUser){
-            return activityService.registerToActivity(activityId,appUser);
-        }
-
-        //filter
-        @GetMapping(path="/activity/{category}")
-        public List<List> getListOfActivitiesByCategory(@PathVariable String category) {
-            return activityService.getActivitiesByCategory(category);
-        }
-
-        //cancelActivity
+    @PutMapping(path = "/user")
+    public void updateClubUser(@RequestBody AppUser appUser) {
+        appUserService.updateAppUser(appUser);
+    }
 
 
-        //updateActivity
+    // Activity
+    @GetMapping(path = "/activity")
+    public List<List> getListOfActivities() {
+        return activityService.getActivities();
+    }
+
+    @PostMapping(path = "/activity")
+    public void registerNewActivity(@RequestBody Activity activity) {
+        activityService.addNewActivity(activity);
+    }
+
+    @DeleteMapping(path = "/activity/{activityName}")
+    public void deleteActivity(@PathVariable String activityName, @RequestBody Club club) {
+        activityService.deleteActivity(activityName, club);
+    }
+
+    @PutMapping(path = "/activity")
+    public void updateActivity(@RequestBody Activity activity) {
+        activityService.updateActivity(activity);
+    }
+
+    //registerToActivity
+    @PostMapping(path = "/activity/{activityId}")
+    public ResponseEntity registerToActivity(@PathVariable Long activityId, @RequestBody AppUser appUser) {
+        return activityService.registerToActivity(activityId, appUser);
+    }
+
+
+    //filter
+    @GetMapping(path = "/activity/{category}")
+    public List<List> getListOfActivitiesByCategory(@PathVariable String category) {
+        return activityService.getActivitiesByCategory(category);
+    }
+
+
+    //cancelActivity
+
+
+    //updateActivity
 
 }
 

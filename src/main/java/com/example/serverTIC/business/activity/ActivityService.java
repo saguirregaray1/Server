@@ -68,19 +68,24 @@ public class ActivityService {
         Optional<Activity> act = activityRepository.findById(activityId);
         Optional<Employee> emp = employeeRepository.findEmployeeById(user.getEmployee().getId());
         if (act.isEmpty() || emp.isEmpty()) {
-            throw new IllegalStateException("activity doesn't exist");
+            return new ResponseEntity<>("actividad o empleado no existen",HttpStatus.BAD_REQUEST);
         }
         Activity activity = act.get();
         Employee employee = emp.get();
 
-        if (Objects.isNull(activity.getCupos())) {
-            employee.setSaldo(employee.getSaldo() - activity.getPrecio());
-        } else {
-            if (activity.getCupos() == 0 || employee.getSaldo() < activity.getPrecio()) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (employee.getSaldo() > activity.getPrecio()) {
+            if (Objects.isNull(activity.getCupos())) {
+                employee.setSaldo(employee.getSaldo() - activity.getPrecio());
+            } else {
+                if (activity.getCupos() == 0) {
+                    return new ResponseEntity<>("Actividad llena",HttpStatus.BAD_REQUEST);
+                }
+                activity.setCupos(activity.getCupos() - 1);
+                employee.setSaldo(employee.getSaldo() - activity.getPrecio());
             }
-            activity.setCupos(activity.getCupos() - 1);
-            employee.setSaldo(employee.getSaldo() - activity.getPrecio());
+        }
+        else{
+            return new ResponseEntity<>("Saldo insuficiente",HttpStatus.BAD_REQUEST);
         }
         employeeRepository.save(employee);
         activityRepository.save(activity);
@@ -97,4 +102,11 @@ public class ActivityService {
         clubRepository.save(club);
     }
 
+    public List<List> getActivitiesByClub(Long clubId) {
+        Optional<Club> club=clubRepository.findById(clubId);
+        if(club.isEmpty()){
+            throw new IllegalStateException("club no existe");
+        }
+        return clubRepository.getClubActivities(club.get().getClubActivities());
+    }
 }
