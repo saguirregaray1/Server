@@ -1,4 +1,4 @@
-package com.example.serverTIC.business.image;
+package com.example.serverTIC.persistence;
 
 
 import javax.persistence.*;
@@ -21,13 +21,16 @@ public class Image {
     @Column(updatable = false)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String type;
 
     @Lob
     @Column(length = 1000)
     private byte[] imageData;
+
 
     public Image(Long id, String name, String type, byte[] imageData) {
         this.id = id;

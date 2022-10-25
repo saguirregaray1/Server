@@ -20,7 +20,7 @@ public class Employee {
             strategy = GenerationType.SEQUENCE,
             generator = "employee_sequence"
     )
-    @Column(updatable = false)
+    @Column(name = "employee_id", updatable = false)
     private Long id;
     @JsonBackReference (value = "companyEmployees")
     @ManyToOne(targetEntity = Company.class)
@@ -32,7 +32,8 @@ public class Employee {
     @JsonManagedReference (value = "employeeUser")
     @OneToOne(mappedBy = "employee", cascade = {CascadeType.ALL})
     private AppUser appUser;
-    @OneToMany
+    @ManyToMany
+    @JoinColumn(name = "activity_id")
     private List<Activity> favs;
 
 

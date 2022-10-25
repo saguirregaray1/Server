@@ -4,6 +4,8 @@ package com.example.serverTIC.persistence;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -20,7 +22,7 @@ public class Activity {
             strategy = GenerationType.SEQUENCE,
             generator = "activity_sequence"
     )
-    @Column(updatable = false)
+    @Column(name = "activity_id", updatable = false)
     private Long id;
 
     @JsonBackReference (value = "clubActivities")
@@ -30,8 +32,15 @@ public class Activity {
     private String nombre;
     @Column(nullable = false)
     private Long precio;
-    @Column(nullable = true)
+    @Column
     private Integer cupos;
+
+    @ManyToMany
+    @JoinTable(name = "Activity_Image",joinColumns = {@JoinColumn(name = "Activity_Id")},
+            inverseJoinColumns = {@JoinColumn(name = "Image_Id")})
+    private List<Image> pictures;
+
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ActivityCategories activityCategories;
@@ -42,6 +51,7 @@ public class Activity {
         this.precio = precio;
         this.cupos = cupos;
         this.activityCategories = activityCategories;
+        this.pictures = new ArrayList<Image>();
     }
 
     public Activity() {
