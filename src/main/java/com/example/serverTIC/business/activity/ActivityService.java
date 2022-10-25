@@ -93,7 +93,6 @@ public class ActivityService {
             throw new IllegalStateException("club no existe");
         }
         Club club = temp.get();
-        activityRepository.save(activity);
         club.addClubActivity(activity);
         clubRepository.save(club);
     }

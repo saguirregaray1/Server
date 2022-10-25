@@ -36,6 +36,14 @@ public class Image {
         this.imageData = imageData;
     }
 
+    public Image(String name, String type, byte[] imageData) {
+        this.name = name;
+        this.type = type;
+        this.imageData = imageData;
+    }
+
+    public Image(){}
+
     public Long getId() {
         return id;
     }
