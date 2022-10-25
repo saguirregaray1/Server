@@ -22,16 +22,15 @@ public class Employee {
     )
     @Column(updatable = false)
     private Long id;
-    @JsonBackReference
+    @JsonBackReference (value = "companyEmployees")
     @ManyToOne(targetEntity = Company.class)
     private Company company;
     @Column(unique = true, nullable = false)
     private Long cedula;
     @Column(nullable = false)
     private Long saldo;
-    @JsonManagedReference
-    @OneToOne(mappedBy = "employee")
-    @Column
+    @JsonManagedReference (value = "employeeUser")
+    @OneToOne(mappedBy = "employee", cascade = {CascadeType.ALL})
     private AppUser appUser;
     @OneToMany
     private List<Activity> favs;
@@ -131,7 +130,7 @@ public class Employee {
                 ", company=" + company +
                 ", cedula=" + cedula +
                 ", saldo=" + saldo +
-                ", appUser=" + appUser +
+                ", appUser=" + appUser.getId() +
                 ", favs=" + favs +
                 '}';
     }

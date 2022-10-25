@@ -26,12 +26,12 @@ public class Club {
     private String nombre;
     @Column(unique = true, nullable = false)
     private String dir;
-    @JsonManagedReference
-    @OneToMany(mappedBy="club")
+    @JsonManagedReference (value = "clubActivities")
+    @OneToMany(mappedBy="club", cascade = CascadeType.ALL)
     private List<Activity> clubActivities;
 
-    @JsonManagedReference
-    @OneToMany (mappedBy="club")
+    @JsonManagedReference (value ="clubUsers")
+    @OneToMany (mappedBy="club", cascade = CascadeType.ALL)
     private List<AppUser> clubUsers;
 
 

@@ -33,12 +33,13 @@ public class EmployeeService{
         if(temp.isEmpty()){
             throw new IllegalStateException("compañía no existe");
         }
+    /*    AppUser appUser= employee.getAppUser();
+        appUser.setEmployee(employee);
+        appUserRepository.save(appUser);
+        employeeRepository.save(employee); */
         Company company = temp.get();
         company.addEmployee(employee);
-        employeeRepository.save(employee);
         companyRepository.save(company);
-        appUserRepository.save(employee.getAppUser());
-
     }
 
     public List<Employee> getEmployees(){ return employeeRepository.findAll();}

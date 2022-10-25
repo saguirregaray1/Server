@@ -23,7 +23,7 @@ public class Activity {
     @Column(updatable = false)
     private Long id;
 
-    @JsonBackReference
+    @JsonBackReference (value = "clubActivities")
     @ManyToOne (targetEntity = Club.class)
     private Club club;
     @Column(unique = true, nullable = false)
@@ -94,4 +94,5 @@ public class Activity {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
 }

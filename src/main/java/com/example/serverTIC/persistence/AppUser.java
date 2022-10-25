@@ -28,15 +28,19 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
 
-    @JsonBackReference
+    @JsonBackReference (value = "employeeUser")
     @OneToOne (targetEntity = Employee.class)
     private Employee employee;
 
-    @JsonBackReference
+    @JsonBackReference (value = "adminUser")
+    @OneToOne (targetEntity = Admin.class)
+    private Admin admin;
+
+    @JsonBackReference (value = "clubUsers")
     @ManyToOne (targetEntity = Club.class)
     private Club club;
 
-    @JsonBackReference
+    @JsonBackReference (value = "companyUsers")
     @ManyToOne (targetEntity = Company.class)
     private Company company;
 
@@ -58,6 +62,13 @@ public class AppUser {
         this.password = password;
         this.appUserRole = appUserRole;
         this.company = company;
+    }
+
+    public AppUser(String email, String password, AppUserRole appUserRole, Admin admin) {
+        this.email = email;
+        this.password = password;
+        this.appUserRole = appUserRole;
+        this.admin = admin;
     }
 
     public AppUserRole getAppUserRole() {
@@ -120,16 +131,50 @@ public class AppUser {
         this.company = company;
     }
 
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
+    }
+
     @Override
     public String toString() {
+        if (appUserRole.equals(AppUserRole.EMPLOYEE)){
         return "AppUser{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", appUserRole=" + appUserRole +
-                ", employee=" + employee +
-                ", club=" + club +
-                ", company=" + company +
+                ", employee=" + employee.getId() +
                 '}';
+    } else if (appUserRole.equals(AppUserRole.COMPANY_USER)) {
+            return "AppUser{" +
+                    "id=" + id +
+                    ", email='" + email + '\'' +
+                    ", password='" + password + '\'' +
+                    ", appUserRole=" + appUserRole +
+                    ", company=" + company.getId() +
+                    '}';
+        } else if (appUserRole.equals(AppUserRole.CLUB_USER)) {
+            return "AppUser{" +
+                    "id=" + id +
+                    ", email='" + email + '\'' +
+                    ", password='" + password + '\'' +
+                    ", appUserRole=" + appUserRole +
+                    ", club=" + club.getId() +
+                    '}';
+
+        }
+        else{
+            return "AppUser{" +
+                    "id=" + id +
+                    ", email='" + email + '\'' +
+                    ", password='" + password + '\'' +
+                    ", appUserRole=" + appUserRole +
+                    ", admin=" + admin.getId() +
+                    '}';
+        }
     }
 }

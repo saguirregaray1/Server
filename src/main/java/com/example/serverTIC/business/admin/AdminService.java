@@ -24,8 +24,8 @@ public class AdminService {
     }
 
     public void addNewAdmin(Admin admin) {
+        admin.setAppUser(new AppUser(admin.getEmail(),admin.getPassword(),AppUserRole.ADMIN,admin));
         adminRepository.save(admin);
-        appUserRepository.save(new AppUser(admin.getEmail(), admin.getPassword(), AppUserRole.ADMIN,admin.getId()));
     }
 
     public List<Admin> getAdmins(){

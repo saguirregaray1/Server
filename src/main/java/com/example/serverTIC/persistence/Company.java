@@ -27,12 +27,12 @@ public class Company {
 
     @Column(nullable = false)
     private Long nroCuenta;
-    @JsonManagedReference
-    @OneToMany (mappedBy = "company")
+    @JsonManagedReference(value = "companyEmployees")
+    @OneToMany (mappedBy = "company", cascade = {CascadeType.ALL})
     private List<Employee> companyEmployees;
 
-    @JsonManagedReference
-    @OneToMany (mappedBy = "company")
+    @JsonManagedReference(value = "companyUsers")
+    @OneToMany (mappedBy = "company", cascade = {CascadeType.ALL})
     private List<AppUser> companyUsers;
 
 

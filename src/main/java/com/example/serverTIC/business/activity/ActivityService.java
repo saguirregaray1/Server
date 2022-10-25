@@ -1,5 +1,6 @@
 package com.example.serverTIC.business.activity;
 
+import com.example.serverTIC.business.appuser.AppUserRepository;
 import com.example.serverTIC.business.club.ClubRepository;
 import com.example.serverTIC.business.employee.EmployeeRepository;
 import com.example.serverTIC.persistence.*;
@@ -20,11 +21,14 @@ public class ActivityService {
 
     private final ClubRepository clubRepository;
 
+    private final AppUserRepository appUserRepository;
+
     @Autowired
-    public ActivityService(EmployeeRepository employeeRepository, ActivityRepository activityRepository, ClubRepository clubRepository) {
+    public ActivityService(EmployeeRepository employeeRepository, ActivityRepository activityRepository, ClubRepository clubRepository, AppUserRepository appUserRepository) {
         this.employeeRepository = employeeRepository;
         this.activityRepository = activityRepository;
         this.clubRepository = clubRepository;
+        this.appUserRepository = appUserRepository;
     }
 
     public void addNewActivity(Activity activity) {
@@ -60,8 +64,9 @@ public class ActivityService {
     }
 
     public ResponseEntity registerToActivity(Long activityId, AppUser appUser) {
+        AppUser user = appUserRepository.findById(appUser.getId()).get();
         Optional<Activity> act = activityRepository.findById(activityId);
-        Optional<Employee> emp = employeeRepository.findEmployeeById(appUser.getAssociatedId());
+        Optional<Employee> emp = employeeRepository.findEmployeeById(user.getEmployee().getId());
         if (act.isEmpty() || emp.isEmpty()) {
             throw new IllegalStateException("activity doesn't exist");
         }
