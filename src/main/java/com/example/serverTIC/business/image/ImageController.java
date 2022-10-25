@@ -15,8 +15,13 @@ public class ImageController {
     private ImageService imageService;
 
     @PostMapping
-    public void uploadImage(@RequestBody Image image) throws IOException {
+    public void uploadImage(@RequestBody Image image) {
         imageService.uploadImage(image);
+    }
+
+    @PostMapping("/{activityId}")
+    public void uploadActivityImage(@PathVariable Long activityId,@RequestBody Image image) {
+        imageService.uploadActivityImage(image,activityId);
     }
 
     @GetMapping("/{id}")

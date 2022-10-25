@@ -39,7 +39,9 @@ public class Club {
         this.nombre = nombre;
         this.dir = dir;
         this.clubActivities = new ArrayList<>();
+        this.clubUsers = new ArrayList<>();
     }
+
 
     public Club() {
     }

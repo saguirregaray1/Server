@@ -35,7 +35,7 @@ public class Activity {
     @Column
     private Integer cupos;
 
-    @ManyToMany
+    @ManyToMany (cascade = CascadeType.ALL)
     @JoinTable(name = "Activity_Image",joinColumns = {@JoinColumn(name = "Activity_Id")},
             inverseJoinColumns = {@JoinColumn(name = "Image_Id")})
     private List<Image> pictures;
@@ -103,6 +103,18 @@ public class Activity {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public List<Image> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<Image> pictures) {
+        this.pictures = pictures;
+    }
+
+    public void addPicture(Image image){
+        this.pictures.add(image);
     }
 
 }
