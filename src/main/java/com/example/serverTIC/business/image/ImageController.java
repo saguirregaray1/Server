@@ -21,7 +21,7 @@ public class ImageController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getImageById(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getImageById(@PathVariable Long id) {
         return imageService.getImage(id);
     }
 }
