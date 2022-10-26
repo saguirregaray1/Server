@@ -20,13 +20,13 @@ public class ImageController {
     }
 
     @PostMapping("/{activityId}")
-    public void uploadActivityImage(@PathVariable Long activityId,@RequestBody Image image) {
+    public void uploadActivityPicture(@PathVariable Long activityId,@RequestBody Image image) {
         imageService.uploadActivityImage(image,activityId);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getImageById(@PathVariable Long id) {
-        return imageService.getImage(id);
+    @GetMapping("/{activityId}")
+    public ResponseEntity<?> getActivityPictures(@PathVariable Long activityId) {
+        return imageService.getActivityPictures(activityId);
     }
 }
 

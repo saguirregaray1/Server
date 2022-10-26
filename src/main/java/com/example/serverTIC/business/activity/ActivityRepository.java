@@ -3,6 +3,7 @@ package com.example.serverTIC.business.activity;
 import com.example.serverTIC.persistence.Activity;
 import com.example.serverTIC.persistence.ActivityCategories;
 import com.example.serverTIC.persistence.Club;
+import com.example.serverTIC.persistence.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,7 +21,8 @@ public interface ActivityRepository extends JpaRepository<Activity,Long> {
     @Query("SELECT a.club,a.nombre,a.cupos,a.precio,a.activityCategories,c.nombre,c.dir,a.id from Activity a JOIN a.club c")
     List<List> joinClubAndActivity();
 
-
+    @Query ("select a.pictures from Activity a where a.id =:activityId ")
+    List<Image> findImagesByActivity(@Param("activityId") Long activityId);
 
 
 }

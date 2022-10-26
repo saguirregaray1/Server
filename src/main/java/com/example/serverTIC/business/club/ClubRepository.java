@@ -2,6 +2,7 @@ package com.example.serverTIC.business.club;
 
 import com.example.serverTIC.persistence.Activity;
 import com.example.serverTIC.persistence.Club;
+import com.example.serverTIC.persistence.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
