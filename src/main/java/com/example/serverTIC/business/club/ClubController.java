@@ -104,18 +104,19 @@ public class ClubController {
         return activityService.registerToActivity(activityId, appUser);
     }
 
+    //cancelRegistration
+
+    @PutMapping(path = "/activity/{activityId}")
+    public ResponseEntity cameToActivity(@PathVariable Long activityId, @RequestBody Long cedula) {
+        return activityService.cameToActivity(activityId, cedula);
+    }
+
 
     //filter
     @GetMapping(path = "/activity/{category}")
     public List<List> getListOfActivitiesByCategory(@PathVariable String category) {
         return activityService.getActivitiesByCategory(category);
     }
-
-
-    //cancelActivity
-
-
-    //updateActivity
 
 }
 

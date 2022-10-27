@@ -85,7 +85,9 @@ public class Club {
     }
 
     public void addClubActivity(Activity activity) {
-        this.clubActivities.add(activity);
+        if (!clubActivities.contains(activity)){
+            this.clubActivities.add(activity);
+        }
     }
 
     @Override

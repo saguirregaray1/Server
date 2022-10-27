@@ -67,7 +67,28 @@ public class ActivityService {
         Optional<Activity> act = activityRepository.findById(activityId);
         Optional<Employee> emp = employeeRepository.findEmployeeById(user.getEmployee().getId());
         if (act.isEmpty() || emp.isEmpty()) {
-            return new ResponseEntity<>("actividad o empleado no existen",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("actividad o empleado no existen", HttpStatus.BAD_REQUEST);
+        }
+        Activity activity = act.get();
+        Employee employee = emp.get();
+
+        if (employee.getSaldo() > activity.getPrecio() && activity.getCupos() > 0) {
+            activity.setCupos(activity.getCupos() - 1);
+            employee.setSaldo(employee.getSaldo() - activity.getPrecio());
+
+        } else {
+            return new ResponseEntity<>("saldo insuficiente o no hay cupos", HttpStatus.BAD_REQUEST);
+        }
+        employeeRepository.save(employee);
+        activityRepository.save(activity);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity cameToActivity(Long activityId, Long cedula) {
+        Optional<Activity> act = activityRepository.findById(activityId);
+        Optional<Employee> emp = employeeRepository.findEmployeeByCedula(cedula);
+        if (act.isEmpty() || emp.isEmpty()) {
+            return new ResponseEntity<>("actividad o empleado no existen", HttpStatus.BAD_REQUEST);
         }
         Activity activity = act.get();
         Employee employee = emp.get();
@@ -77,14 +98,13 @@ public class ActivityService {
                 employee.setSaldo(employee.getSaldo() - activity.getPrecio());
             } else {
                 if (activity.getCupos() == 0) {
-                    return new ResponseEntity<>("Actividad llena",HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>("Actividad llena", HttpStatus.BAD_REQUEST);
                 }
                 activity.setCupos(activity.getCupos() - 1);
                 employee.setSaldo(employee.getSaldo() - activity.getPrecio());
             }
-        }
-        else{
-            return new ResponseEntity<>("Saldo insuficiente",HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>("Saldo insuficiente", HttpStatus.BAD_REQUEST);
         }
         employeeRepository.save(employee);
         activityRepository.save(activity);
@@ -102,10 +122,11 @@ public class ActivityService {
     }
 
     public List<List> getActivitiesByClub(Long clubId) {
-        Optional<Club> club=clubRepository.findById(clubId);
-        if(club.isEmpty()){
+        Optional<Club> club = clubRepository.findById(clubId);
+        if (club.isEmpty()) {
             throw new IllegalStateException("club no existe");
         }
         return clubRepository.getClubActivities(club.get().getClubActivities());
     }
+
 }
