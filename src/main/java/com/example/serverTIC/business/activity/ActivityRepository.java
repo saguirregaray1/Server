@@ -14,11 +14,11 @@ import java.util.Optional;
 
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity,Long> {
-    @Query("select a.club,a.nombre,a.cupos,a.precio,a.activityCategories,c.nombre,c.dir from Activity a Join a.club c where a.activityCategories=:activityCategories")
+    @Query("select a.nombre,a.cupos,a.precio,a.activityCategories,c.nombre,c.dir,a.id from Activity a Join a.club c where a.activityCategories=:activityCategories")
     List<List> findActivitiesByActivityCategories(@Param("activityCategories") ActivityCategories activityCategories);
     Optional<Activity> findActivitiesByClubIdAndNombre(Long clubId, String nombre);
 
-    @Query("SELECT a.club,a.nombre,a.cupos,a.precio,a.activityCategories,c.nombre,c.dir,a.id from Activity a JOIN a.club c")
+    @Query("SELECT a.nombre,a.cupos,a.precio,a.activityCategories,c.nombre,c.dir,a.id from Activity a JOIN a.club c")
     List<List> joinClubAndActivity();
 
     @Query ("select a.pictures from Activity a where a.id =:activityId ")

@@ -85,6 +85,14 @@ public class Company {
         companyUsers.add(appUser);
     }
 
+    public List<AppUser> getCompanyUsers() {
+        return companyUsers;
+    }
+
+    public void setCompanyUsers(List<AppUser> companyUsers) {
+        this.companyUsers = companyUsers;
+    }
+
     @Override
     public String toString() {
         return "Company{" +
