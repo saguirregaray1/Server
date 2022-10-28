@@ -62,7 +62,7 @@ public class ActivityService {
         return activityRepository.findActivitiesByActivityCategories(activityCategories);
     }
 
-    public ResponseEntity registerToActivity(Long activityId, AppUser appUser) {
+    public ResponseEntity registerToActivity(Long activityId, Long scheduleId, AppUser appUser)/*IMPORTANTE: se agrega argumento para la hora*/ {
         AppUser user = appUserRepository.findById(appUser.getId()).get();
         Optional<Activity> act = activityRepository.findById(activityId);
         Optional<Employee> emp = employeeRepository.findEmployeeById(user.getEmployee().getId());
@@ -72,8 +72,8 @@ public class ActivityService {
         Activity activity = act.get();
         Employee employee = emp.get();
 
-        if (employee.getSaldo() > activity.getPrecio() && activity.getCupos() > 0) {
-            activity.setCupos(activity.getCupos() - 1);
+        if (employee.getSaldo() > activity.getPrecio() && activity.getQuota().get(scheduleId.intValue()).getCupos() > 0) {
+            activity.getQuota().get(scheduleId.intValue()).setCupos(activity.getQuota().get(scheduleId.intValue()).getCupos() - 1);
             employee.setSaldo(employee.getSaldo() - activity.getPrecio());
 
         } else {
@@ -84,7 +84,7 @@ public class ActivityService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity cameToActivity(Long activityId, Long cedula) {
+    public ResponseEntity cameToActivity(Long activityId, Long cedula, Long scheduleId) /*IMPORTANTE: se agrega argumento para la hora de la actividad*/{
         Optional<Activity> act = activityRepository.findById(activityId);
         Optional<Employee> emp = employeeRepository.findEmployeeByCedula(cedula);
         if (act.isEmpty() || emp.isEmpty()) {
@@ -94,13 +94,13 @@ public class ActivityService {
         Employee employee = emp.get();
 
         if (employee.getSaldo() > activity.getPrecio()) {
-            if (Objects.isNull(activity.getCupos())) {
+            if (Objects.isNull(activity.getQuota().get(scheduleId.intValue()).getCupos())) {
                 employee.setSaldo(employee.getSaldo() - activity.getPrecio());
             } else {
-                if (activity.getCupos() == 0) {
+                if (activity.getQuota().get(scheduleId.intValue()).getCupos() == 0) {
                     return new ResponseEntity<>("Actividad llena", HttpStatus.BAD_REQUEST);
                 }
-                activity.setCupos(activity.getCupos() - 1);
+                activity.getQuota().get(scheduleId.intValue()).setCupos(activity.getQuota().get(scheduleId.intValue()).getCupos() - 1);
                 employee.setSaldo(employee.getSaldo() - activity.getPrecio());
             }
         } else {

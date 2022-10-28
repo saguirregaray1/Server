@@ -2,6 +2,7 @@ package com.example.serverTIC.persistence;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
@@ -12,8 +13,6 @@ import java.util.List;
 
 @Entity
 @Table
-@TypeDef(name = "schedule_matrix",
-        typeClass = Semana.class)
 public class Activity {
 
     @Id
@@ -36,15 +35,11 @@ public class Activity {
     private String nombre;
     @Column(nullable = false)
     private Long precio;
-    @Column
-    private Integer cupos;
+    @JsonManagedReference(value = "quota")
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
+    private List<Quota> cupos;
 
-    //@Type(type = "schedule_matrix", parameters = @org.hibernate.annotations.Parameter(
-    //        name = "sql_array_type",
-    //        value = "Semana"
-    //))
-    //@Column(name = "horarios", columnDefinition = "Semana[][]")
-    //private Semana[][] horarios;
+
 
 
     @ManyToMany (cascade = CascadeType.ALL)
@@ -57,7 +52,7 @@ public class Activity {
     @Enumerated(EnumType.STRING)
     private ActivityCategories activityCategories;
 
-    public Activity(Club club, String nombre, Long precio, Integer cupos, ActivityCategories activityCategories) {
+    public Activity(Club club, String nombre, Long precio, List<Quota> cupos, ActivityCategories activityCategories) {
         this.club = club;
         this.nombre = nombre;
         this.precio = precio;
@@ -85,11 +80,11 @@ public class Activity {
         this.precio = precio;
     }
 
-    public Integer getCupos() {
+    public List<Quota> getQuota() {
         return cupos;
     }
 
-    public void setCupos(Integer cupos) {
+    public void setQuota(List<Quota> cupos) {
         this.cupos = cupos;
     }
 
