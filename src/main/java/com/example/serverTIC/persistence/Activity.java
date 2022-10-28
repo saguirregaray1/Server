@@ -2,6 +2,8 @@ package com.example.serverTIC.persistence;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,6 +12,8 @@ import java.util.List;
 
 @Entity
 @Table
+@TypeDef(name = "schedule_matrix",
+        typeClass = Semana.class)
 public class Activity {
 
     @Id
@@ -34,6 +38,14 @@ public class Activity {
     private Long precio;
     @Column
     private Integer cupos;
+
+    //@Type(type = "schedule_matrix", parameters = @org.hibernate.annotations.Parameter(
+    //        name = "sql_array_type",
+    //        value = "Semana"
+    //))
+    //@Column(name = "horarios", columnDefinition = "Semana[][]")
+    //private Semana[][] horarios;
+
 
     @ManyToMany (cascade = CascadeType.ALL)
     @JoinTable(name = "Activity_Image",joinColumns = {@JoinColumn(name = "Activity_Id")},
