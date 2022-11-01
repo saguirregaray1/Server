@@ -3,8 +3,6 @@ package com.example.serverTIC.persistence;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -35,7 +33,7 @@ public class Activity {
     private String nombre;
     @Column(nullable = false)
     private Long precio;
-    @JsonManagedReference(value = "quota")
+    @JsonManagedReference(value = "cupos")
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
     private List<Quota> cupos;
 
@@ -80,11 +78,11 @@ public class Activity {
         this.precio = precio;
     }
 
-    public List<Quota> getQuota() {
+    public List<Quota> getCupos() {
         return cupos;
     }
 
-    public void setQuota(List<Quota> cupos) {
+    public void setCupos(List<Quota> cupos) {
         this.cupos = cupos;
     }
 
@@ -124,11 +122,4 @@ public class Activity {
         this.pictures.add(image);
     }
 
-    public List<Quota> getCupos() {
-        return cupos;
-    }
-
-    public void setCupos(List<Quota> cupos) {
-        this.cupos = cupos;
-    }
 }

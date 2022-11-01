@@ -11,15 +11,16 @@ public class Quota {
 
     @Id
     @SequenceGenerator(
-            name = "activity_sequence",
-            sequenceName = "activity_sequence",
+            name = "quota_sequence",
+            sequenceName = "quota_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "activity_sequence"
+            generator = "quota_sequence"
     )
     private Long quotaId;
+
 
     @Column
     private String day;
@@ -50,6 +51,15 @@ public class Quota {
         this.startTime = startTime;
         this.finishTime = finishTime;
         this.activity = activity;
+        this.cupos = -1;
+    }
+
+    public Quota(String day,Activity activity) {
+        this.day = day;
+        this.startTime = null;
+        this.finishTime = null;
+        this.activity = activity;
+        this.cupos = -1;
     }
 
 

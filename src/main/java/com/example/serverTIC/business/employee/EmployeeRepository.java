@@ -17,6 +17,6 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
 
     Optional<Employee> findEmployeeById(Long employeeId);
 
-    @Query("select a.nombre,a.cupos,a.precio,a.activityCategories,c.nombre,c.dir,a.id from Activity a Join a.club c where a in :favouriteList")
+    @Query("select a.nombre,a.precio,a.activityCategories,c.nombre,c.dir,a.id from Activity a Join a.club c where a in :favouriteList")
     List<List> getFavouriteList(@Param("favouriteList") List<Activity> favouriteList);
 }

@@ -9,8 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -72,11 +73,17 @@ public class ActivityService {
         Activity activity = act.get();
         Employee employee = emp.get();
 
-        if (employee.getSaldo() > activity.getPrecio() && activity.getQuota().get(scheduleId.intValue()).getCupos() > 0) {
-            activity.getQuota().get(scheduleId.intValue()).setCupos(activity.getQuota().get(scheduleId.intValue()).getCupos() - 1);
+        Quota quota = activity.getCupos().get(scheduleId.intValue());
+
+        if (employee.getSaldo() > activity.getPrecio() &&
+                quota.getCupos() > 0 &&
+                LocalTime.parse(quota.getStartTime()).isBefore(LocalTime.now()) &&
+                LocalTime.parse(quota.getFinishTime()).isAfter(LocalTime.now()))
+        {
+            activity.getCupos().get(scheduleId.intValue()).setCupos(activity.getCupos().get(scheduleId.intValue()).getCupos() - 1);
             employee.setSaldo(employee.getSaldo() - activity.getPrecio());
 
-        } else {
+        } else{
             return new ResponseEntity<>("saldo insuficiente o no hay cupos", HttpStatus.BAD_REQUEST);
         }
         employeeRepository.save(employee);
@@ -84,7 +91,7 @@ public class ActivityService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity cameToActivity(Long activityId, Long cedula, Long scheduleId) /*IMPORTANTE: se agrega argumento para la hora de la actividad*/{
+    public ResponseEntity cameToActivity(Long activityId, Long cedula) /*IMPORTANTE: se agrega argumento para la hora de la actividad*/ {
         Optional<Activity> act = activityRepository.findById(activityId);
         Optional<Employee> emp = employeeRepository.findEmployeeByCedula(cedula);
         if (act.isEmpty() || emp.isEmpty()) {
@@ -93,23 +100,19 @@ public class ActivityService {
         Activity activity = act.get();
         Employee employee = emp.get();
 
-        if (employee.getSaldo() > activity.getPrecio()) {
-            if (Objects.isNull(activity.getQuota().get(scheduleId.intValue()).getCupos())) {
-                employee.setSaldo(employee.getSaldo() - activity.getPrecio());
-            } else {
-                if (activity.getQuota().get(scheduleId.intValue()).getCupos() == 0) {
-                    return new ResponseEntity<>("Actividad llena", HttpStatus.BAD_REQUEST);
-                }
-                activity.getQuota().get(scheduleId.intValue()).setCupos(activity.getQuota().get(scheduleId.intValue()).getCupos() - 1);
-                employee.setSaldo(employee.getSaldo() - activity.getPrecio());
-            }
-        } else {
-            return new ResponseEntity<>("Saldo insuficiente", HttpStatus.BAD_REQUEST);
+        Quota quota = activity.getCupos().get(LocalDate.now().getDayOfWeek().getValue() - 1);
+
+        if (employee.getSaldo() > activity.getPrecio() &&
+                quota.getCupos() == -1 &&
+                LocalTime.parse(quota.getStartTime()).isBefore(LocalTime.now()) &&
+                LocalTime.parse(quota.getFinishTime()).isAfter(LocalTime.now())) {
+            employee.setSaldo(employee.getSaldo() - activity.getPrecio());
         }
         employeeRepository.save(employee);
         activityRepository.save(activity);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
     public void updateActivity(Activity activity) {
         Optional<Club> temp = clubRepository.findById(activity.getClub().getId());
@@ -129,4 +132,11 @@ public class ActivityService {
         return clubRepository.getClubActivities(club.get().getClubActivities());
     }
 
+    public List<Quota> getActivityQuota(Long activityId) {
+        Optional<Activity> activity = activityRepository.findById(activityId);
+        if (activity.isEmpty()){
+            throw new IllegalStateException("actividad no existe");
+        }
+        return activityRepository.getActivityQuota(activityId);
+    }
 }

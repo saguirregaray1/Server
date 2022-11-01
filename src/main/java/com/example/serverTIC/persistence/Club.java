@@ -90,6 +90,14 @@ public class Club {
         }
     }
 
+    public List<AppUser> getClubUsers() {
+        return clubUsers;
+    }
+
+    public void setClubUsers(List<AppUser> clubUsers) {
+        this.clubUsers = clubUsers;
+    }
+
     @Override
     public String toString() {
         return "Club{" +
