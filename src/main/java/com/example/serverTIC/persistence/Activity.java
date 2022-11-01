@@ -124,4 +124,11 @@ public class Activity {
         this.pictures.add(image);
     }
 
+    public List<Quota> getCupos() {
+        return cupos;
+    }
+
+    public void setCupos(List<Quota> cupos) {
+        this.cupos = cupos;
+    }
 }

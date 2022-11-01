@@ -62,8 +62,8 @@ public class ActivityService {
         return activityRepository.findActivitiesByActivityCategories(activityCategories);
     }
 
-    public ResponseEntity registerToActivity(Long activityId, Long scheduleId, AppUser appUser)/*IMPORTANTE: se agrega argumento para la hora*/ {
-        AppUser user = appUserRepository.findById(appUser.getId()).get();
+    public ResponseEntity registerToActivity(Long activityId, Long appUserId, Long scheduleId)/*IMPORTANTE: se agrega argumento para la hora*/ {
+        AppUser user = appUserRepository.findById(appUserId).get();
         Optional<Activity> act = activityRepository.findById(activityId);
         Optional<Employee> emp = employeeRepository.findEmployeeById(user.getEmployee().getId());
         if (act.isEmpty() || emp.isEmpty()) {

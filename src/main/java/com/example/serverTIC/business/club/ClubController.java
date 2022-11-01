@@ -100,15 +100,15 @@ public class ClubController {
 
     //registerToActivity
     @PostMapping(path = "/activity/{activityId}")
-    public ResponseEntity registerToActivity(@PathVariable Long activityId, @RequestBody AppUser appUser) {
-        return activityService.registerToActivity(activityId, appUser);
+    public ResponseEntity registerToActivity(@PathVariable Long activityId, @RequestBody List<Long> ids) {
+        return activityService.registerToActivity(activityId, ids.get(0), ids.get(1));
     }
 
     //cancelRegistration
 
     @PutMapping(path = "/activity/{activityId}")
-    public ResponseEntity cameToActivity(@PathVariable Long activityId, @RequestBody Long cedula) {
-        return activityService.cameToActivity(activityId, cedula);
+    public ResponseEntity cameToActivity(@PathVariable Long activityId, @RequestBody List<Long> ids) {
+        return activityService.cameToActivity(activityId, ids.get(0), ids.get(1));
     }
 
 

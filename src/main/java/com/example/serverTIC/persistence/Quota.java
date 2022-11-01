@@ -84,4 +84,24 @@ public class Quota {
     public Activity getActivity() {
         return activity;
     }
+
+    public void setQuotaId(Long quotaId) {
+        this.quotaId = quotaId;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setFinishTime(String finishTime) {
+        this.finishTime = finishTime;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
 }
