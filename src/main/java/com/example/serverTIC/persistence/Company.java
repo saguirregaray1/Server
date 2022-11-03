@@ -40,6 +40,7 @@ public class Company {
         this.nombre = nombre;
         this.nroCuenta = nroCuenta;
         this.companyEmployees = new ArrayList<>();
+        this.companyUsers = new ArrayList<>();
     }
 
     public Company() {

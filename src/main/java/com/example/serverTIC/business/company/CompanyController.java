@@ -4,6 +4,7 @@ import com.example.serverTIC.business.appuser.AppUserService;
 import com.example.serverTIC.persistence.AppUser;
 import com.example.serverTIC.persistence.Company;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -25,8 +26,8 @@ public class CompanyController {
     public List<Company> getListOfCompanies(){ return companyService.getCompanies(); }
 
     @PostMapping
-    public void registerNewCompany(@RequestBody Company company){
-        companyService.addNewCompany(company);
+    public ResponseEntity<?> registerNewCompany(@RequestBody List<String> inputs){
+        return companyService.addNewCompany(inputs);
     }
 
     @DeleteMapping(path="{companyName}")
