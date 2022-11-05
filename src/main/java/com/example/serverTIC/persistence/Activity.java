@@ -37,8 +37,13 @@ public class Activity {
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
     private List<Quota> cupos;
 
+    @JsonManagedReference(value = "confirmedUses")
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
+    private List<CheckIn> confirmedUses;
 
-
+    @JsonManagedReference(value = "reservationsMade")
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
+    private List<Reservation> reservationsReceived;
 
     @ManyToMany (cascade = CascadeType.ALL)
     @JoinTable(name = "Activity_Image",joinColumns = {@JoinColumn(name = "Activity_Id")},
@@ -60,6 +65,14 @@ public class Activity {
     }
 
     public Activity() {
+    }
+
+    public List<Reservation> getReservationsReceived() {
+        return reservationsReceived;
+    }
+
+    public List<CheckIn> getConfirmedUses() {
+        return confirmedUses;
     }
 
     public Club getClub() {
@@ -122,4 +135,11 @@ public class Activity {
         this.pictures.add(image);
     }
 
+    public void setConfirmedUses(List<CheckIn> confirmedUses) {
+        this.confirmedUses = confirmedUses;
+    }
+
+    public void setReservationsReceived(List<Reservation> reservationsReceived) {
+        this.reservationsReceived = reservationsReceived;
+    }
 }

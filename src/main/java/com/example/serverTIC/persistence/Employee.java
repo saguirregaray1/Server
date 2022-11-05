@@ -32,6 +32,15 @@ public class Employee {
     @JsonManagedReference (value = "employeeUser")
     @OneToOne(mappedBy = "employee", cascade = {CascadeType.ALL})
     private AppUser appUser;
+
+    @JsonManagedReference(value = "access")
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<CheckIn> access;
+
+    @JsonManagedReference(value = "reservationsMade")
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<Reservation> reservationsMade;
+
     @ManyToMany
     @JoinColumn(name = "activity_id")
     private List<Activity> favs;
@@ -70,6 +79,14 @@ public class Employee {
     }
 
     public Employee() {
+    }
+
+    public List<Reservation> getReservationsMade() {
+        return reservationsMade;
+    }
+
+    public List<CheckIn> getAccess() {
+        return access;
     }
 
     public Long getId() {
@@ -122,6 +139,14 @@ public class Employee {
 
     public void addFav(Activity activity) {
         this.favs.add(activity);
+    }
+
+    public void setAccess(List<CheckIn> access) {
+        this.access = access;
+    }
+
+    public void setReservationsMade(List<Reservation> reservationsMade) {
+        this.reservationsMade = reservationsMade;
     }
 
     @Override

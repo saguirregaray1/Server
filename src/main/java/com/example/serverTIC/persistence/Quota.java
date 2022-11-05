@@ -19,6 +19,7 @@ public class Quota {
             strategy = GenerationType.SEQUENCE,
             generator = "quota_sequence"
     )
+    @Column(updatable = false)
     private Long quotaId;
 
 
