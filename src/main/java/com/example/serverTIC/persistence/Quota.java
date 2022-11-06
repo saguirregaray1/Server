@@ -38,12 +38,12 @@ public class Quota {
     @Column
     private Integer maxCupos;
 
-    @JsonManagedReference(value = "reservationsMade")
+    @JsonManagedReference(value = "reservationsReceived")
     @OneToMany(mappedBy = "quota", cascade = CascadeType.ALL)
     private List<Reservation> reservationsReceived;
 
     @JsonManagedReference(value = "confirmedUses")
-    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "quota", cascade = CascadeType.ALL)
     private List<CheckIn> confirmedUses;
 
     @JsonBackReference(value = "cupos")

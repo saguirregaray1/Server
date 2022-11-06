@@ -27,19 +27,13 @@ public class ActivityService {
 
     private final QuotaRepository quotaRepository;
 
-    private final CheckInRepository checkInRepository;
-
-    private final ReservationRepository reservationRepository;
-
     @Autowired
-    public ActivityService(EmployeeRepository employeeRepository, ActivityRepository activityRepository, ClubRepository clubRepository, AppUserRepository appUserRepository, QuotaRepository quotaRepository, CheckInRepository checkInRepository, ReservationRepository reservationRepository) {
+    public ActivityService(EmployeeRepository employeeRepository, ActivityRepository activityRepository, ClubRepository clubRepository, AppUserRepository appUserRepository, QuotaRepository quotaRepository) {
         this.employeeRepository = employeeRepository;
         this.activityRepository = activityRepository;
         this.clubRepository = clubRepository;
         this.appUserRepository = appUserRepository;
         this.quotaRepository = quotaRepository;
-        this.checkInRepository = checkInRepository;
-        this.reservationRepository = reservationRepository;
     }
 
     public void addNewActivity(Activity activity) {
@@ -71,7 +65,7 @@ public class ActivityService {
         return activityRepository.findActivitiesByActivityCategories(activityCategories);
     }
 
-    public ResponseEntity makeReservation(Long appUserId, Long scheduleId)/*IMPORTANTE: se agrega argumento para la hora*/ {
+    public ResponseEntity makeReservation(Long appUserId, Long scheduleId, String fecha)/*IMPORTANTE: se agrega argumento para la hora*/ {
         AppUser user = appUserRepository.findById(appUserId).get();
         Optional<Quota> quot= quotaRepository.findById(scheduleId);
         Optional<Employee> emp = employeeRepository.findEmployeeById(user.getEmployee().getId());
@@ -86,7 +80,7 @@ public class ActivityService {
         if (employee.getSaldo() > activity.getPrecio() &&
                 quota.calculateCupos() > 0)
         {
-            Reservation reservation = new Reservation(employee,quota,ReservationStatus.PENDIENTE,LocalDate.now().toString());
+            Reservation reservation = new Reservation(employee,quota,ReservationStatus.PENDIENTE,fecha);
             employee.addReservation(reservation);
         } else{
             return new ResponseEntity<>("saldo insuficiente o no hay cupos", HttpStatus.BAD_REQUEST);
@@ -96,7 +90,7 @@ public class ActivityService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity cameToActivity(Long activityId, Long cedula, String day, String startTime) /*IMPORTANTE: se agrega argumento para la hora de la actividad*/ {
+    public ResponseEntity cameToActivity(Long activityId, Long cedula) /*IMPORTANTE: se agrega argumento para la hora de la actividad*/ {
         Optional<Activity> act = activityRepository.findById(activityId);
         Optional<Employee> emp = employeeRepository.findEmployeeByCedula(cedula);
         if (act.isEmpty() || emp.isEmpty()) {
@@ -112,6 +106,7 @@ public class ActivityService {
                 LocalTime.parse(quota.getStartTime()).isBefore(LocalTime.now()) &&
                 LocalTime.parse(quota.getFinishTime()).isAfter(LocalTime.now())) {
             employee.setSaldo(employee.getSaldo() - activity.getPrecio());
+            CheckIn checkIn = new CheckIn(employee,quota,LocalDate.now().toString());
         }
         employeeRepository.save(employee);
         activityRepository.save(activity);

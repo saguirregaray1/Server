@@ -24,7 +24,6 @@ public class Reservation {
     @Column
     private String fecha;
 
-
     @JsonBackReference(value = "reservationsMade")
     @ManyToOne(targetEntity = Employee.class)
     private Employee employee;

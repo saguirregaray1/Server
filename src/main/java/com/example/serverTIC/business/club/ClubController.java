@@ -96,9 +96,9 @@ public class ClubController {
     }
 
     //registerToActivity
-    @PostMapping(path = "/activity/registration")
-    public ResponseEntity registerToActivity(@RequestBody List<Long> ids) {
-        return activityService.makeReservation(ids.get(0), ids.get(1));
+    @PostMapping(path = "/activity/register")
+    public ResponseEntity makeAReservation(@RequestBody List<String> inputs) {
+        return activityService.makeReservation(Long.parseLong(inputs.get(0)), Long.parseLong(inputs.get(1)),inputs.get(3));
     }
 
     //cancelRegistration
