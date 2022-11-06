@@ -149,6 +149,14 @@ public class Employee {
         this.reservationsMade = reservationsMade;
     }
 
+    public void addReservation(Reservation reservation){
+        this.reservationsMade.add(reservation);
+    }
+
+    public void addAccess(CheckIn checkIn){
+        this.access.add(checkIn);
+    }
+
     @Override
     public String toString() {
         return "Employee{" +

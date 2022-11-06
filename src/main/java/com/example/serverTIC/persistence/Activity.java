@@ -37,14 +37,6 @@ public class Activity {
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
     private List<Quota> cupos;
 
-    @JsonManagedReference(value = "confirmedUses")
-    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
-    private List<CheckIn> confirmedUses;
-
-    @JsonManagedReference(value = "reservationsMade")
-    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
-    private List<Reservation> reservationsReceived;
-
     @ManyToMany (cascade = CascadeType.ALL)
     @JoinTable(name = "Activity_Image",joinColumns = {@JoinColumn(name = "Activity_Id")},
             inverseJoinColumns = {@JoinColumn(name = "Image_Id")})
@@ -54,6 +46,16 @@ public class Activity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ActivityCategories activityCategories;
+
+    public Activity(Long id, Club club, String nombre, Long precio, List<Quota> cupos,List<Image> pictures, ActivityCategories activityCategories) {
+        this.id = id;
+        this.club = club;
+        this.nombre = nombre;
+        this.precio = precio;
+        this.cupos = cupos;
+        this.pictures = pictures;
+        this.activityCategories = activityCategories;
+    }
 
     public Activity(Club club, String nombre, Long precio, List<Quota> cupos, ActivityCategories activityCategories) {
         this.club = club;
@@ -67,13 +69,6 @@ public class Activity {
     public Activity() {
     }
 
-    public List<Reservation> getReservationsReceived() {
-        return reservationsReceived;
-    }
-
-    public List<CheckIn> getConfirmedUses() {
-        return confirmedUses;
-    }
 
     public Club getClub() {
         return club;
@@ -135,11 +130,4 @@ public class Activity {
         this.pictures.add(image);
     }
 
-    public void setConfirmedUses(List<CheckIn> confirmedUses) {
-        this.confirmedUses = confirmedUses;
-    }
-
-    public void setReservationsReceived(List<Reservation> reservationsReceived) {
-        this.reservationsReceived = reservationsReceived;
-    }
 }

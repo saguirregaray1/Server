@@ -5,11 +5,11 @@ import com.example.serverTIC.business.activity.ActivityService;
 import com.example.serverTIC.business.appuser.AppUserService;
 import com.example.serverTIC.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/club")
@@ -96,16 +96,18 @@ public class ClubController {
     }
 
     //registerToActivity
-    @PostMapping(path = "/activity/{activityId}")
-    public ResponseEntity registerToActivity(@PathVariable Long activityId, @RequestBody List<Long> ids) {
-        return activityService.registerToActivity(activityId, ids.get(0), ids.get(1));
+    @PostMapping(path = "/activity/registration")
+    public ResponseEntity registerToActivity(@RequestBody List<Long> ids) {
+        return activityService.makeReservation(ids.get(0), ids.get(1));
     }
 
     //cancelRegistration
 
     @PutMapping(path = "/activity/{activityId}")
     public ResponseEntity cameToActivity(@PathVariable Long activityId, @RequestBody Long cedula) {
-        return activityService.cameToActivity(activityId,cedula);
+        //fixme
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        //return activityService.cameToActivity(activityId,cedula,);
     }
 
 

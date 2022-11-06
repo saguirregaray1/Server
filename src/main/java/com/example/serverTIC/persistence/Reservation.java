@@ -22,40 +22,68 @@ public class Reservation {
     private Long ReservationId;
 
     @Column
-    private String fechaReservada;
+    private String fecha;
+
 
     @JsonBackReference(value = "reservationsMade")
     @ManyToOne(targetEntity = Employee.class)
     private Employee employee;
 
     @JsonBackReference(value = "reservationsReceived")
-    @ManyToOne(targetEntity = Activity.class)
-    private Activity activity;
+    @ManyToOne(targetEntity = Quota.class)
+    private Quota quota;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus reservationStatus;
 
 
-    public Reservation(){
+    public Reservation() { }
 
+    public Reservation(Employee employee, Quota quota,ReservationStatus reservationStatus,String fecha) {
+        this.employee = employee;
+        this.quota = quota;
+        this.reservationStatus = reservationStatus;
+        this.fecha = fecha;
     }
 
-    public Reservation(String fechaReservada, Employee employee, Activity activity) {
-        this.fechaReservada = fechaReservada;
-        this.employee = employee;
-        this.activity = activity;
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 
     public Long getReservationId() {
         return ReservationId;
     }
 
-    public String getFechaReservada() {
-        return fechaReservada;
-    }
-
     public Employee getEmployee() {
         return employee;
     }
 
-    public Activity getActivity() {
-        return activity;
+    public Quota getQuota() {
+        return quota;
+    }
+
+    public void setReservationId(Long reservationId) {
+        ReservationId = reservationId;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public void setQuota(Quota quota) {
+        this.quota = quota;
+    }
+
+    public ReservationStatus getReservationStatus() {
+        return reservationStatus;
+    }
+
+    public void setReservationStatus(ReservationStatus reservationStatus) {
+        this.reservationStatus = reservationStatus;
     }
 }

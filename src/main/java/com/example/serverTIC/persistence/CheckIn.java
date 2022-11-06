@@ -21,30 +21,62 @@ public class CheckIn {
     @Column(updatable = false)
     private Long checkInId;
 
-    @Column
-    private String fechaAccedido;
-
     @JsonBackReference(value = "access")
     @ManyToOne(targetEntity = Employee.class)
     private Employee employee;
 
-    @JsonBackReference(value = "confimedUses")
-    @ManyToOne(targetEntity = Activity.class)
-    private Activity activity;
+    @Column
+    private String fecha;
+
+    @JsonBackReference(value = "confirmedUses")
+    @ManyToOne(targetEntity = Quota.class)
+    private Quota quota;
+
+
+    public CheckIn(Long checkInId, Employee employee, Quota quota,String fecha) {
+        this.checkInId = checkInId;
+        this.employee = employee;
+        this.quota = quota;
+        this.fecha = fecha;
+    }
+
+    public CheckIn(Employee employee, Quota quota,String fecha) {
+        this.employee = employee;
+        this.quota = quota;
+        this.fecha = fecha;
+    }
+
+    public CheckIn(){}
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
 
     public Long getCheckInId() {
         return checkInId;
-    }
-
-    public String getFechaAccedido() {
-        return fechaAccedido;
     }
 
     public Employee getEmployee() {
         return employee;
     }
 
-    public Activity getActivity() {
-        return activity;
+    public Quota getQuota() {
+        return quota;
+    }
+
+    public void setCheckInId(Long checkInId) {
+        this.checkInId = checkInId;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public void setQuota(Quota quota) {
+        this.quota = quota;
     }
 }

@@ -24,5 +24,4 @@ public interface ActivityRepository extends JpaRepository<Activity,Long> {
     @Query ("select a.cupos from Activity a where a.id =:activityId")
     List<Quota> getActivityQuota(@Param("activityId") Long activityId);
 
-
 }

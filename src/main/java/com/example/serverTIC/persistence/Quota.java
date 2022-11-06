@@ -2,8 +2,12 @@ package com.example.serverTIC.persistence;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table
@@ -22,7 +26,6 @@ public class Quota {
     @Column(updatable = false)
     private Long quotaId;
 
-
     @Column
     private String day;
 
@@ -33,18 +36,38 @@ public class Quota {
     private String finishTime;
 
     @Column
-    private Integer cupos;
+    private Integer maxCupos;
+
+    @JsonManagedReference(value = "reservationsMade")
+    @OneToMany(mappedBy = "quota", cascade = CascadeType.ALL)
+    private List<Reservation> reservationsReceived;
+
+    @JsonManagedReference(value = "confirmedUses")
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
+    private List<CheckIn> confirmedUses;
 
     @JsonBackReference(value = "cupos")
     @ManyToOne(targetEntity = Activity.class, optional = false)
     private Activity activity;
 
-    public Quota(String day, String startTime, String finishTime, Integer cupos, Activity activity) {
+    public Quota(String day, String startTime, String finishTime, Integer maxCupos, Activity activity, List<Reservation> reservationReceived, List<CheckIn> confirmedUses) {
         this.day = day;
         this.startTime = startTime;
         this.finishTime = finishTime;
-        this.cupos = cupos;
+        this.maxCupos = maxCupos;
         this.activity = activity;
+        this.reservationsReceived = reservationReceived;
+        this.confirmedUses = confirmedUses;
+    }
+
+    public Quota(String day, String startTime, String finishTime, Integer maxCupos, Activity activity) {
+        this.day = day;
+        this.startTime = startTime;
+        this.finishTime = finishTime;
+        this.maxCupos = maxCupos;
+        this.activity = activity;
+        this.reservationsReceived = new ArrayList<>();
+        this.confirmedUses = new ArrayList<>();
     }
 
     public Quota(String day, String startTime, String finishTime, Activity activity) {
@@ -52,19 +75,21 @@ public class Quota {
         this.startTime = startTime;
         this.finishTime = finishTime;
         this.activity = activity;
-        this.cupos = -1;
+        this.maxCupos = -1;
+        this.reservationsReceived = new ArrayList<>();
     }
 
-    public Quota(String day,Activity activity) {
+    public Quota(String day, Activity activity) {
         this.day = day;
         this.startTime = null;
         this.finishTime = null;
         this.activity = activity;
-        this.cupos = -1;
+        this.maxCupos = -1;
+        this.reservationsReceived = new ArrayList<>();
     }
 
 
-    public Quota(){
+    public Quota() {
     }
 
 
@@ -84,12 +109,28 @@ public class Quota {
         return finishTime;
     }
 
-    public Integer getCupos() {
+    public Integer calculateCupos() {
+        LocalDate now = LocalDate.now();
+        Integer cupos = this.maxCupos;
+        for (Reservation reservation : this.reservationsReceived) {
+            if (reservation.getReservationStatus().equals(ReservationStatus.PENDIENTE) && LocalDate.parse(reservation.getFecha()).equals(now)) {
+                cupos = cupos - 1;
+            }
+        }
+        for (CheckIn checkIn : this.confirmedUses) {
+            if (LocalDate.parse(checkIn.getFecha()).equals(now)) {
+                cupos = cupos - 1;
+            }
+        }
         return cupos;
     }
 
-    public void setCupos(Integer cupos) {
-        this.cupos = cupos;
+    public Integer getMaxCupos() {
+        return maxCupos;
+    }
+
+    public void setMaxCupos(Integer maxCupos) {
+        this.maxCupos = maxCupos;
     }
 
     public Activity getActivity() {
@@ -114,5 +155,21 @@ public class Quota {
 
     public void setActivity(Activity activity) {
         this.activity = activity;
+    }
+
+    public List<Reservation> getReservationsReceived() {
+        return reservationsReceived;
+    }
+
+    public void setReservationsReceived(List<Reservation> reservationsReceived) {
+        this.reservationsReceived = reservationsReceived;
+    }
+
+    public List<CheckIn> getConfirmedUses() {
+        return confirmedUses;
+    }
+
+    public void setConfirmedUses(List<CheckIn> confirmedUses) {
+        this.confirmedUses = confirmedUses;
     }
 }
