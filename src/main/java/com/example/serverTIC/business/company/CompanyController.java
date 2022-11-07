@@ -3,6 +3,7 @@ package com.example.serverTIC.business.company;
 import com.example.serverTIC.business.appuser.AppUserService;
 import com.example.serverTIC.persistence.AppUser;
 import com.example.serverTIC.persistence.Company;
+import com.example.serverTIC.persistence.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,8 @@ public class CompanyController {
     @PutMapping(path="/{companyId}")
     public void updateCompany(@PathVariable Long companyId, @RequestBody Company company) { companyService.updateCompany(company,companyId);}
 
+    @GetMapping(path="/{companyId}")
+    public List<Employee> getCompanyEmployees(@PathVariable Long companyId) {return companyService.getCompanyEmployees(companyId);}
     //CompanyUser
     @PostMapping(path = "/user/{companyId}")
     public void registerNewCompanyUser(@PathVariable Long companyId,@RequestBody AppUser appUser) {
@@ -52,5 +55,6 @@ public class CompanyController {
 
     @PutMapping(path="/user")
     public void updateCompanyUser(@RequestBody AppUser appUser) {appUserService.updateAppUser(appUser);}
+
 
 }

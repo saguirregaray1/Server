@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +43,11 @@ public class EmployeeService{
         companyRepository.save(company);
     }
 
-    public List<Employee> getEmployees(){ return employeeRepository.findAll();}
+
+    @Transactional
+    public List<Employee> getEmployees(){
+        return employeeRepository.findAll();
+        }
 
     public void deleteEmployee(Long cedulaEmp) {
         Optional<Employee> temp=employeeRepository.findEmployeeByCedula(cedulaEmp);
@@ -52,12 +59,12 @@ public class EmployeeService{
     }
 
 
-    public ResponseEntity isAnEmployee(Long cedula) {
+    public ResponseEntity<Employee> isAnEmployee(Long cedula) {
         Optional<Employee> emp = employeeRepository.findEmployeeByCedula(cedula);
         if (emp.isEmpty()){
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(emp.get(),HttpStatus.OK);
+        return new ResponseEntity<>(emp.get(),HttpStatus.OK);
     }
 
 

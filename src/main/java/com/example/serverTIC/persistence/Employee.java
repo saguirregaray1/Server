@@ -1,6 +1,7 @@
 package com.example.serverTIC.persistence;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -41,6 +42,7 @@ public class Employee {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Reservation> reservationsMade;
 
+    @JsonIgnore
     @ManyToMany
     @JoinColumn(name = "activity_id")
     private List<Activity> favs;

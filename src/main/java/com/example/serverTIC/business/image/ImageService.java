@@ -36,7 +36,6 @@ public class ImageService {
         return new ResponseEntity(dbImage.get().getImageData(), HttpStatus.OK);
     }
 
-    @Transactional
     public ResponseEntity getActivityPictures(Long activityId) {
         Optional<Activity> act= activityRepository.findById(activityId);
         if(act.isEmpty()){

@@ -1,7 +1,9 @@
 package com.example.serverTIC.business.company;
+import com.example.serverTIC.business.employee.EmployeeRepository;
 import com.example.serverTIC.persistence.AppUser;
 import com.example.serverTIC.persistence.AppUserRole;
 import com.example.serverTIC.persistence.Company;
+import com.example.serverTIC.persistence.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +17,11 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
 
+    private final EmployeeRepository employeeRepository;
+
     @Autowired
-    public CompanyService(CompanyRepository companyRepository) {
+    public CompanyService(CompanyRepository companyRepository, EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
         this.companyRepository = companyRepository;
     }
 
@@ -49,5 +54,13 @@ public class CompanyService {
             companyRepository.save(company1);
         }
     }
- }
+
+    public List<Employee> getCompanyEmployees(Long companyId) {
+        Optional<Company> comp=companyRepository.findById(companyId);
+        if (comp.isEmpty()){
+            throw new IllegalStateException("company not found");
+        }
+       return employeeRepository.findEmployeeByCompanyId(comp.get());
+    }
+}
 
