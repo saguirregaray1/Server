@@ -42,7 +42,7 @@ public class Employee {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Reservation> reservationsMade;
 
-    @JsonIgnore
+
     @ManyToMany
     @JoinColumn(name = "activity_id")
     private List<Activity> favs;

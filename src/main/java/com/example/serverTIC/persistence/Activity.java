@@ -2,6 +2,7 @@ package com.example.serverTIC.persistence;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -37,6 +38,7 @@ public class Activity {
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
     private List<Quota> cupos;
 
+    @JsonIgnore
     @ManyToMany (cascade = CascadeType.ALL)
     @JoinTable(name = "Activity_Image",joinColumns = {@JoinColumn(name = "Activity_Id")},
             inverseJoinColumns = {@JoinColumn(name = "Image_Id")})
