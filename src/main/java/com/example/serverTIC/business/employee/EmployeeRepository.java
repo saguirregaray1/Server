@@ -27,6 +27,8 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
     @Query("select e from Employee e where e.company=:company")
     List<Employee> findEmployeeByCompanyId(@Param("company") Company company);
 
-    @Query("SELECT sum(a.quota.activity.precio) from CheckIn a where a.employee=:employee")
-    Long findCheckInsCost(@Param("employee")Employee employee);
+
+    //fixme
+    @Query("SELECT sum(a.quota.activity.precio) from CheckIn a where a.employee=:employee and a.fecha like concat('__/',:fecha)")
+    Long findCheckInsCost(@Param("employee")Employee employee,@Param("fecha") String fecha);
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -90,7 +91,7 @@ public class ActivityService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity cameToActivity(Long activityId, Long cedula) /*IMPORTANTE: se agrega argumento para la hora de la actividad*/ {
+    public ResponseEntity cameToActivityWithoutCupos(Long activityId, Long cedula) /*IMPORTANTE: se agrega argumento para la hora de la actividad*/ {
         Optional<Activity> act = activityRepository.findById(activityId);
         Optional<Employee> emp = employeeRepository.findEmployeeByCedula(cedula);
         if (act.isEmpty() || emp.isEmpty()) {
@@ -113,18 +114,19 @@ public class ActivityService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity cameToActivityWithReservation(Long activityId, Long cedula, String day, String startTime) /*IMPORTANTE: se agrega argumento para la hora de la actividad*/ {
+    public ResponseEntity cameToActivityWithReservation(Long activityId, Long cedula,String startTime) /*IMPORTANTE: se agrega argumento para la hora de la actividad*/ {
         Optional<Activity> act = activityRepository.findById(activityId);
         Optional<Employee> emp = employeeRepository.findEmployeeByCedula(cedula);
         if (act.isEmpty() || emp.isEmpty()) {
             return new ResponseEntity<>("actividad o empleado no existen", HttpStatus.BAD_REQUEST);
         }
+        int day = LocalDate.now().getDayOfWeek().getValue();
         Activity activity = act.get();
         Employee employee = emp.get();
         Reservation reservation = null;
 
         for (Reservation reserva:employee.getReservationsMade()){
-            if (reserva.getQuota().getDay().equals(day) && reserva.getQuota().getStartTime().equals(startTime) && reserva.getReservationStatus().equals(ReservationStatus.PENDIENTE)){
+            if (DayOfWeek.valueOf(reserva.getQuota().getDay()).getValue()==day && reserva.getQuota().getStartTime().equals(startTime) && reserva.getReservationStatus().equals(ReservationStatus.PENDIENTE)){
                 reservation = reserva;
             }
         }
@@ -144,9 +146,10 @@ public class ActivityService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity cameToActivityWithNoReservation(Long activityId, Long cedula, String day, String startTime) /*IMPORTANTE: se agrega argumento para la hora de la actividad*/ {
+    public ResponseEntity cameToActivityWithNoReservation(Long activityId, Long cedula,String startTime) /*IMPORTANTE: se agrega argumento para la hora de la actividad*/ {
         Optional<Activity> act = activityRepository.findById(activityId);
         Optional<Employee> emp = employeeRepository.findEmployeeByCedula(cedula);
+        int day = LocalDate.now().getDayOfWeek().getValue();
         if (act.isEmpty() || emp.isEmpty()) {
             return new ResponseEntity<>("actividad o empleado no existen", HttpStatus.BAD_REQUEST);
         }
@@ -155,8 +158,12 @@ public class ActivityService {
         Quota quota = null;
 
         for (Quota quot:activity.getCupos()){
-            if (quot.getDay().equals(day) && quot.getStartTime().equals(startTime)){
+             ;
+            if (DayOfWeek.valueOf(quot.getDay()).getValue()==day && quot.getStartTime().equals(startTime)){
                 quota=quot;
+                if (quota.getMaxCupos()==-1){
+                    return cameToActivityWithoutCupos(activityId,cedula);
+                }
             }
         }
 
@@ -199,5 +206,13 @@ public class ActivityService {
             throw new IllegalStateException("actividad no existe");
         }
         return activityRepository.getActivityQuota(activityId);
+    }
+
+    public ResponseEntity getActivityByNombre(String clubId,String nombre){
+        Optional<Activity> act= activityRepository.findActivitiesByClubIdAndNombre(Long.parseLong(clubId),nombre);
+        if (act.isEmpty()){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(act.get(),HttpStatus.OK);
     }
 }

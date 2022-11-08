@@ -46,6 +46,7 @@ public class ClubController {
     public void updateClub(@PathVariable Long clubId, @RequestBody Club club) {
         clubService.updateClub(club, clubId);
     }
+
     @GetMapping(path = "/{clubId}")
     public List<List> getListOfClubActivities(@PathVariable Long clubId) {
         return activityService.getActivitiesByClub(clubId);
@@ -54,8 +55,8 @@ public class ClubController {
 
     //ClubUser
     @PostMapping(path = "/user/{clubId}")
-    public void registerNewClubUser(@PathVariable Long clubId,@RequestBody AppUser appUser) {
-        appUserService.addNewClubUser(appUser,clubId);
+    public void registerNewClubUser(@PathVariable Long clubId, @RequestBody AppUser appUser) {
+        appUserService.addNewClubUser(appUser, clubId);
     }
 
     @DeleteMapping(path = "/user/{userId}")
@@ -98,16 +99,18 @@ public class ClubController {
     //registerToActivity
     @PostMapping(path = "/activity/register")
     public ResponseEntity makeAReservation(@RequestBody List<String> inputs) {
-        return activityService.makeReservation(Long.parseLong(inputs.get(0)), Long.parseLong(inputs.get(1)),inputs.get(3));
+        return activityService.makeReservation(Long.parseLong(inputs.get(0)), Long.parseLong(inputs.get(1)), inputs.get(2));
     }
 
     //cancelRegistration
 
-    @PutMapping(path = "/activity/{activityId}")
-    public ResponseEntity cameToActivity(@PathVariable Long activityId, @RequestBody Long cedula) {
-        //fixme
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        //return activityService.cameToActivity(activityId,cedula,);
+    @PostMapping(path = "/activity/checkIn")
+    public ResponseEntity cameToActivityWithReservation(@RequestBody List<String> inputs) {
+        return activityService.cameToActivityWithReservation(Long.parseLong(inputs.get(0)), Long.parseLong(inputs.get(1)), inputs.get(2));
+    }
+    @PutMapping(path= "/activity/checkIn")
+    public ResponseEntity cameToActivityWithoutReservation(@RequestBody List<String> inputs) {
+        return activityService.cameToActivityWithNoReservation(Long.parseLong(inputs.get(0)), Long.parseLong(inputs.get(1)), inputs.get(2));
     }
 
 
@@ -118,9 +121,18 @@ public class ClubController {
     }
 
     @GetMapping(path = "/activity/quota/{activityId}")
-    public List<Quota> getQuotaOfActivity(@PathVariable Long activityId){
+    public List<Quota> getQuotaOfActivity(@PathVariable Long activityId) {
         return activityService.getActivityQuota(activityId);
     }
 
+    @GetMapping(path = "/earnings/{clubId}")
+    public Long getClubEarnings(@PathVariable Long clubId, @RequestBody String fechaMesAño) {
+        return clubService.getClubEarnings(clubId,fechaMesAño);
+    }
+
+    @GetMapping(path= "/activity/nombre")
+    public ResponseEntity getActivityByNombre(@RequestBody List<String> inputs){
+        return activityService.getActivityByNombre(inputs.get(0),inputs.get(1));
+    }
 }
 

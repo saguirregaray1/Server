@@ -61,7 +61,7 @@ public class CompanyService {
        return employeeRepository.findEmployeeByCompanyId(comp.get());
     }
 
-    public Long getCostsForTheMonth(Long companyId) {
+    public Long getCostsForTheMonth(Long companyId,String fechaMesAño) {
         Optional<Company> comp=companyRepository.findById(companyId);
         if (comp.isEmpty()){
             throw new IllegalStateException("company not found");
@@ -69,7 +69,7 @@ public class CompanyService {
         Company company=comp.get();
         Long totalCost=null;
         for (Employee employee:company.getCompanyEmployees()){
-            totalCost+=employeeRepository.findCheckInsCost(employee);
+            totalCost+=employeeRepository.findCheckInsCost(employee,fechaMesAño);
         }
         return totalCost;
     }

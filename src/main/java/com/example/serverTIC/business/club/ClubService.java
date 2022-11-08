@@ -1,9 +1,7 @@
 package com.example.serverTIC.business.club;
 
-import com.example.serverTIC.persistence.AppUser;
-import com.example.serverTIC.persistence.AppUserRole;
-import com.example.serverTIC.persistence.Club;
-import org.apache.coyote.Response;
+import com.example.serverTIC.business.activity.ActivityRepository;
+import com.example.serverTIC.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +14,12 @@ public class ClubService {
 
     private final ClubRepository clubRepository;
 
+    private final ActivityRepository activityRepository;
+
     @Autowired
-    public ClubService(ClubRepository clubRepository) {
+    public ClubService(ClubRepository clubRepository, ActivityRepository activityRepository) {
         this.clubRepository = clubRepository;
+        this.activityRepository = activityRepository;
     }
 
     public ResponseEntity<?> addNewClub(List<String> inputs) {
@@ -51,4 +52,16 @@ public class ClubService {
         }
     }
 
+    public Long getClubEarnings(Long clubId,String fechaMesAño) {
+        Optional<Club> tempClub=clubRepository.findById(clubId);
+        if (tempClub.isEmpty()){
+            throw new IllegalStateException("company not found");
+        }
+        Club club=tempClub.get();
+        Long totalCost=null;
+        for (Activity activity:club.getClubActivities()){
+            totalCost+=activity.getPrecio()*activityRepository.findActivityEarning(activity.getId(),fechaMesAño);
+        }
+        return totalCost;
+    }
 }
