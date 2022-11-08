@@ -1,14 +1,12 @@
 package com.example.serverTIC.business.company;
 import com.example.serverTIC.business.employee.EmployeeRepository;
-import com.example.serverTIC.persistence.AppUser;
-import com.example.serverTIC.persistence.AppUserRole;
-import com.example.serverTIC.persistence.Company;
-import com.example.serverTIC.persistence.Employee;
+import com.example.serverTIC.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,6 +59,19 @@ public class CompanyService {
             throw new IllegalStateException("company not found");
         }
        return employeeRepository.findEmployeeByCompanyId(comp.get());
+    }
+
+    public Long getCostsForTheMonth(Long companyId) {
+        Optional<Company> comp=companyRepository.findById(companyId);
+        if (comp.isEmpty()){
+            throw new IllegalStateException("company not found");
+        }
+        Company company=comp.get();
+        Long totalCost=null;
+        for (Employee employee:company.getCompanyEmployees()){
+            totalCost+=employeeRepository.findCheckInsCost(employee);
+        }
+        return totalCost;
     }
 }
 

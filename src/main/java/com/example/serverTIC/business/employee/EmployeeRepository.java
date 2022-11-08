@@ -1,8 +1,10 @@
 package com.example.serverTIC.business.employee;
 
 import com.example.serverTIC.persistence.Activity;
+import com.example.serverTIC.persistence.CheckIn;
 import com.example.serverTIC.persistence.Company;
 import com.example.serverTIC.persistence.Employee;
+import org.hibernate.annotations.Check;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,4 +26,7 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
 
     @Query("select e from Employee e where e.company=:company")
     List<Employee> findEmployeeByCompanyId(@Param("company") Company company);
+
+    @Query("SELECT sum(a.quota.activity.precio) from CheckIn a where a.employee=:employee")
+    Long findCheckInsCost(@Param("employee")Employee employee);
 }

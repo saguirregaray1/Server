@@ -56,5 +56,10 @@ public class CompanyController {
     @PutMapping(path="/user")
     public void updateCompanyUser(@RequestBody AppUser appUser) {appUserService.updateAppUser(appUser);}
 
+    @GetMapping(path="/costs/{companyId}")
+    public void getCostsForTheMonth(@PathVariable Long companyId){
+        companyService.getCostsForTheMonth(companyId);
+    }
+
 
 }

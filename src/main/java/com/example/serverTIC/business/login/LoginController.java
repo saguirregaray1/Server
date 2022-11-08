@@ -2,10 +2,7 @@ package com.example.serverTIC.business.login;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path="/login")
@@ -20,4 +17,9 @@ public class LoginController {
 
     @PostMapping
     public ResponseEntity login(@RequestBody LoginRequest loginRequest){return loginService.isLoginCorrect(loginRequest);}
+
+    @GetMapping(path="{id}")
+    public ResponseEntity getDependenceEntity(@PathVariable Long id){
+        return loginService.getDependenceEntity(id);
+    }
 }

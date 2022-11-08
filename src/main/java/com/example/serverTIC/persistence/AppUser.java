@@ -44,6 +44,14 @@ public class AppUser {
     @ManyToOne (targetEntity = Company.class)
     private Company company;
 
+    public AppUser(Long id,String email, String password, AppUserRole appUserRole, Company company) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.appUserRole = appUserRole;
+        this.company = company;
+    }
+
     public AppUser(String email, String password, AppUserRole appUserRole, Employee employee) {
         this.email = email;
         this.password = password;
@@ -141,40 +149,15 @@ public class AppUser {
 
     @Override
     public String toString() {
-        if (appUserRole.equals(AppUserRole.EMPLOYEE)){
         return "AppUser{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", appUserRole=" + appUserRole +
-                ", employee=" + employee.getId() +
+                ", employee=" + employee +
+                ", admin=" + admin +
+                ", club=" + club +
+                ", company=" + company +
                 '}';
-    } else if (appUserRole.equals(AppUserRole.COMPANY_USER)) {
-            return "AppUser{" +
-                    "id=" + id +
-                    ", email='" + email + '\'' +
-                    ", password='" + password + '\'' +
-                    ", appUserRole=" + appUserRole +
-                    ", company=" + company.getId() +
-                    '}';
-        } else if (appUserRole.equals(AppUserRole.CLUB_USER)) {
-            return "AppUser{" +
-                    "id=" + id +
-                    ", email='" + email + '\'' +
-                    ", password='" + password + '\'' +
-                    ", appUserRole=" + appUserRole +
-                    ", club=" + club.getId() +
-                    '}';
-
-        }
-        else{
-            return "AppUser{" +
-                    "id=" + id +
-                    ", email='" + email + '\'' +
-                    ", password='" + password + '\'' +
-                    ", appUserRole=" + appUserRole +
-                    ", admin=" + admin.getId() +
-                    '}';
-        }
     }
 }
