@@ -125,12 +125,12 @@ public class ClubController {
         return activityService.getActivityQuota(activityId);
     }
 
-    @GetMapping(path = "/earnings/{clubId}")
-    public Long getClubEarnings(@PathVariable Long clubId, @RequestBody String fechaMesAño) {
-        return clubService.getClubEarnings(clubId,fechaMesAño);
+    @PostMapping(path = "/earnings")
+    public Long getClubEarnings(@RequestBody List<String> inputs) {
+        return clubService.getClubEarnings(Long.parseLong(inputs.get(0)),inputs.get(1));
     }
 
-    @GetMapping(path= "/activity/nombre")
+    @PostMapping(path= "/activity/byName")
     public ResponseEntity getActivityByNombre(@RequestBody List<String> inputs){
         return activityService.getActivityByNombre(inputs.get(0),inputs.get(1));
     }

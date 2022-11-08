@@ -126,7 +126,8 @@ public class ActivityService {
         Reservation reservation = null;
 
         for (Reservation reserva:employee.getReservationsMade()){
-            if (DayOfWeek.valueOf(reserva.getQuota().getDay()).getValue()==day && reserva.getQuota().getStartTime().equals(startTime) && reserva.getReservationStatus().equals(ReservationStatus.PENDIENTE)){
+            Quota quota = reserva.getQuota();
+            if (DayOfWeek.valueOf(quota.getDay()).getValue()==day && quota.getStartTime().equals(startTime) && reserva.getReservationStatus().equals(ReservationStatus.PENDIENTE)){
                 reservation = reserva;
             }
         }
