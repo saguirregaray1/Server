@@ -67,7 +67,7 @@ public class CompanyService {
             throw new IllegalStateException("company not found");
         }
         Company company=comp.get();
-        Long totalCost=null;
+        Long totalCost=0L;
         for (Employee employee:company.getCompanyEmployees()){
             totalCost+=employeeRepository.findCheckInsCost(employee,fechaMesAño);
         }
