@@ -1,6 +1,8 @@
 package com.example.serverTIC.persistence;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
 
@@ -20,7 +22,6 @@ public class CheckIn {
     )
     @Column(updatable = false)
     private Long checkInId;
-
     @JsonBackReference(value = "access")
     @ManyToOne(targetEntity = Employee.class)
     private Employee employee;
@@ -78,5 +79,14 @@ public class CheckIn {
 
     public void setQuota(Quota quota) {
         this.quota = quota;
+    }
+
+    @Override
+    public String toString() {
+        return "CheckIn{" +
+                "checkInId=" + checkInId +
+                ", employee=" + employee.toString() +
+                ", fecha='" + fecha + '\'' +
+                '}';
     }
 }

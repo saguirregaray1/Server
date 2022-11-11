@@ -11,7 +11,4 @@ import java.util.List;
 
 public interface QuotaRepository extends JpaRepository<Quota,Long> {
 
-
-
-
 }

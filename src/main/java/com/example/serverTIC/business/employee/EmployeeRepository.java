@@ -31,4 +31,9 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
     //fixme
     @Query("SELECT sum(a.quota.activity.precio) from CheckIn a where a.employee=:employee and a.fecha like concat(:fecha,'-__')")
     Long findCheckInsCost(@Param("employee")Employee employee,@Param("fecha") String fecha);
+
+    @Query("SELECT a from CheckIn a where a.employee=:employee and a.fecha like concat(:fecha,'-__')")
+    List<CheckIn> findCheckInList(@Param("employee")Employee employee,@Param("fecha") String fecha);
+
+
 }

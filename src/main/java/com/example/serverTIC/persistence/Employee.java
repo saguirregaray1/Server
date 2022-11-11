@@ -163,11 +163,7 @@ public class Employee {
     public String toString() {
         return "Employee{" +
                 "id=" + id +
-                ", company=" + company +
                 ", cedula=" + cedula +
-                ", saldo=" + saldo +
-                ", appUser=" + appUser.getId() +
-                ", favs=" + favs +
                 '}';
     }
 }
