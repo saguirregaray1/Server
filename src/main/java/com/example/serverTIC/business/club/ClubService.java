@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,23 +25,24 @@ public class ClubService {
     }
 
     public ResponseEntity<?> addNewClub(List<String> inputs) {
-        Club club=new Club(inputs.get(0),inputs.get(1));
-        club.addClubUser(new AppUser(inputs.get(2),inputs.get(3), AppUserRole.CLUB_USER,club));
+        Club club = new Club(inputs.get(0), inputs.get(1));
+        club.addClubUser(new AppUser(inputs.get(2), inputs.get(3), AppUserRole.CLUB_USER, club));
         clubRepository.save(club);
-        return new ResponseEntity<>(club,HttpStatus.OK);
+        return new ResponseEntity<>(club, HttpStatus.OK);
     }
 
-    public List<Club> getClubs(){
+    public List<Club> getClubs() {
         return clubRepository.findAll();
     }
 
     public void deleteClub(String clubName) {
-        Optional<Club> temp=clubRepository.findClubByNombre(clubName);
-        if(temp.isEmpty()){
+        Optional<Club> temp = clubRepository.findClubByNombre(clubName);
+        if (temp.isEmpty()) {
             throw new IllegalStateException("club is not registered");
         }
         clubRepository.deleteById(temp.get().getId());
     }
+
     public void updateClub(Club club, Long clubId) {
         Optional<Club> temp = clubRepository.findById(clubId);
         if (temp.isPresent()) {
@@ -52,16 +55,49 @@ public class ClubService {
         }
     }
 
-    public Long getClubEarnings(Long clubId,String fechaMesAño) {
-        Optional<Club> tempClub=clubRepository.findById(clubId);
-        if (tempClub.isEmpty()){
+    public ResponseEntity getClubEarningsForTheMonth(Long clubId, String fechaMesAño) {
+        Optional<Club> comp=clubRepository.findById(clubId);
+        if (comp.isEmpty()){
             throw new IllegalStateException("company not found");
         }
-        Club club=tempClub.get();
-        Long totalCost=null;
+        Club club=comp.get();
+        long totalCost=0L;
         for (Activity activity:club.getClubActivities()){
-            totalCost+=activity.getPrecio()*activityRepository.findActivityEarning(activity.getId(),fechaMesAño);
+            List<CheckIn> temp=activityRepository.findActivityEarning(activity.getId(),fechaMesAño);
+            totalCost+= activity.getPrecio()* temp.size();
         }
-        return totalCost;
+        return new ResponseEntity<>(new Costs(totalCost), HttpStatus.OK);
+    }
+
+    public List<CheckIn> getCheckInListForTheMonth(Long clubId, String fechaMesAño) {
+        Optional<Club> temp = clubRepository.findById(clubId);
+        if (temp.isEmpty()) {
+            throw new IllegalStateException("company not found");
+        }
+        Club club = temp.get();
+        List<CheckIn> totalCheckIns = new ArrayList<>();
+        for (Activity activity : club.getClubActivities()) {
+            List<CheckIn> checkIn = activityRepository.findCheckInList(activity, fechaMesAño);
+            totalCheckIns.addAll(activityRepository.findCheckInList(activity, fechaMesAño));
+        }
+        return totalCheckIns;
+    }
+
+    public List<Employee> getCheckInListForTheMonthUtil(Long clubId, String fechaMesAño) {
+        Optional<Club> temp = clubRepository.findById(clubId);
+        if (temp.isEmpty()) {
+            throw new IllegalStateException("company not found");
+        }
+        Club club = temp.get();
+        List<Employee> totalUsers = new ArrayList<>();
+        for (Activity activity : club.getClubActivities()) {
+            List<Employee> userCheckIn = activityRepository.findCheckInEmployeeList(activity, fechaMesAño);
+            for (Employee user: userCheckIn){
+                if (!totalUsers.contains(user)){
+                    totalUsers.add(user);
+                }
+            }
+        }
+        return totalUsers;
     }
 }

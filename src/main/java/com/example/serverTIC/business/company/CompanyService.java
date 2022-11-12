@@ -69,8 +69,11 @@ public class CompanyService {
         }
         Company company=comp.get();
         Long totalCost=0L;
-        for (Employee employee:company.getCompanyEmployees()){
-            totalCost+=employeeRepository.findCheckInsCost(employee,fechaMesAño);
+        for (Employee employee:company.getCompanyEmployees()) {
+            Optional<Long> tempCost = employeeRepository.findCheckInsCost(employee, fechaMesAño);
+            if (tempCost.isPresent()) {
+                totalCost += tempCost.get();
+            }
         }
         return new ResponseEntity<>(new Costs(totalCost), HttpStatus.OK);
     }
@@ -83,7 +86,6 @@ public class CompanyService {
         Company company=comp.get();
         List<CheckIn> totalCheckIns= new ArrayList<>();
         for (Employee employee:company.getCompanyEmployees()){
-            List<CheckIn> temp= employeeRepository.findCheckInList(employee, fechaMesAño);
             totalCheckIns.addAll(employeeRepository.findCheckInList(employee, fechaMesAño));
         }
         return totalCheckIns;

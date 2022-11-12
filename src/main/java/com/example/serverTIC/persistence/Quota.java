@@ -109,16 +109,16 @@ public class Quota {
         return finishTime;
     }
 
-    public Integer calculateCupos() {
+    public Integer calculateCupos(String fecha) {
         LocalDate now = LocalDate.now();
         Integer cupos = this.maxCupos;
         for (Reservation reservation : this.reservationsReceived) {
-            if (reservation.getReservationStatus().equals(ReservationStatus.PENDIENTE) && LocalDate.parse(reservation.getFecha()).equals(now)) {
+            if (reservation.getReservationStatus().equals(ReservationStatus.PENDIENTE) && reservation.getFecha().equals(fecha)) {
                 cupos = cupos - 1;
             }
         }
         for (CheckIn checkIn : this.confirmedUses) {
-            if (LocalDate.parse(checkIn.getFecha()).equals(now)) {
+            if (checkIn.getFecha().equals(fecha)) {
                 cupos = cupos - 1;
             }
         }
@@ -165,11 +165,19 @@ public class Quota {
         this.reservationsReceived = reservationsReceived;
     }
 
+    public void addReservation(Reservation reservation){
+        this.reservationsReceived.add(reservation);
+    }
+
     public List<CheckIn> getConfirmedUses() {
         return confirmedUses;
     }
 
     public void setConfirmedUses(List<CheckIn> confirmedUses) {
         this.confirmedUses = confirmedUses;
+    }
+
+    public void addCheckIn(CheckIn checkIn){
+        this.confirmedUses.add(checkIn);
     }
 }

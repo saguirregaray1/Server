@@ -79,7 +79,7 @@ public class ActivityService {
 
 
         if (employee.getSaldo() > activity.getPrecio() &&
-                quota.calculateCupos() > 0)
+                quota.calculateCupos(fecha) > 0)
         {
             Reservation reservation = new Reservation(employee,quota,ReservationStatus.PENDIENTE,fecha);
             employee.addReservation(reservation);
@@ -108,6 +108,7 @@ public class ActivityService {
                 LocalTime.parse(quota.getFinishTime()).isAfter(LocalTime.now())) {
             employee.setSaldo(employee.getSaldo() - activity.getPrecio());
             CheckIn checkIn = new CheckIn(employee,quota,LocalDate.now().toString());
+            employee.addAccess(checkIn);
         }
         employeeRepository.save(employee);
         activityRepository.save(activity);
@@ -137,8 +138,9 @@ public class ActivityService {
         }
 
         if (employee.getSaldo() > activity.getPrecio()) {
+            Quota quota = reservation.getQuota();
             employee.setSaldo(employee.getSaldo() - activity.getPrecio());
-            CheckIn checkIn = new CheckIn(employee, reservation.getQuota(),LocalDate.now().toString());
+            CheckIn checkIn = new CheckIn(employee,quota,LocalDate.now().toString());
             reservation.setReservationStatus(ReservationStatus.ATENDIDO);
             employee.addAccess(checkIn);
         }
@@ -172,7 +174,7 @@ public class ActivityService {
             throw new IllegalStateException("horario no encontrado");
         }
 
-        if (employee.getSaldo() > activity.getPrecio() && quota.calculateCupos()>0) {
+        if (employee.getSaldo() > activity.getPrecio() && quota.calculateCupos(LocalDate.now().toString())>0) {
             employee.setSaldo(employee.getSaldo() - activity.getPrecio());
             CheckIn checkIn = new CheckIn(employee, quota,LocalDate.now().toString());
             employee.addAccess(checkIn);

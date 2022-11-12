@@ -126,8 +126,18 @@ public class ClubController {
     }
 
     @PostMapping(path = "/earnings")
-    public Long getClubEarnings(@RequestBody List<String> inputs) {
-        return clubService.getClubEarnings(Long.parseLong(inputs.get(0)),inputs.get(1));
+    public ResponseEntity getClubEarnings(@RequestBody List<String> inputs) {
+        return clubService.getClubEarningsForTheMonth(Long.parseLong(inputs.get(0)),inputs.get(1));
+    }
+
+    @PostMapping(path = "/checkIn")
+    public List<CheckIn> getClubCheckInList(@RequestBody List<String> inputs) {
+        return clubService.getCheckInListForTheMonth(Long.parseLong(inputs.get(0)),inputs.get(1));
+    }
+
+    @PutMapping(path = "/checkIn")
+    public List<Employee> getClubCheckInListUtil(@RequestBody List<String> inputs) {
+        return clubService.getCheckInListForTheMonthUtil(Long.parseLong(inputs.get(0)),inputs.get(1));
     }
 
     @PostMapping(path= "/activity/byName")
