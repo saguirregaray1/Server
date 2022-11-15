@@ -48,6 +48,7 @@ public class CompanyController {
         appUserService.addNewCompanyUser(appUser,companyId);
     }
 
+
     @DeleteMapping(path="/user/{userId}")
     public void deleteCompanyUser(@PathVariable Long userId){ appUserService.deleteAppUser(userId);}
 
