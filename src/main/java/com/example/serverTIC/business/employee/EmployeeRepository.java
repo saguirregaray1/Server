@@ -17,8 +17,13 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
 
     Optional<Employee> findEmployeeById(Long employeeId);
 
-    @Query("select a from Employee e join e.reservationsMade a where e.id=:employeeId and a.reservationStatus='PENDIENTE'")
-    List<Reservation> findReservationsById(@Param("employeeId")Long employeeId);
+    @Query("select a.quota.day, a.quota.startTime, a.quota.activity.nombre from Employee e join e.reservationsMade a where e.id=:employeeId and a.reservationStatus='PENDIENTE'")
+    List<List> findReservationsById(@Param("employeeId")Long employeeId);
+    @Query("select a.quota from Employee e join e.reservationsMade a where e.id=:employeeId and a.reservationStatus='PENDIENTE'")
+    List<Quota> findQuotaById(@Param("employeeId") Long employeeId);
+    @Query("select a.quota.activity from Employee e join e.reservationsMade a where e.id=:employeeId and a.reservationStatus='PENDIENTE'")
+    List<Activity> findActivitiesById(@Param("employeeId") Long employeeId);
+
 
     @Query("select a.nombre,a.precio,a.activityCategories,c.nombre,c.dir,a.id from Activity a Join a.club c where a in :favouriteList")
     List<List> getFavouriteList(@Param("favouriteList") List<Activity> favouriteList);

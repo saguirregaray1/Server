@@ -131,7 +131,7 @@ public class ClubController {
     }
 
     @PostMapping(path = "/checkIn")
-    public List<CheckIn> getClubCheckInList(@RequestBody List<String> inputs) {
+    public List<List> getClubCheckInList(@RequestBody List<String> inputs) {
         return clubService.getCheckInListForTheMonth(Long.parseLong(inputs.get(0)),inputs.get(1));
     }
 

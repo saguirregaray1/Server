@@ -1,9 +1,6 @@
 package com.example.serverTIC.business.employee;
 
-import com.example.serverTIC.persistence.Activity;
-import com.example.serverTIC.persistence.AppUser;
-import com.example.serverTIC.persistence.Employee;
-import com.example.serverTIC.persistence.Reservation;
+import com.example.serverTIC.persistence.*;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -51,8 +48,16 @@ public class EmployeeController {
         return employeeService.getFavsList(userId);}
 
     @GetMapping(path= "/reservations/{userId}")
-    public List<Reservation> getPendingReservations(@PathVariable Long userId){
+    public List<List> getPendingReservations(@PathVariable Long userId){
         return employeeService.getPendingReservations(userId);
     }
+    @PutMapping(path= "/reservations/{userId}")
+    public List<Quota> getPendingReservationsUtil(@PathVariable Long userId){
+        return employeeService.getPendingReservationsUtil(userId);
+    }
 
+    @PostMapping(path= "/reservations/{userId}")
+    public List<Activity> getPendingReservationsUtil2(@PathVariable Long userId){
+        return employeeService.getPendingReservationsUtil2(userId);
+    }
 }

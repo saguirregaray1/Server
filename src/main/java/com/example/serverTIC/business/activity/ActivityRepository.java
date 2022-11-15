@@ -28,8 +28,8 @@ public interface ActivityRepository extends JpaRepository<Activity,Long> {
     @Query("select b.confirmedUses from Activity a join a.cupos b join b.confirmedUses c where a.id =:activityId and c.fecha like concat(:fecha,'-__')")
     List<CheckIn> findActivityEarning(@Param("activityId") Long activityId,@Param("fecha") String fecha);
 
-    @Query("SELECT a from CheckIn a where a.quota.activity=:activity and a.fecha like concat(:fecha,'-__')")
-    List<CheckIn> findCheckInList(@Param("activity")Activity activity,@Param("fecha") String fecha);
+    @Query("SELECT a.fecha,a.quota.day,a.quota.startTime,a from CheckIn a where a.quota.activity=:activity and a.fecha like concat(:fecha,'-__')")
+    List<List> findCheckInList(@Param("activity")Activity activity,@Param("fecha") String fecha);
     @Query("SELECT a.employee from CheckIn a where a.quota.activity=:activity and a.fecha like concat(:fecha,'-__')")
     List<Employee> findCheckInEmployeeList(@Param("activity")Activity activity,@Param("fecha") String fecha);
 }

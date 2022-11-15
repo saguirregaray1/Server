@@ -111,15 +111,18 @@ public class ActivityService {
         }
         Activity activity = act.get();
         Employee employee = emp.get();
-
-        Quota quota = activity.getCupos().get(LocalDate.now().getDayOfWeek().getValue() - 1);
+        Quota horario = null;
+        for (Quota quota:activity.getCupos()){
+            if (LocalTime.parse(quota.getStartTime()).isBefore(LocalTime.now()) &&
+                    LocalTime.parse(quota.getFinishTime()).isAfter(LocalTime.now()) && DayOfWeek.from(LocalDate.now()).equals(DayOfWeek.valueOf(quota.getDay()))){
+                horario = quota;
+            }
+        }
 
         if (employee.getSaldo() > activity.getPrecio() &&
-                quota.getMaxCupos() == -1 &&
-                LocalTime.parse(quota.getStartTime()).isBefore(LocalTime.now()) &&
-                LocalTime.parse(quota.getFinishTime()).isAfter(LocalTime.now())) {
+                horario.getMaxCupos() == -1) {
             employee.setSaldo(employee.getSaldo() - activity.getPrecio());
-            CheckIn checkIn = new CheckIn(employee,quota,LocalDate.now().toString());
+            CheckIn checkIn = new CheckIn(employee,horario,LocalDate.now().toString());
             employee.addAccess(checkIn);
         }
         employeeRepository.save(employee);

@@ -99,12 +99,30 @@ public class EmployeeService{
         return employeeRepository.getFavouriteList(temp.get().getFavs());
     }
 
-    public List<Reservation> getPendingReservations(Long userId) {
+    public List<List> getPendingReservations(Long userId) {
         AppUser appUser=appUserRepository.findById(userId).get();
         Optional<Employee> temp=employeeRepository.findById(appUser.getEmployee().getId());
         if(temp.isEmpty()){
             return new ArrayList<>();
         }
         return employeeRepository.findReservationsById(temp.get().getId());
+    }
+
+    public List<Quota> getPendingReservationsUtil(Long userId) {
+        AppUser appUser=appUserRepository.findById(userId).get();
+        Optional<Employee> temp=employeeRepository.findById(appUser.getEmployee().getId());
+        if(temp.isEmpty()){
+            return new ArrayList<>();
+        }
+        return employeeRepository.findQuotaById(temp.get().getId());
+    }
+
+    public List<Activity> getPendingReservationsUtil2(Long userId) {
+        AppUser appUser=appUserRepository.findById(userId).get();
+        Optional<Employee> temp=employeeRepository.findById(appUser.getEmployee().getId());
+        if(temp.isEmpty()){
+            return new ArrayList<>();
+        }
+        return employeeRepository.findActivitiesById(temp.get().getId());
     }
 }

@@ -69,15 +69,14 @@ public class ClubService {
         return new ResponseEntity<>(new Costs(totalCost), HttpStatus.OK);
     }
 
-    public List<CheckIn> getCheckInListForTheMonth(Long clubId, String fechaMesAño) {
+    public List<List> getCheckInListForTheMonth(Long clubId, String fechaMesAño) {
         Optional<Club> temp = clubRepository.findById(clubId);
         if (temp.isEmpty()) {
             throw new IllegalStateException("company not found");
         }
         Club club = temp.get();
-        List<CheckIn> totalCheckIns = new ArrayList<>();
+        List<List> totalCheckIns = new ArrayList<>();
         for (Activity activity : club.getClubActivities()) {
-            List<CheckIn> checkIn = activityRepository.findCheckInList(activity, fechaMesAño);
             totalCheckIns.addAll(activityRepository.findCheckInList(activity, fechaMesAño));
         }
         return totalCheckIns;
