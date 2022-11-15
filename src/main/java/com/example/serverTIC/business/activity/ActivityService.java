@@ -116,7 +116,7 @@ public class ActivityService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity cameToActivityWithReservation(Long activityId, Long cedula,String startTime) /*IMPORTANTE: se agrega argumento para la hora de la actividad*/ {
+    public ResponseEntity cameToActivity(Long activityId, Long cedula,String startTime) /*IMPORTANTE: se agrega argumento para la hora de la actividad*/ {
         Optional<Activity> act = activityRepository.findById(activityId);
         Optional<Employee> emp = employeeRepository.findEmployeeByCedula(cedula);
         if (act.isEmpty() || emp.isEmpty()) {
@@ -135,7 +135,7 @@ public class ActivityService {
         }
 
         if (Objects.isNull(reservation)){
-            throw new IllegalStateException("reservacion no existe");
+            return cameToActivityWithNoReservation(activityId,cedula,startTime);
         }
 
         if (employee.getSaldo() > activity.getPrecio()) {

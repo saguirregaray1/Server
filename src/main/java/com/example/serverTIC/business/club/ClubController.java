@@ -106,7 +106,7 @@ public class ClubController {
 
     @PostMapping(path = "/activity/checkIn")
     public ResponseEntity<?> cameToActivityWithReservation(@RequestBody List<String> inputs) {
-        return activityService.cameToActivityWithReservation(Long.parseLong(inputs.get(0)), Long.parseLong(inputs.get(1)), inputs.get(2));
+        return activityService.cameToActivity(Long.parseLong(inputs.get(0)), Long.parseLong(inputs.get(1)), inputs.get(2));
     }
     @PutMapping(path= "/activity/checkIn")
     public ResponseEntity cameToActivityWithoutReservation(@RequestBody List<String> inputs) {
