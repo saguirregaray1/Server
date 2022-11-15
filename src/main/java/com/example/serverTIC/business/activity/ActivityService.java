@@ -37,14 +37,15 @@ public class ActivityService {
         this.quotaRepository = quotaRepository;
     }
 
-    public void addNewActivity(Activity activity) {
+    public ResponseEntity<?> addNewActivity(Activity activity) {
         Optional<Club> temp = clubRepository.findById(activity.getClub().getId());
         if (temp.isEmpty()) {
-            throw new IllegalStateException("club no existe");
+            return new ResponseEntity<>("club no existe",HttpStatus.OK);
         }
         Club club = temp.get();
         club.addClubActivity(activity);
         clubRepository.save(club);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public List<List> getActivities() {
@@ -171,7 +172,7 @@ public class ActivityService {
         }
 
         if (Objects.isNull(quota)){
-            throw new IllegalStateException("horario no encontrado");
+            return new ResponseEntity<>("horario no encontrado",HttpStatus.BAD_REQUEST);
         }
 
         if (employee.getSaldo() > activity.getPrecio() && quota.calculateCupos(LocalDate.now().toString())>0) {

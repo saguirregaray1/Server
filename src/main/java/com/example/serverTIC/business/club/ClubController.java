@@ -55,13 +55,13 @@ public class ClubController {
 
     //ClubUser
     @PostMapping(path = "/user/{clubId}")
-    public void registerNewClubUser(@PathVariable Long clubId, @RequestBody AppUser appUser) {
-        appUserService.addNewClubUser(appUser, clubId);
+    public ResponseEntity<?> registerNewClubUser(@PathVariable Long clubId, @RequestBody AppUser appUser) {
+        return appUserService.addNewClubUser(appUser, clubId);
     }
 
     @DeleteMapping(path = "/user/{userId}")
-    public void deleteClubUser(@PathVariable Long userId) {
-        appUserService.deleteAppUser(userId);
+    public ResponseEntity<?> deleteClubUser(@PathVariable Long userId) {
+        return appUserService.deleteAppUser(userId);
     }
 
     @GetMapping(path = "/user")
@@ -82,8 +82,8 @@ public class ClubController {
     }
 
     @PostMapping(path = "/activity")
-    public void registerNewActivity(@RequestBody Activity activity) {
-        activityService.addNewActivity(activity);
+    public ResponseEntity<?> registerNewActivity(@RequestBody Activity activity) {
+        return activityService.addNewActivity(activity);
     }
 
     @DeleteMapping(path = "/activity/{activityName}")
@@ -98,14 +98,14 @@ public class ClubController {
 
     //registerToActivity
     @PostMapping(path = "/activity/register")
-    public ResponseEntity makeAReservation(@RequestBody List<String> inputs) {
+    public ResponseEntity<?> makeAReservation(@RequestBody List<String> inputs) {
         return activityService.makeReservation(Long.parseLong(inputs.get(0)), Long.parseLong(inputs.get(1)), inputs.get(2));
     }
 
     //cancelRegistration
 
     @PostMapping(path = "/activity/checkIn")
-    public ResponseEntity cameToActivityWithReservation(@RequestBody List<String> inputs) {
+    public ResponseEntity<?> cameToActivityWithReservation(@RequestBody List<String> inputs) {
         return activityService.cameToActivityWithReservation(Long.parseLong(inputs.get(0)), Long.parseLong(inputs.get(1)), inputs.get(2));
     }
     @PutMapping(path= "/activity/checkIn")

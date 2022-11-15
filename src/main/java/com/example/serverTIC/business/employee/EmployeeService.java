@@ -33,14 +33,15 @@ public class EmployeeService{
         this.companyRepository = companyRepository;
     }
 
-    public void addNewEmployee(Employee employee){
+    public ResponseEntity<?> addNewEmployee(Employee employee){
         Optional<Company> temp=companyRepository.findById(employee.getCompany().getId());
         if(temp.isEmpty()){
-            throw new IllegalStateException("compañía no existe");
+            return new ResponseEntity<>("compañía no existe",HttpStatus.BAD_REQUEST);
         }
         Company company = temp.get();
         company.addEmployee(employee);
         companyRepository.save(company);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
@@ -49,13 +50,14 @@ public class EmployeeService{
         return employeeRepository.findAll();
         }
 
-    public void deleteEmployee(Long cedulaEmp) {
+    public ResponseEntity<?> deleteEmployee(Long cedulaEmp) {
         Optional<Employee> temp=employeeRepository.findEmployeeByCedula(cedulaEmp);
         if(temp.isEmpty()){
-            throw new IllegalStateException("employee is not registered");
+            return new ResponseEntity<>("employee is not registered", HttpStatus.BAD_REQUEST);
         }
         //borrar de compañia
         employeeRepository.deleteById(temp.get().getId());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
@@ -72,12 +74,12 @@ public class EmployeeService{
         employeeRepository.save(employee);
     }
 
-    public void addFavouriteActivity(Long activityId, AppUser appUser){
+    public ResponseEntity<?> addFavouriteActivity(Long activityId, AppUser appUser){
         AppUser user=appUserRepository.findById(appUser.getId()).get();
         Optional<Employee> emp=employeeRepository.findById(user.getEmployee().getId());
         Optional<Activity> act=activityRepository.findById(activityId);
         if(emp.isEmpty() || act.isEmpty()){
-            throw new IllegalStateException("empleado o actividad no existen");
+            return new ResponseEntity<>("empleado o actividad no existen",HttpStatus.BAD_REQUEST);
         }
         Employee employee=emp.get();
         Activity activity=act.get();
@@ -85,6 +87,7 @@ public class EmployeeService{
             employee.addFav(activity);
         }
         employeeRepository.save(employee);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public List<List> getFavsList(Long userId) {

@@ -44,13 +44,13 @@ public class CompanyController {
     public List<Employee> getCompanyEmployees(@PathVariable Long companyId) {return companyService.getCompanyEmployees(companyId);}
     //CompanyUser
     @PostMapping(path = "/user/{companyId}")
-    public void registerNewCompanyUser(@PathVariable Long companyId,@RequestBody AppUser appUser) {
-        appUserService.addNewCompanyUser(appUser,companyId);
+    public ResponseEntity<?> registerNewCompanyUser(@PathVariable Long companyId,@RequestBody AppUser appUser) {
+        return appUserService.addNewCompanyUser(appUser,companyId);
     }
 
 
     @DeleteMapping(path="/user/{userId}")
-    public void deleteCompanyUser(@PathVariable Long userId){ appUserService.deleteAppUser(userId);}
+    public ResponseEntity<?> deleteCompanyUser(@PathVariable Long userId){ return appUserService.deleteAppUser(userId);}
 
     @GetMapping(path="/user")
     public List<AppUser> getListOfCompanyUsers(){ return appUserService.getAppUsers();}

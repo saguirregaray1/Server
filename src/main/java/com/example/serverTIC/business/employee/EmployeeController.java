@@ -26,12 +26,12 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public void registerNewEmployee(@RequestBody Employee employee){
-        this.employeeService.addNewEmployee(employee);
+    public ResponseEntity<?> registerNewEmployee(@RequestBody Employee employee){
+        return this.employeeService.addNewEmployee(employee);
     }
 
     @DeleteMapping(path="{cedula}")
-    public void deleteEmployee(@PathVariable Long cedula){ employeeService.deleteEmployee(cedula); }
+    public ResponseEntity<?> deleteEmployee(@PathVariable Long cedula){ return employeeService.deleteEmployee(cedula); }
 
     @PutMapping
     public void updateEmployee(@RequestBody Employee employee){
@@ -39,11 +39,11 @@ public class EmployeeController {
     }
 
     @GetMapping(path="{cedula}")
-    public ResponseEntity isAnEmployee(@PathVariable Long cedula){ return employeeService.isAnEmployee(cedula); }
+    public ResponseEntity<?> isAnEmployee(@PathVariable Long cedula){ return employeeService.isAnEmployee(cedula); }
 
     @PostMapping(path="{activityId}")
-    public void addToFavouriteList(@PathVariable Long activityId, @RequestBody AppUser appUser) {
-        employeeService.addFavouriteActivity(activityId,appUser);}
+    public ResponseEntity<?> addToFavouriteList(@PathVariable Long activityId, @RequestBody AppUser appUser) {
+        return employeeService.addFavouriteActivity(activityId,appUser);}
 
     @GetMapping(path="/favourite/{userId}")
     public List<List> getFavouriteList(@PathVariable Long userId) {

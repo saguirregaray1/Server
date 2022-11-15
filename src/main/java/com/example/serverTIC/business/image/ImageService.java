@@ -3,6 +3,7 @@ package com.example.serverTIC.business.image;
 import com.example.serverTIC.business.activity.ActivityRepository;
 import com.example.serverTIC.persistence.Activity;
 import com.example.serverTIC.persistence.Image;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,13 +55,15 @@ public class ImageService {
         return new ResponseEntity(byteList, HttpStatus.OK);
     }
 
-    public void uploadActivityImage(Image image, Long activityId) {
+    public ResponseEntity<?> uploadActivityImage(Image image, Long activityId) {
         Optional<Activity> act = activityRepository.findById(activityId);
         if (act.isEmpty()){
-            throw new IllegalStateException("actividad no existe");
+            return new ResponseEntity<>("actividad no existe", HttpStatus.BAD_REQUEST);
         }
         Activity activity=act.get();
         activity.addPicture(image);
         activityRepository.save(activity);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }
