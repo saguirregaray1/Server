@@ -3,6 +3,7 @@ package com.example.serverTIC.business.employee;
 import com.example.serverTIC.persistence.Activity;
 import com.example.serverTIC.persistence.AppUser;
 import com.example.serverTIC.persistence.Employee;
+import com.example.serverTIC.persistence.Reservation;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,5 +49,10 @@ public class EmployeeController {
     @GetMapping(path="/favourite/{userId}")
     public List<List> getFavouriteList(@PathVariable Long userId) {
         return employeeService.getFavsList(userId);}
+
+    @GetMapping(path= "/reservations/{userId}")
+    public List<Reservation> getPendingReservations(@PathVariable Long userId){
+        return employeeService.getPendingReservations(userId);
+    }
 
 }

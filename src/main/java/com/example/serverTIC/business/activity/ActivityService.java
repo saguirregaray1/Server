@@ -127,7 +127,7 @@ public class ActivityService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity cameToActivity(Long activityId, Long cedula,String startTime) /*IMPORTANTE: se agrega argumento para la hora de la actividad*/ {
+    public ResponseEntity cameToActivity(Long activityId, Long cedula,String startTime) {
         Optional<Activity> act = activityRepository.findById(activityId);
         Optional<Employee> emp = employeeRepository.findEmployeeByCedula(cedula);
         if (act.isEmpty() || emp.isEmpty()) {

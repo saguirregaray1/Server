@@ -94,8 +94,17 @@ public class EmployeeService{
         AppUser appUser=appUserRepository.findById(userId).get();
         Optional<Employee> temp=employeeRepository.findById(appUser.getEmployee().getId());
         if(temp.isEmpty()){
-            throw new IllegalStateException("empleado no existe");
+            return new ArrayList<>();
         }
         return employeeRepository.getFavouriteList(temp.get().getFavs());
+    }
+
+    public List<Reservation> getPendingReservations(Long userId) {
+        AppUser appUser=appUserRepository.findById(userId).get();
+        Optional<Employee> temp=employeeRepository.findById(appUser.getEmployee().getId());
+        if(temp.isEmpty()){
+            return new ArrayList<>();
+        }
+        return employeeRepository.findReservationsById(temp.get().getId());
     }
 }
