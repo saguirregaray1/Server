@@ -80,8 +80,8 @@ public class ActivityService {
         Quota quota = quot.get();
         Employee employee = emp.get();
         Activity activity = quota.getActivity();
-        Integer restaDias = DayOfWeek.from(LocalDate.now()).getValue()-DayOfWeek.from(LocalDate.parse(fecha)).getValue();
-        if (restaDias>=0) {
+        Integer restaDias = DayOfWeek.from(LocalDate.now()).getValue()-DayOfWeek.valueOf(quota.getDay()).getValue();
+        if (restaDias>0) {
             restaDias=7-restaDias;
         }
         else {
@@ -90,12 +90,13 @@ public class ActivityService {
         String fechaReserva = LocalDate.now().plusDays(Long.parseLong(restaDias.toString())).toString();
 
         if (employee.getSaldo() > activity.getPrecio() &&
-                quota.calculateCupos(fechaReserva) > 0)
+                quota.calculateCupos(fechaReserva) > 0 && !employee.hasReservation(fechaReserva,quota.getQuotaId()))
         {
-            Reservation reservation = new Reservation(employee,quota,ReservationStatus.PENDIENTE,fecha);
+
+            Reservation reservation = new Reservation(employee,quota,ReservationStatus.PENDIENTE,fechaReserva);
             employee.addReservation(reservation);
         } else{
-            return new ResponseEntity<>("saldo insuficiente o no hay cupos", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("saldo insuficiente, no hay cupos o ya tiene reserva", HttpStatus.BAD_REQUEST);
         }
         employeeRepository.save(employee);
         quotaRepository.save(quota);

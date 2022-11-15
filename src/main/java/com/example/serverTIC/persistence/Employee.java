@@ -166,4 +166,13 @@ public class Employee {
                 ", cedula=" + cedula +
                 '}';
     }
+
+    public boolean hasReservation(String fechaReserva, Long quotaId) {
+        for (Reservation reservation:reservationsMade){
+            if (reservation.getQuota().getQuotaId().equals(quotaId) && reservation.getFecha().equals(fechaReserva)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
