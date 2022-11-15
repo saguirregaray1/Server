@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static java.lang.Math.abs;
+
 @Service
 public class ActivityService {
 
@@ -74,13 +76,21 @@ public class ActivityService {
         if (quot.isEmpty() || emp.isEmpty()) {
             return new ResponseEntity<>("horario o empleado no existen", HttpStatus.BAD_REQUEST);
         }
+
         Quota quota = quot.get();
         Employee employee = emp.get();
         Activity activity = quota.getActivity();
-
+        Integer restaDias = DayOfWeek.from(LocalDate.now()).getValue()-DayOfWeek.from(LocalDate.parse(fecha)).getValue();
+        if (restaDias>=0) {
+            restaDias=7-restaDias;
+        }
+        else {
+            restaDias = -restaDias;
+        }
+        String fechaReserva = LocalDate.now().plusDays(Long.parseLong(restaDias.toString())).toString();
 
         if (employee.getSaldo() > activity.getPrecio() &&
-                quota.calculateCupos(fecha) > 0)
+                quota.calculateCupos(fechaReserva) > 0)
         {
             Reservation reservation = new Reservation(employee,quota,ReservationStatus.PENDIENTE,fecha);
             employee.addReservation(reservation);
