@@ -1,7 +1,6 @@
 package com.example.serverTIC.persistence;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -169,7 +168,19 @@ public class Employee {
 
     public boolean hasReservation(String fechaReserva, Long quotaId) {
         for (Reservation reservation:reservationsMade){
-            if (reservation.getQuota().getQuotaId().equals(quotaId) && reservation.getFecha().equals(fechaReserva)){
+            if (reservation.getQuota().getQuotaId().equals(quotaId) && reservation.getFecha().equals(fechaReserva)
+                    &&reservation.getReservationStatus().equals(ReservationStatus.PENDIENTE)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean cancelReservation(String fechaReserva, Long quotaId){
+        for (Reservation reservation:reservationsMade){
+            if (reservation.getQuota().getQuotaId().equals(quotaId) && reservation.getFecha().equals(fechaReserva)
+                    &&reservation.getReservationStatus().equals(ReservationStatus.PENDIENTE)){
+                reservationsMade.remove(reservation);
                 return true;
             }
         }

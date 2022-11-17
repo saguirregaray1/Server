@@ -102,6 +102,11 @@ public class ClubController {
         return activityService.makeReservation(Long.parseLong(inputs.get(0)), Long.parseLong(inputs.get(1)), inputs.get(2));
     }
 
+    @PostMapping(path = "/activity/register/cancel")
+    public ResponseEntity<?> cancelReservation(@RequestBody List<String> inputs) {
+        return activityService.cancelReservation(Long.parseLong(inputs.get(0)), inputs.get(1), inputs.get(2),inputs.get(3),inputs.get(4));
+    }
+
     //cancelRegistration
 
     @PostMapping(path = "/activity/checkIn")

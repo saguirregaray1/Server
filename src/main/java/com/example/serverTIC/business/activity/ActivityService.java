@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,7 +17,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static java.lang.Math.abs;
 
 @Service
 public class ActivityService {
@@ -80,14 +80,14 @@ public class ActivityService {
         Quota quota = quot.get();
         Employee employee = emp.get();
         Activity activity = quota.getActivity();
-        Integer restaDias = DayOfWeek.from(LocalDate.now()).getValue()-DayOfWeek.valueOf(quota.getDay()).getValue();
+        int restaDias = DayOfWeek.from(LocalDate.now()).getValue()-DayOfWeek.valueOf(quota.getDay()).getValue();
         if (restaDias>0) {
             restaDias=7-restaDias;
         }
         else {
             restaDias = -restaDias;
         }
-        String fechaReserva = LocalDate.now().plusDays(Long.parseLong(restaDias.toString())).toString();
+        String fechaReserva = LocalDate.now().plusDays(restaDias).toString();
 
         if (employee.getSaldo() > activity.getPrecio() &&
                 quota.calculateCupos(fechaReserva) > 0 && !employee.hasReservation(fechaReserva,quota.getQuotaId()))
@@ -101,6 +101,33 @@ public class ActivityService {
         employeeRepository.save(employee);
         quotaRepository.save(quota);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Transactional
+    public ResponseEntity<?> cancelReservation(Long appUserId, String nombreActividad, String diaAct, String startTime,String fechaAct){
+        AppUser user = appUserRepository.findById(appUserId).get();
+        Optional<Activity> act= activityRepository.findActivityByNombre(nombreActividad);
+        Optional<Employee> emp = employeeRepository.findEmployeeById(user.getEmployee().getId());
+        if (act.isEmpty() || emp.isEmpty()) {
+            return new ResponseEntity<>("horario o empleado no existen", HttpStatus.BAD_REQUEST);
+        }
+        Activity activity=act.get();
+        Quota quota=null;
+        for (Quota element:activity.getCupos()){
+                if (element.getDay().equals(diaAct)
+                && element.getStartTime().equals(startTime)){
+                    quota=element;
+                }
+        }
+        if (quota!=null){
+            Employee employee = emp.get();
+            if (employee.cancelReservation(fechaAct, quota.getQuotaId())){
+                employeeRepository.deleteReservationByFechaAndQuota(fechaAct, quota.getQuotaId());
+                employeeRepository.save(employee);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>("reserva no encontrada",HttpStatus.BAD_REQUEST);
     }
 
     public ResponseEntity cameToActivityWithoutCupos(Long activityId, Long cedula) /*IMPORTANTE: se agrega argumento para la hora de la actividad*/ {
@@ -119,12 +146,12 @@ public class ActivityService {
             }
         }
 
-        if (employee.getSaldo() > activity.getPrecio() &&
-                horario.getMaxCupos() == -1) {
-            employee.setSaldo(employee.getSaldo() - activity.getPrecio());
-            CheckIn checkIn = new CheckIn(employee,horario,LocalDate.now().toString());
-            employee.addAccess(checkIn);
+        if (employee.getSaldo() > activity.getPrecio() && horario != null && horario.getMaxCupos() == -1){
+                employee.setSaldo(employee.getSaldo() - activity.getPrecio());
+                CheckIn checkIn = new CheckIn(employee, horario, LocalDate.now().toString());
+                employee.addAccess(checkIn);
         }
+
         employeeRepository.save(employee);
         activityRepository.save(activity);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -226,11 +253,11 @@ public class ActivityService {
         return activityRepository.getActivityQuota(activityId);
     }
 
-    public ResponseEntity getActivityByNombre(String clubId,String nombre){
+    public ResponseEntity<?> getActivityByNombre(String clubId,String nombre){
         Optional<Activity> act= activityRepository.findActivitiesByClubIdAndNombre(Long.parseLong(clubId),nombre);
         if (act.isEmpty()){
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(act.get(),HttpStatus.OK);
+        return new ResponseEntity<>(act.get(),HttpStatus.OK);
     }
 }

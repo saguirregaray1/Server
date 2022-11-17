@@ -62,15 +62,15 @@ public class CompanyService {
        return employeeRepository.findEmployeeByCompanyId(comp.get());
     }
 
-    public ResponseEntity getCostsForTheMonth(Long companyId, String fechaMesAño) {
+    public ResponseEntity getCostsForTheMonth(Long companyId, String fechaMonthYear) {
         Optional<Company> comp=companyRepository.findById(companyId);
         if (comp.isEmpty()){
             throw new IllegalStateException("company not found");
         }
         Company company=comp.get();
-        Long totalCost=0L;
+        long totalCost=0L;
         for (Employee employee:company.getCompanyEmployees()) {
-            Optional<Long> tempCost = employeeRepository.findCheckInsCost(employee, fechaMesAño);
+            Optional<Long> tempCost = employeeRepository.findCheckInsCost(employee, fechaMonthYear);
             if (tempCost.isPresent()) {
                 totalCost += tempCost.get();
             }
@@ -78,7 +78,7 @@ public class CompanyService {
         return new ResponseEntity<>(new Costs(totalCost), HttpStatus.OK);
     }
 
-    public List<CheckIn> getCheckInListForTheMonth(Long companyId, String fechaMesAño) {
+    public List<CheckIn> getCheckInListForTheMonth(Long companyId, String fechaMonthYear) {
         Optional<Company> comp=companyRepository.findById(companyId);
         if (comp.isEmpty()){
             throw new IllegalStateException("company not found");
@@ -86,12 +86,12 @@ public class CompanyService {
         Company company=comp.get();
         List<CheckIn> totalCheckIns= new ArrayList<>();
         for (Employee employee:company.getCompanyEmployees()){
-            totalCheckIns.addAll(employeeRepository.findCheckInList(employee, fechaMesAño));
+            totalCheckIns.addAll(employeeRepository.findCheckInList(employee, fechaMonthYear));
         }
         return totalCheckIns;
     }
 
-    public List<Employee> getCheckInListForTheMonthUtil(Long companyId, String fechaMesAño) {
+    public List<Employee> getCheckInListForTheMonthUtil(Long companyId, String fechaMonthYear) {
         Optional<Company> comp=companyRepository.findById(companyId);
         if (comp.isEmpty()){
             throw new IllegalStateException("company not found");
@@ -99,12 +99,13 @@ public class CompanyService {
         Company company=comp.get();
         List<Employee> totalEmployees= new ArrayList<>();
         for (Employee employee:company.getCompanyEmployees()){
-            List<CheckIn> temp= employeeRepository.findCheckInList(employee, fechaMesAño);
+            List<CheckIn> temp= employeeRepository.findCheckInList(employee, fechaMonthYear);
             if (!temp.isEmpty()){
                 totalEmployees.add(employee);
             }
         }
         return totalEmployees;
     }
+
 }
 

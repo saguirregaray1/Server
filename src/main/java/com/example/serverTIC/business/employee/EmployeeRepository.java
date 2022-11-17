@@ -3,6 +3,7 @@ package com.example.serverTIC.business.employee;
 import com.example.serverTIC.persistence.*;
 import org.hibernate.annotations.Check;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -17,7 +18,7 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
 
     Optional<Employee> findEmployeeById(Long employeeId);
 
-    @Query("select a.quota.day, a.quota.startTime, a.quota.activity.nombre from Employee e join e.reservationsMade a where e.id=:employeeId and a.reservationStatus='PENDIENTE'")
+    @Query("select a.quota.day, a.quota.startTime, a.quota.activity.nombre,a.fecha from Employee e join e.reservationsMade a where e.id=:employeeId and a.reservationStatus='PENDIENTE'")
     List<List> findReservationsById(@Param("employeeId")Long employeeId);
     @Query("select a.quota from Employee e join e.reservationsMade a where e.id=:employeeId and a.reservationStatus='PENDIENTE'")
     List<Quota> findQuotaById(@Param("employeeId") Long employeeId);
@@ -39,6 +40,10 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
 
     @Query("SELECT a from CheckIn a where a.employee=:employee and a.fecha like concat(:fecha,'-__')")
     List<CheckIn> findCheckInList(@Param("employee")Employee employee,@Param("fecha") String fecha);
+
+    @Modifying
+    @Query("DELETE from Reservation a where a.fecha=:fecha and a.quota.quotaId=:quotaId")
+    void deleteReservationByFechaAndQuota(@Param("fecha")String fecha,@Param("quotaId") Long quotaId);
 
 
 }
