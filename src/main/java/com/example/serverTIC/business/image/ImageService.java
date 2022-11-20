@@ -34,15 +34,14 @@ public class ImageService {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity(dbImage.get().getImageData(), HttpStatus.OK);
+        return new ResponseEntity<>(dbImage.get().getImageData(), HttpStatus.OK);
     }
 
     @Transactional
     public ResponseEntity getActivityPictures(Long activityId) {
         Optional<Activity> act= activityRepository.findById(activityId);
         if(act.isEmpty()){
-            return new ResponseEntity("actividad no existe",HttpStatus.BAD_REQUEST);
-
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         List<Image> dbImage = activityRepository.findImagesByActivity(activityId);
         List<byte[]> byteList = new ArrayList<>();
@@ -50,15 +49,15 @@ public class ImageService {
             byteList.add(i.getImageData());
         }
         if(dbImage.isEmpty()){
-            return new ResponseEntity("actividad no tiene fotos",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(byteList, HttpStatus.OK);
+        return new ResponseEntity<>(byteList, HttpStatus.OK);
     }
 
     public ResponseEntity<?> uploadActivityImage(Image image, Long activityId) {
         Optional<Activity> act = activityRepository.findById(activityId);
         if (act.isEmpty()){
-            return new ResponseEntity<>("actividad no existe", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         Activity activity=act.get();
         activity.addPicture(image);

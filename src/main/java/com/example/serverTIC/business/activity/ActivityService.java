@@ -42,7 +42,7 @@ public class ActivityService {
     public ResponseEntity<?> addNewActivity(Activity activity) {
         Optional<Club> temp = clubRepository.findById(activity.getClub().getId());
         if (temp.isEmpty()) {
-            return new ResponseEntity<>("club no existe",HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Club club = temp.get();
         club.addClubActivity(activity);
@@ -74,7 +74,7 @@ public class ActivityService {
         Optional<Quota> quot= quotaRepository.findById(scheduleId);
         Optional<Employee> emp = employeeRepository.findEmployeeById(user.getEmployee().getId());
         if (quot.isEmpty() || emp.isEmpty()) {
-            return new ResponseEntity<>("horario o empleado no existen", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Quota quota = quot.get();
@@ -89,14 +89,14 @@ public class ActivityService {
         }
         String fechaReserva = LocalDate.now().plusDays(restaDias).toString();
 
-        if (employee.getSaldo() > activity.getPrecio() &&
+        if (employee.getBalance() > activity.getPrecio() &&
                 quota.calculateCupos(fechaReserva) > 0 && !employee.hasReservation(fechaReserva,quota.getQuotaId()))
         {
 
             Reservation reservation = new Reservation(employee,quota,ReservationStatus.PENDIENTE,fechaReserva);
             employee.addReservation(reservation);
         } else{
-            return new ResponseEntity<>("saldo insuficiente, no hay cupos o ya tiene reserva", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         employeeRepository.save(employee);
         quotaRepository.save(quota);
@@ -109,7 +109,7 @@ public class ActivityService {
         Optional<Activity> act= activityRepository.findActivityByNombre(nombreActividad);
         Optional<Employee> emp = employeeRepository.findEmployeeById(user.getEmployee().getId());
         if (act.isEmpty() || emp.isEmpty()) {
-            return new ResponseEntity<>("horario o empleado no existen", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Activity activity=act.get();
         Quota quota=null;
@@ -127,14 +127,14 @@ public class ActivityService {
                 return new ResponseEntity<>(HttpStatus.OK);
             }
         }
-        return new ResponseEntity<>("reserva no encontrada",HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     public ResponseEntity cameToActivityWithoutCupos(Long activityId, Long cedula) /*IMPORTANTE: se agrega argumento para la hora de la actividad*/ {
         Optional<Activity> act = activityRepository.findById(activityId);
         Optional<Employee> emp = employeeRepository.findEmployeeByCedula(cedula);
         if (act.isEmpty() || emp.isEmpty()) {
-            return new ResponseEntity<>("actividad o empleado no existen", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Activity activity = act.get();
         Employee employee = emp.get();
@@ -146,10 +146,13 @@ public class ActivityService {
             }
         }
 
-        if (employee.getSaldo() > activity.getPrecio() && horario != null && horario.getMaxCupos() == -1){
-                employee.setSaldo(employee.getSaldo() - activity.getPrecio());
+        if (employee.getBalance() > activity.getPrecio() && horario != null && horario.getMaxCupos() == -1){
+         //       employee.setSaldo(employee.getSaldo() - activity.getPrecio());
                 CheckIn checkIn = new CheckIn(employee, horario, LocalDate.now().toString());
                 employee.addAccess(checkIn);
+        }
+        else{
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         employeeRepository.save(employee);
@@ -161,7 +164,7 @@ public class ActivityService {
         Optional<Activity> act = activityRepository.findById(activityId);
         Optional<Employee> emp = employeeRepository.findEmployeeByCedula(cedula);
         if (act.isEmpty() || emp.isEmpty()) {
-            return new ResponseEntity<>("actividad o empleado no existen", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         int day = LocalDate.now().getDayOfWeek().getValue();
         Activity activity = act.get();
@@ -179,9 +182,15 @@ public class ActivityService {
             return cameToActivityWithNoReservation(activityId,cedula,startTime);
         }
 
-        if (employee.getSaldo() > activity.getPrecio()) {
+
+
+        if (employee.getBalance() > activity.getPrecio()) {
             Quota quota = reservation.getQuota();
-            employee.setSaldo(employee.getSaldo() - activity.getPrecio());
+            if(LocalTime.parse(quota.getFinishTime()).isAfter(LocalTime.now())){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            //    employee.setSaldo(employee.getSaldo() - activity.getPrecio());
             CheckIn checkIn = new CheckIn(employee,quota,LocalDate.now().toString());
             reservation.setReservationStatus(ReservationStatus.ATENDIDO);
             employee.addAccess(checkIn);
@@ -196,7 +205,7 @@ public class ActivityService {
         Optional<Employee> emp = employeeRepository.findEmployeeByCedula(cedula);
         int day = LocalDate.now().getDayOfWeek().getValue();
         if (act.isEmpty() || emp.isEmpty()) {
-            return new ResponseEntity<>("actividad o empleado no existen", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Activity activity = act.get();
         Employee employee = emp.get();
@@ -213,11 +222,15 @@ public class ActivityService {
         }
 
         if (Objects.isNull(quota)){
-            return new ResponseEntity<>("horario no encontrado",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if (employee.getSaldo() > activity.getPrecio() && quota.calculateCupos(LocalDate.now().toString())>0) {
-            employee.setSaldo(employee.getSaldo() - activity.getPrecio());
+        if(LocalTime.parse(quota.getFinishTime()).isAfter(LocalTime.now())){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if (employee.getBalance() > activity.getPrecio() && quota.calculateCupos(LocalDate.now().toString())>0) {
+          //  employee.setSaldo(employee.getSaldo() - activity.getPrecio());
             CheckIn checkIn = new CheckIn(employee, quota,LocalDate.now().toString());
             employee.addAccess(checkIn);
         }

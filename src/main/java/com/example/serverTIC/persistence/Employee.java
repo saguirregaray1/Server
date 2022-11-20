@@ -1,9 +1,11 @@
 package com.example.serverTIC.persistence;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,7 +109,24 @@ public class Employee {
     }
 
     public Long getSaldo() {
-        return saldo;
+        Long balance = this.saldo;
+        for (CheckIn checkIn:this.access) {
+            if (LocalDate.parse(checkIn.getFecha()).getMonth().equals(LocalDate.now().getMonth())) {
+                balance = balance - checkIn.getQuota().getActivity().getPrecio();
+            }
+        }
+        return balance;
+    }
+
+    @JsonIgnore
+    public Long getBalance() {
+        Long balance = this.saldo;
+        for (CheckIn checkIn:this.access) {
+            if (LocalDate.parse(checkIn.getFecha()).getMonth().equals(LocalDate.now().getMonth())) {
+                balance = balance - checkIn.getQuota().getActivity().getPrecio();
+            }
+        }
+        return balance;
     }
 
     public void setSaldo(Long saldo) {

@@ -45,5 +45,6 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
     @Query("DELETE from Reservation a where a.fecha=:fecha and a.quota.quotaId=:quotaId")
     void deleteReservationByFechaAndQuota(@Param("fecha")String fecha,@Param("quotaId") Long quotaId);
 
-
+    @Query("SELECT a from Reservation a where a.reservationStatus='PENDIENTE'")
+    List<Reservation> getAllReservations();
 }

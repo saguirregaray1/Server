@@ -58,7 +58,7 @@ public class ClubService {
     public ResponseEntity getClubEarningsForTheMonth(Long clubId, String fechaMesAño) {
         Optional<Club> comp=clubRepository.findById(clubId);
         if (comp.isEmpty()){
-            throw new IllegalStateException("company not found");
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         Club club=comp.get();
         long totalCost=0L;
@@ -85,7 +85,7 @@ public class ClubService {
     public List<Employee> getCheckInListForTheMonthUtil(Long clubId, String fechaMesAño) {
         Optional<Club> temp = clubRepository.findById(clubId);
         if (temp.isEmpty()) {
-            throw new IllegalStateException("company not found");
+            return new ArrayList<>();
         }
         Club club = temp.get();
         List<Employee> totalUsers = new ArrayList<>();

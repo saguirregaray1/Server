@@ -57,7 +57,7 @@ public class CompanyService {
     public List<Employee> getCompanyEmployees(Long companyId) {
         Optional<Company> comp=companyRepository.findById(companyId);
         if (comp.isEmpty()){
-            throw new IllegalStateException("company not found");
+            return new ArrayList<>();
         }
        return employeeRepository.findEmployeeByCompanyId(comp.get());
     }
@@ -65,7 +65,7 @@ public class CompanyService {
     public ResponseEntity getCostsForTheMonth(Long companyId, String fechaMonthYear) {
         Optional<Company> comp=companyRepository.findById(companyId);
         if (comp.isEmpty()){
-            throw new IllegalStateException("company not found");
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         Company company=comp.get();
         long totalCost=0L;
@@ -81,7 +81,7 @@ public class CompanyService {
     public List<CheckIn> getCheckInListForTheMonth(Long companyId, String fechaMonthYear) {
         Optional<Company> comp=companyRepository.findById(companyId);
         if (comp.isEmpty()){
-            throw new IllegalStateException("company not found");
+            return new ArrayList<>();
         }
         Company company=comp.get();
         List<CheckIn> totalCheckIns= new ArrayList<>();
@@ -94,7 +94,7 @@ public class CompanyService {
     public List<Employee> getCheckInListForTheMonthUtil(Long companyId, String fechaMonthYear) {
         Optional<Company> comp=companyRepository.findById(companyId);
         if (comp.isEmpty()){
-            throw new IllegalStateException("company not found");
+            return new ArrayList<>();
         }
         Company company=comp.get();
         List<Employee> totalEmployees= new ArrayList<>();

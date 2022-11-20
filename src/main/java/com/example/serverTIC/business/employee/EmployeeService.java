@@ -1,15 +1,18 @@
 package com.example.serverTIC.business.employee;
 
 import com.example.serverTIC.business.activity.ActivityRepository;
+import com.example.serverTIC.business.activity.ReservationRepository;
 import com.example.serverTIC.business.appuser.AppUserRepository;
 import com.example.serverTIC.business.company.CompanyRepository;
 import com.example.serverTIC.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,18 +28,21 @@ public class EmployeeService{
 
     private final CompanyRepository companyRepository;
 
+    private final ReservationRepository reservationRepository;
+
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository, AppUserRepository appUserRepository, ActivityRepository activityRepository, CompanyRepository companyRepository){
+    public EmployeeService(EmployeeRepository employeeRepository, AppUserRepository appUserRepository, ActivityRepository activityRepository, CompanyRepository companyRepository, ReservationRepository reservationRepository){
         this.employeeRepository = employeeRepository;
         this.appUserRepository = appUserRepository;
         this.activityRepository = activityRepository;
         this.companyRepository = companyRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     public ResponseEntity<?> addNewEmployee(Employee employee){
         Optional<Company> temp=companyRepository.findById(employee.getCompany().getId());
         if(temp.isEmpty()){
-            return new ResponseEntity<>("compañía no existe",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Company company = temp.get();
         company.addEmployee(employee);
@@ -53,7 +59,7 @@ public class EmployeeService{
     public ResponseEntity<?> deleteEmployee(Long cedulaEmp) {
         Optional<Employee> temp=employeeRepository.findEmployeeByCedula(cedulaEmp);
         if(temp.isEmpty()){
-            return new ResponseEntity<>("employee is not registered", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         //borrar de compañia
         employeeRepository.deleteById(temp.get().getId());
@@ -79,7 +85,7 @@ public class EmployeeService{
         Optional<Employee> emp=employeeRepository.findById(user.getEmployee().getId());
         Optional<Activity> act=activityRepository.findById(activityId);
         if(emp.isEmpty() || act.isEmpty()){
-            return new ResponseEntity<>("empleado o actividad no existen",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Employee employee=emp.get();
         Activity activity=act.get();
@@ -88,6 +94,18 @@ public class EmployeeService{
         }
         employeeRepository.save(employee);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 4 1 * *")
+    public void changeExpiredReservationsStatus(){
+        List<Reservation> reservations = reservationRepository.getAllByReservationStatus(ReservationStatus.PENDIENTE);
+        for (Reservation reservation: reservations){
+            if (LocalDate.parse(reservation.getFecha()).isBefore(LocalDate.now())){
+                reservation.setReservationStatus(ReservationStatus.NO_ATENDIDO);
+                reservationRepository.save(reservation);
+            }
+        }
     }
 
     public List<List> getFavsList(Long userId) {

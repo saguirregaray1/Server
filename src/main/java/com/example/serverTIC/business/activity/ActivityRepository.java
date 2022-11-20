@@ -27,7 +27,7 @@ public interface ActivityRepository extends JpaRepository<Activity,Long> {
     @Query ("select a.cupos from Activity a where a.id =:activityId")
     List<Quota> getActivityQuota(@Param("activityId") Long activityId);
 
-    @Query("select b.confirmedUses from Activity a join a.cupos b join b.confirmedUses c where a.id =:activityId and c.fecha like concat(:fecha,'-__')")
+    @Query("select distinct b.confirmedUses from Activity a join a.cupos b join b.confirmedUses c where a.id =:activityId and c.fecha like concat(:fecha,'-__')")
     List<CheckIn> findActivityEarning(@Param("activityId") Long activityId,@Param("fecha") String fecha);
 
     @Query("SELECT a.fecha,a.quota.day,a.quota.startTime,a from CheckIn a where a.quota.activity=:activity and a.fecha like concat(:fecha,'-__')")

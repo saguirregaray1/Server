@@ -34,7 +34,7 @@ public class AppUserService {
     public ResponseEntity<?> addNewAppUser(AppUser appUser) {
         Optional<AppUser> temp = appUserRepository.findAppUserByEmail(appUser.getEmail());
         if (temp.isPresent()) {
-            return new ResponseEntity<>("usuario ya existe", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         appUserRepository.save(appUser);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -47,7 +47,7 @@ public class AppUserService {
     public ResponseEntity<?> deleteAppUser(Long id) {
         Optional<AppUser> temp = appUserRepository.findById(id);
         if (temp.isEmpty()) {
-            return new ResponseEntity<>("club is not registered", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         appUserRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -61,7 +61,7 @@ public class AppUserService {
     public ResponseEntity<?> addNewClubUser(AppUser appUser, Long clubId) {
         Optional<Club> temp = clubRepository.findById(clubId);
         if (temp.isEmpty()) {
-            return new ResponseEntity<>("club no existe", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Club club = temp.get();
         club.addClubUser(appUser);
@@ -72,7 +72,7 @@ public class AppUserService {
     public ResponseEntity<?> addNewCompanyUser(AppUser appUser, Long companyId) {
         Optional<Company> temp = companyRepository.findById(companyId);
         if (temp.isEmpty()) {
-            return new ResponseEntity<>("club no existe", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Company company = temp.get();
         company.addCompanyUser(appUser);
