@@ -255,7 +255,7 @@ public class ActivityService {
         if (club.isEmpty()) {
             throw new IllegalStateException("club no existe");
         }
-        return clubRepository.getClubActivities(club.get().getClubActivities());
+        return clubRepository.getClubActivities(club.get());
     }
 
     public List<Quota> getActivityQuota(Long activityId) {

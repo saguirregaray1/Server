@@ -16,7 +16,7 @@ public interface ClubRepository extends JpaRepository<Club,Long> {
 
     Optional<Club> findClubByNombre(String nombre);
 
-    @Query("select a.club,a.nombre,a.cupos,a.precio,a.activityCategories,c.nombre,c.dir from Activity a Join a.club c where a in :clubActivities")
-    List<List> getClubActivities(@Param("clubActivities") List<Activity> clubActivities);
+    @Query("select a.nombre,a.precio,a.activityCategories,c.nombre,c.dir,a.id from Activity a Join a.club c where a.club=:club")
+    List<List> getClubActivities(@Param("club") Club club);
 
 }
