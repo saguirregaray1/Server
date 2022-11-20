@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,6 +128,17 @@ public class Employee {
             }
         }
         return balance;
+    }
+
+    @JsonIgnore
+    public boolean hasAlreadyCheckedIn(){
+        for (CheckIn checkIn:this.access) {
+            if (LocalDate.parse(checkIn.getFecha()).getDayOfYear()==LocalDate.now().getDayOfYear()
+             && LocalTime.parse(checkIn.getQuota().getFinishTime()).isAfter(LocalTime.now())){
+               return true;
+            }
+        }
+        return false;
     }
 
     public void setSaldo(Long saldo) {

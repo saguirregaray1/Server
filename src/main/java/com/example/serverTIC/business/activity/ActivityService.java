@@ -169,6 +169,10 @@ public class ActivityService {
         int day = LocalDate.now().getDayOfWeek().getValue();
         Activity activity = act.get();
         Employee employee = emp.get();
+
+        if (employee.hasAlreadyCheckedIn()){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
         Reservation reservation = null;
 
         for (Reservation reserva:employee.getReservationsMade()){
