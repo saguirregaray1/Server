@@ -221,11 +221,11 @@ public class ActivityService {
             }
         }
 
-        if (Objects.isNull(quota)){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if(Objects.isNull(quota)){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
-        if(LocalTime.parse(quota.getFinishTime()).isAfter(LocalTime.now())){
+        if(LocalTime.parse(quota.getFinishTime()).isBefore(LocalTime.now())){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
