@@ -30,7 +30,7 @@ public class Activity {
     @JsonBackReference (value = "clubActivities")
     @ManyToOne (targetEntity = Club.class)
     private Club club;
-    @Column(unique = true, nullable = false)
+    @Column(unique = false, nullable = false)
     private String nombre;
     @Column(nullable = false)
     private Long precio;
