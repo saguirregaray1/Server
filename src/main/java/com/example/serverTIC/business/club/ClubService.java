@@ -2,6 +2,7 @@ package com.example.serverTIC.business.club;
 
 import com.example.serverTIC.business.activity.ActivityRepository;
 import com.example.serverTIC.persistence.*;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,15 @@ public class ClubService {
     public List<Club> getClubs() {
         return clubRepository.findAll();
     }
+
+    public ResponseEntity<?> getClubByNombre(String clubName) {
+        Optional<Club> club=clubRepository.findClubByNombre(clubName);
+        if (club.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(club.get(),HttpStatus.OK);
+    }
+
 
     public void deleteClub(String clubName) {
         Optional<Club> temp = clubRepository.findClubByNombre(clubName);

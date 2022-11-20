@@ -32,6 +32,11 @@ public class ClubController {
         return clubService.getClubs();
     }
 
+    @GetMapping(path="/byName/{clubName}")
+    public ResponseEntity<?> getClubByName(@PathVariable String clubName) {
+        return clubService.getClubByNombre(clubName);
+    }
+
     @PostMapping
     public ResponseEntity<?> registerNewClub(@RequestBody List<String> inputs) {
         return clubService.addNewClub(inputs);
