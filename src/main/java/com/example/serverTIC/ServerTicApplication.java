@@ -10,4 +10,5 @@ public class ServerTicApplication {
 		SpringApplication.run(ServerTicApplication.class, args);
 	}
 
+
 }

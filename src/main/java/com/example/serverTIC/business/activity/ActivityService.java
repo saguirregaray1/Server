@@ -106,12 +106,12 @@ public class ActivityService {
     @Transactional
     public ResponseEntity<?> cancelReservation(Long appUserId, String nombreActividad, String diaAct, String startTime,String fechaAct){
         AppUser user = appUserRepository.findById(appUserId).get();
-        Optional<Activity> act= activityRepository.findActivityByNombre(nombreActividad);
+        List<Activity> act= activityRepository.findActivityByNombre(nombreActividad);
         Optional<Employee> emp = employeeRepository.findEmployeeById(user.getEmployee().getId());
         if (act.isEmpty() || emp.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        Activity activity=act.get();
+        Activity activity=act.get(0);
         Quota quota=null;
         for (Quota element:activity.getCupos()){
                 if (element.getDay().equals(diaAct)
@@ -190,7 +190,7 @@ public class ActivityService {
 
         if (employee.getBalance() > activity.getPrecio()) {
             Quota quota = reservation.getQuota();
-            if(LocalTime.parse(quota.getFinishTime()).isAfter(LocalTime.now())){
+            if(LocalTime.parse(quota.getFinishTime()).isBefore(LocalTime.now())){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 

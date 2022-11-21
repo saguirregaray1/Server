@@ -16,7 +16,7 @@ public interface ActivityRepository extends JpaRepository<Activity,Long> {
     List<List> findActivitiesByActivityCategories(@Param("activityCategories") ActivityCategories activityCategories);
     Optional<Activity> findActivitiesByClubIdAndNombre(Long clubId, String nombre);
 
-    Optional<Activity> findActivityByNombre(String nombre);
+    List<Activity> findActivityByNombre(String nombre);
 
     @Query("SELECT a.nombre,a.precio,a.activityCategories,c.nombre,c.dir,a.id from Activity a JOIN a.club c")
     List<List> joinClubAndActivity();
