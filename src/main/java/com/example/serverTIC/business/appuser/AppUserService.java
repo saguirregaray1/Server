@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,6 +78,16 @@ public class AppUserService {
         Company company = temp.get();
         company.addCompanyUser(appUser);
         companyRepository.save(company);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Transactional
+    public ResponseEntity<?> deleteAppUserByEmail(String email) {
+        Optional<AppUser> temp = appUserRepository.findAppUserByEmail(email);
+        if (temp.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        appUserRepository.deleteByEmail(email);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

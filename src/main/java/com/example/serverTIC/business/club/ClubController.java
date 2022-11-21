@@ -64,9 +64,9 @@ public class ClubController {
         return appUserService.addNewClubUser(appUser, clubId);
     }
 
-    @DeleteMapping(path = "/user/{userId}")
-    public ResponseEntity<?> deleteClubUser(@PathVariable Long userId) {
-        return appUserService.deleteAppUser(userId);
+    @DeleteMapping(path = "/user/{email}")
+    public ResponseEntity<?> deleteClubUser(@PathVariable String email) {
+        return appUserService.deleteAppUserByEmail(email);
     }
 
     @GetMapping(path = "/user")
